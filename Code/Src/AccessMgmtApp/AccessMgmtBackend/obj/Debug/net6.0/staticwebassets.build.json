@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "CfZYaPV+WUEzgBwpPnhFyizhb5qHfupAPTx1pLZA8nk=",
+  "Source": "AccessMgmtBackend",
+  "BasePath": "_content/AccessMgmtBackend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
