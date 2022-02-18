@@ -1,3 +1,4 @@
+using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AccessMgmtBackend.Controllers

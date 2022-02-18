@@ -1,4 +1,4 @@
-namespace AccessMgmtBackend
+namespace AccessMgmtBackend.Models
 {
     public class WeatherForecast
     {
