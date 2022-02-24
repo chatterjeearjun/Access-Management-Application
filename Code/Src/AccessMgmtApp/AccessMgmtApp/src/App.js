@@ -1,59 +1,101 @@
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React from "react"
 
-export default class App extends Component {
-    static displayName = App.name;
+import { Switch, BrowserRouter as Router } from "react-router-dom"
+import { connect } from "react-redux"
 
-    constructor(props) {
-        super(props);
-        this.state = { forecasts: [], loading: true };
+// Import Routes all
+import { userRoutes, authRoutes } from "./routes/allRoutes"
+
+// Import all middleware
+import Authmiddleware from "./routes/middleware/Authmiddleware"
+
+// layouts Format
+import VerticalLayout from "./components/VerticalLayout/"
+import HorizontalLayout from "./components/HorizontalLayout/"
+import NonAuthLayout from "./components/NonAuthLayout"
+
+// Import scss
+import "./assets/scss/theme.scss"
+import "./assets/scss/preloader.scss"
+
+// Import Firebase Configuration file
+// import { initFirebaseBackend } from "./helpers/firebase_helper"
+
+import fakeBackend from "./helpers/AuthType/fakeBackend";
+
+// Activating fake backend
+fakeBackend()
+
+// const firebaseConfig = {
+//   apiKey: process.env.REACT_APP_APIKEY,
+//   authDomain: process.env.REACT_APP_AUTHDOMAIN,
+//   databaseURL: process.env.REACT_APP_DATABASEURL,
+//   projectId: process.env.REACT_APP_PROJECTID,
+//   storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+//   messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+//   appId: process.env.REACT_APP_APPID,
+//   measurementId: process.env.REACT_APP_MEASUREMENTID,
+// }
+
+// init firebase backend
+// initFirebaseBackend(firebaseConfig)
+
+const App = props => {
+
+  function getLayout() {
+    let layoutCls = VerticalLayout
+    switch (props.layout.layoutType) {
+      case "horizontal":
+        layoutCls = HorizontalLayout
+        break
+      default:
+        layoutCls = VerticalLayout
+        break
     }
+    return layoutCls
+  }
 
-    componentDidMount() {
-        this.populateWeatherData();
-    }
+  const Layout = getLayout()
+  return (
+    <React.Fragment>
+      <Router>
+        <Switch>
+          {authRoutes.map((route, idx) => (
+            <Authmiddleware
+              path={route.path}
+              layout={NonAuthLayout}
+              component={route.component}
+              key={idx}
+              isAuthProtected={false}
+              exact
+            />
+          ))}
 
-    static renderForecastsTable(forecasts) {
-        return (
-            <table className='table table-striped' aria-labelledby="tabelLabel">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {forecasts.map(forecast =>
-                        <tr key={forecast.date}>
-                            <td>{forecast.date}</td>
-                            <td>{forecast.temperatureC}</td>
-                            <td>{forecast.temperatureF}</td>
-                            <td>{forecast.summary}</td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        );
-    }
-
-    render() {
-        let contents = this.state.loading
-            ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-            : App.renderForecastsTable(this.state.forecasts);
-
-        return (
-            <div>
-                <h1 id="tabelLabel" >Weather forecast</h1>
-                <p>This component demonstrates fetching data from the server.</p>
-                {contents}
-            </div>
-        );
-    }
-
-    async populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        this.setState({ forecasts: data, loading: false });
-    }
+          {userRoutes.map((route, idx) => (
+            <Authmiddleware
+              path={route.path}
+              layout={Layout}
+              component={route.component}
+              key={idx}
+              isAuthProtected={true}
+              exact
+            />
+          ))}
+        </Switch>
+      </Router>
+    </React.Fragment>
+  )
 }
+
+App.propTypes = {
+  layout: PropTypes.any
+}
+
+const mapStateToProps = state => {
+  return {
+    layout: state.Layout,
+  }
+}
+
+export default connect(mapStateToProps, null)(App)
