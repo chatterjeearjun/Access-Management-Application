@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
 using System.Text;
 
+var _policyName = "CorsPolicy";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -40,7 +41,21 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddCors(opt =>
+{
+
+    opt.AddPolicy(name: _policyName, builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
+
 
 var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
 
@@ -64,6 +79,8 @@ if (app.Environment.IsDevelopment())
 //InitialData.Seed();
 
 app.UseHttpsRedirection();
+
+app.UseCors(_policyName);
 
 app.UseAuthorization();
 
