@@ -1,41 +1,43 @@
 using AccessMgmtBackend.Context;
-//using AccessMgmtBackend.Data.Entities;
+
+using AccessMgmtBackend.Data.Entities;
 using AccessMgmtBackend.Migrations;
-//using Microsoft.AspNetCore.Authentication.JwtBearer;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-//using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
-//using System.Text;
+using System.Text;
 
 var _policyName = "CorsPolicy";
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CompanyContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CompanyConnStr")));
-////builder.Services.AddDbContext<PayrollContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CompanyConnStr")));
 
-//builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<CompanyContext>()
-//    .AddDefaultTokenProviders();
-////builder.Services.AddAuthentication().AddJwtBearer();
+//builder.Services.AddDbContext<PayrollContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CompanyConnStr")));
 
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//}).AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters()
-//    {
-//        ValidIssuer = builder.Configuration["Tokens:Issuer"],
-//        ValidAudience = builder.Configuration["Tokens:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"]))
-//    };
-//});
-////builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<CompanyContext>()
+    .AddDefaultTokenProviders();
+//builder.Services.AddAuthentication().AddJwtBearer();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = builder.Configuration["Tokens:Issuer"],
+        ValidAudience = builder.Configuration["Tokens:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Tokens:Key"]))
+    };
+});
+//builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -64,9 +66,10 @@ using (var scope = scopedFactory.CreateScope())
 {
     var service = scope.ServiceProvider.GetService<CompanyContext>();
     service.Seed();
-    //var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    //var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    //UserAndRoleDataInitializer.SeedData(userManager, roleManager);
+
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    UserAndRoleDataInitializer.SeedData(userManager, roleManager);
 }
 
 // Configure the HTTP request pipeline.

@@ -2,11 +2,13 @@
 {
     using Microsoft.EntityFrameworkCore;
     using AccessMgmtBackend.Models;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using AccessMgmtBackend.Data.Entities;
 
     public class CompanyContext
-        : DbContext
+        : IdentityDbContext<User>
     {
-        public CompanyContext(DbContextOptions options)
+        public CompanyContext(DbContextOptions<CompanyContext> options)
             : base(options)
         {
 
