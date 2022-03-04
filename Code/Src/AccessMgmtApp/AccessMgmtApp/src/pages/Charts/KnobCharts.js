@@ -1,37 +1,37 @@
-import React, { useState } from "react"
-import { Container, Row, Col, Card, CardBody, CardHeader } from "reactstrap"
-import MetaTags from 'react-meta-tags';
+import React, { useState } from "react";
+import { Container, Row, Col, Card, CardBody, CardHeader } from "reactstrap";
+import MetaTags from "react-meta-tags";
 
-import Knob from "../AllCharts/knob/knob"
+import Knob from "../AllCharts/knob/knob";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const ChartsKnob = () => {
-  const [value, setvalue] = useState(35)
-  const [value_cur, setvalue_cur] = useState(29)
-  const [value_prev, setvalue_prev] = useState(44)
-  const [angle, setangle] = useState(14)
-  const [steps, setsteps] = useState(56)
-  const [angleArc, setangleArc] = useState(54)
-  const [ang_offset_arc, setang_offset_arc] = useState(44)
-  const [readonly, setreadonly] = useState(85)
+  const [value, setvalue] = useState(35);
+  const [value_cur, setvalue_cur] = useState(29);
+  const [value_prev, setvalue_prev] = useState(44);
+  const [angle, setangle] = useState(14);
+  const [steps, setsteps] = useState(56);
+  const [angleArc, setangleArc] = useState(54);
+  const [ang_offset_arc, setang_offset_arc] = useState(44);
+  const [readonly, setreadonly] = useState(85);
 
-  const handleChange = newValue => {
-    setvalue(newValue)
-  }
-  const handleChangecursor = newValue => {
-    setvalue_cur(newValue)
-  }
-  const handleChangeprev = newValue => {
-    setvalue_prev(newValue)
-  }
+  const handleChange = (newValue) => {
+    setvalue(newValue);
+  };
+  const handleChangecursor = (newValue) => {
+    setvalue_cur(newValue);
+  };
+  const handleChangeprev = (newValue) => {
+    setvalue_prev(newValue);
+  };
 
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Jquery Knob | Minia - React Admin & Dashboard Template</title>
+          <title>Jquery Knob | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           <Breadcrumbs title="Charts" breadcrumbItem="Jquery Knob" />
@@ -58,7 +58,7 @@ const ChartsKnob = () => {
                           width={150}
                           fgColor="#7a6fbe"
                           displayCustom={() => {
-                            return false
+                            return false;
                           }}
                           onChange={handleChange}
                         />
@@ -74,7 +74,7 @@ const ChartsKnob = () => {
                           fgColor="#4ac18e"
                           cursor={true}
                           displayCustom={() => {
-                            return false
+                            return false;
                           }}
                           onChange={handleChangecursor}
                         />
@@ -106,8 +106,8 @@ const ChartsKnob = () => {
                           lineCap="round"
                           height={200}
                           width={150}
-                          onChange={e => {
-                            setangle(e)
+                          onChange={(e) => {
+                            setangle(e);
                           }}
                         />
                       </div>
@@ -124,8 +124,8 @@ const ChartsKnob = () => {
                           step={10}
                           height={200}
                           width={150}
-                          onChange={e => {
-                            setsteps(e)
+                          onChange={(e) => {
+                            setsteps(e);
                           }}
                         />
                       </div>
@@ -143,8 +143,8 @@ const ChartsKnob = () => {
                           cursor={true}
                           height={200}
                           width={150}
-                          onChange={e => {
-                            setangleArc(e)
+                          onChange={(e) => {
+                            setangleArc(e);
                           }}
                         />
                       </div>
@@ -162,8 +162,8 @@ const ChartsKnob = () => {
                           readOnly={true}
                           height={200}
                           width={150}
-                          onChange={e => {
-                            setreadonly(e)
+                          onChange={(e) => {
+                            setreadonly(e);
                           }}
                         />
                       </div>
@@ -183,8 +183,8 @@ const ChartsKnob = () => {
                           cursor={true}
                           height={200}
                           width={150}
-                          onChange={e => {
-                            setang_offset_arc(e)
+                          onChange={(e) => {
+                            setang_offset_arc(e);
                           }}
                         />
                       </div>
@@ -197,7 +197,7 @@ const ChartsKnob = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ChartsKnob
+export default ChartsKnob;

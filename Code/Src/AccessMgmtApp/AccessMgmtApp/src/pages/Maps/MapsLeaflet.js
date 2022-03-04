@@ -1,25 +1,25 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
+import React from "react";
+import MetaTags from "react-meta-tags";
 
-import { Container, Row, Col, Card, CardBody } from "reactstrap"
+import { Container, Row, Col, Card, CardBody } from "reactstrap";
 
 //Import maps
-import SimpleMap from "./LeafletMap/SimpleMap"
-import MapWithPopup from "./LeafletMap/MapWithPopup"
-import MapVectorLayers from "./LeafletMap/MapVectorLayers"
-import MapMarkerCustomIcons from "./LeafletMap/MapMarkerCustomIcons"
-import LayerGroup from "./LeafletMap/LayerGroup"
-import MapLayerControl from "./LeafletMap/MapLayerControl"
+import SimpleMap from "./LeafletMap/SimpleMap";
+import MapWithPopup from "./LeafletMap/MapWithPopup";
+import MapVectorLayers from "./LeafletMap/MapVectorLayers";
+import MapMarkerCustomIcons from "./LeafletMap/MapMarkerCustomIcons";
+import LayerGroup from "./LeafletMap/LayerGroup";
+import MapLayerControl from "./LeafletMap/MapLayerControl";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const MapsLeaflet = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Leaflet | Minia - React Admin & Dashboard Template</title>
+          <title>Leaflet | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           <Breadcrumbs title="Maps" breadcrumbItem="Leaflet" />
@@ -101,7 +101,7 @@ const MapsLeaflet = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default MapsLeaflet
+export default MapsLeaflet;

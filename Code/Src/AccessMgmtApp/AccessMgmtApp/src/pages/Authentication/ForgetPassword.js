@@ -1,41 +1,39 @@
-import PropTypes from "prop-types"
-import MetaTags from "react-meta-tags"
-import React from "react"
-import { Row, Col, Alert, Container } from "reactstrap"
+import PropTypes from "prop-types";
+import MetaTags from "react-meta-tags";
+import React from "react";
+import { Row, Col, Alert, Container } from "reactstrap";
 
 //redux
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 
-import { withRouter, Link } from "react-router-dom"
+import { withRouter, Link } from "react-router-dom";
 
 // availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
+import { AvForm, AvField } from "availity-reactstrap-validation";
 
 // action
-import { userForgetPassword } from "../../store/actions"
+import { userForgetPassword } from "../../store/actions";
 
 // import images
-import logo from "../../assets/images/logo-sm.svg"
-import CarouselPage from "../AuthenticationInner/CarouselPage"
+import logo from "../../assets/images/logo-sm.svg";
+import CarouselPage from "../AuthenticationInner/CarouselPage";
 
-const ForgetPasswordPage = props => {
-  const dispatch = useDispatch()
+const ForgetPasswordPage = (props) => {
+  const dispatch = useDispatch();
 
-  const { forgetError, forgetSuccessMsg } = useSelector(state => ({
+  const { forgetError, forgetSuccessMsg } = useSelector((state) => ({
     forgetError: state.ForgetPassword.forgetError,
     forgetSuccessMsg: state.ForgetPassword.forgetSuccessMsg,
-  }))
+  }));
 
   function handleValidSubmit(event, values) {
-    dispatch(userForgetPassword(values, props.history))
+    dispatch(userForgetPassword(values, props.history));
   }
 
   return (
     <React.Fragment>
       <MetaTags>
-        <title>
-          Forget Password | Minia - React Admin & Dashboard Template
-        </title>
+        <title>Forget Password | Crossleaf - Access Management</title>
       </MetaTags>
       <div className="auth-page">
         <Container fluid className="p-0">
@@ -46,13 +44,16 @@ const ForgetPasswordPage = props => {
                   <div className="d-flex flex-column h-100">
                     <div className="mb-4 mb-md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
-                        <img src={logo} alt="" height="28" /> <span className="logo-txt">Minia</span>
+                        <img src={logo} alt="" height="28" />{" "}
+                        <span className="logo-txt">Crossleaf</span>
                       </Link>
                     </div>
                     <div className="auth-content my-auto">
                       <div className="text-center">
                         <h5 className="mb-0">Reset Password</h5>
-                        <p className="text-muted mt-2">Reset Password with Minia.</p>
+                        <p className="text-muted mt-2">
+                          Reset Password with Crossleaf.
+                        </p>
                       </div>
 
                       {forgetError && forgetError ? (
@@ -66,7 +67,8 @@ const ForgetPasswordPage = props => {
                         </Alert>
                       ) : null}
 
-                      <AvForm className="custom-form mt-4"
+                      <AvForm
+                        className="custom-form mt-4"
                         onValidSubmit={(e, v) => handleValidSubmit(e, v)}
                       >
                         <div className="mb-3">
@@ -80,17 +82,34 @@ const ForgetPasswordPage = props => {
                           />
                         </div>
                         <div className="mb-3 mt-4">
-                          <button className="btn btn-primary w-100 waves-effect waves-light" type="submit">Reset</button>
+                          <button
+                            className="btn btn-primary w-100 waves-effect waves-light"
+                            type="submit"
+                          >
+                            Reset
+                          </button>
                         </div>
                       </AvForm>
 
                       <div className="mt-5 text-center">
-                        <p className="text-muted mb-0">Remember It ?  <a href="auth-login.html"
-                          className="text-primary fw-semibold"> Sign In </a> </p>
+                        <p className="text-muted mb-0">
+                          Remember It ?{" "}
+                          <a
+                            href="auth-login.html"
+                            className="text-primary fw-semibold"
+                          >
+                            {" "}
+                            Sign In{" "}
+                          </a>{" "}
+                        </p>
                       </div>
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
-                      <p className="mb-0">© {new Date().getFullYear()} Minia   . Crafted with <i className="mdi mdi-heart text-danger"></i> by Themesbrand</p>
+                      <p className="mb-0">
+                        © {new Date().getFullYear()} Crossleaf . Crafted with{" "}
+                        <i className="mdi mdi-heart text-danger"></i> by
+                        Crossleaf
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -101,11 +120,11 @@ const ForgetPasswordPage = props => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
 ForgetPasswordPage.propTypes = {
   history: PropTypes.object,
-}
+};
 
-export default withRouter(ForgetPasswordPage)
+export default withRouter(ForgetPasswordPage);

@@ -1,18 +1,26 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
+import React from "react";
+import MetaTags from "react-meta-tags";
 
-import { Row, Col, Card, CardBody, CardTitle, CardSubtitle, CardHeader } from "reactstrap"
-import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table"
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css"
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  CardHeader,
+} from "reactstrap";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const ResponsiveTables = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Responsive | Minia - React Admin & Dashboard Template</title>
+          <title>Responsive | Crossleaf - Access Management</title>
         </MetaTags>
         <div className="container-fluid">
           <Breadcrumbs title="Tables" breadcrumbItem="Responsive" />
@@ -567,7 +575,7 @@ const ResponsiveTables = () => {
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ResponsiveTables
+export default ResponsiveTables;

@@ -67,10 +67,11 @@ const contacts = (state = INIT_STATE, action) => {
       }
 
     case DELETE_USER_SUCCESS:
+      debugger;
       return {
         ...state,
         users: state.users.filter(
-          user => user.id.toString() !== action.payload.id.toString()
+          user => user.employeeId.toString() !== action.payload.employeeId.toString()
         ),
       }
 

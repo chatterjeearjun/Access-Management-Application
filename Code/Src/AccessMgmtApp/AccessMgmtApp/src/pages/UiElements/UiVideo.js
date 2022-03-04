@@ -1,7 +1,16 @@
 import React from "react";
-import MetaTags from 'react-meta-tags';
+import MetaTags from "react-meta-tags";
 
-import { Card, CardBody, CardHeader, CardSubtitle, CardTitle, Col, Container, Row } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardSubtitle,
+  CardTitle,
+  Col,
+  Container,
+  Row,
+} from "reactstrap";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -11,7 +20,7 @@ const UiVideo = () => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Video | Minia - React Admin & Dashboard Template</title>
+          <title>Video | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid={true}>
           <Breadcrumbs title="Components" breadcrumbItem="Video" />

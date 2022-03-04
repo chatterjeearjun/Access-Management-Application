@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react"
-import MetaTags from "react-meta-tags"
-import { withRouter, Link } from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import MetaTags from "react-meta-tags";
+import { withRouter, Link } from "react-router-dom";
 import {
   Card,
   CardBody,
@@ -16,62 +16,62 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-} from "reactstrap"
+} from "reactstrap";
 
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
-} from "react-bootstrap-table2-paginator"
+} from "react-bootstrap-table2-paginator";
 
-import { AvForm, AvField } from "availity-reactstrap-validation"
-import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit"
-import BootstrapTable from "react-bootstrap-table-next"
+import { AvForm, AvField } from "availity-reactstrap-validation";
+import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import BootstrapTable from "react-bootstrap-table-next";
 
-import * as images from "../../../assets/images"
+import * as images from "../../../assets/images";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
 
 import {
   getUsers as onGetUsers,
   addNewUser as onAddNewUser,
   updateUser as onUpdateUser,
   deleteUser as onDeleteUser,
-} from "../../../store/actions"
-import { isEmpty, size, map } from "lodash"
+} from "../../../store/actions";
+import { isEmpty, size, map } from "lodash";
 
 //redux
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 
-const ContactsList = props => {
-  const dispatch = useDispatch()
+const ContactsList = (props) => {
+  const dispatch = useDispatch();
 
-  const { users } = useSelector(state => ({
-    users: state.contacts.users
+  const { users } = useSelector((state) => ({
+    users: state.contacts.users,
   }));
 
-  const [userList, setUserList] = useState([])
-  const [modal, setModal] = useState(false)
-  const [isEdit, setIsEdit] = useState(false)
+  const [userList, setUserList] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
-  const { SearchBar } = Search
+  const { SearchBar } = Search;
 
   const pageOptions = {
     sizePerPage: 10,
     totalSize: users.length, // replace later with size(users),
     custom: true,
-  }
+  };
 
   const defaultSorted = [
     {
       dataField: "id", // if dataField is not match to any column you defined, it will be ignored.
       order: "desc", // desc or asc
     },
-  ]
+  ];
 
   const selectRow = {
     mode: "checkbox",
-  }
+  };
 
   const contactListColumns = [
     {
@@ -184,32 +184,32 @@ const ContactsList = props => {
         </div>
       ),
     },
-  ]
+  ];
 
   useEffect(() => {
     if (users && !users.length) {
-      dispatch(onGetUsers())
-      setIsEdit(false)
+      dispatch(onGetUsers());
+      setIsEdit(false);
     }
-  }, [dispatch, users])
+  }, [dispatch, users]);
 
   useEffect(() => {
-    setUserList(users)
-    setIsEdit(false)
-  }, [users])
+    setUserList(users);
+    setIsEdit(false);
+  }, [users]);
 
   const toggle = () => {
-    setModal(!modal)
+    setModal(!modal);
     if (!modal && !isEmpty(users) && !!isEdit) {
       setTimeout(() => {
-        setUserList(users)
-        setIsEdit(false)
-      }, 500)
+        setUserList(users);
+        setIsEdit(false);
+      }, 500);
     }
-  }
+  };
 
-  const handleUserClick = arg => {
-    const user = arg
+  const handleUserClick = (arg) => {
+    const user = arg;
 
     setUserList({
       id: user.id,
@@ -218,15 +218,15 @@ const ContactsList = props => {
       email: user.email,
       tags: user.tags,
       projects: user.projects,
-    })
-    setIsEdit(true)
+    });
+    setIsEdit(true);
 
-    toggle()
-  }
+    toggle();
+  };
 
-  const handleDeleteUser = user => {
-    dispatch(onDeleteUser(user))
-  }
+  const handleDeleteUser = (user) => {
+    dispatch(onDeleteUser(user));
+  };
 
   /**
    * Handling submit user on user form
@@ -240,11 +240,11 @@ const ContactsList = props => {
         tags: values.tags,
         email: values.email,
         projects: values.projects,
-      }
+      };
 
       // update user
-      dispatch(onUpdateUser(updateUser))
-      setIsEdit(false)
+      dispatch(onUpdateUser(updateUser));
+      setIsEdit(false);
     } else {
       const newUser = {
         id: Math.floor(Math.random() * (30 - 20)) + 20,
@@ -253,23 +253,23 @@ const ContactsList = props => {
         email: values["email"],
         tags: values["tags"],
         projects: values["projects"],
-      }
+      };
       // save new user
-      dispatch(onAddNewUser(newUser))
+      dispatch(onAddNewUser(newUser));
     }
-    toggle()
-  }
+    toggle();
+  };
   const handleUserClicks = () => {
-    setUserList("")
-    setIsEdit(false)
-    toggle()
-  }
+    setUserList("");
+    setIsEdit(false);
+    toggle();
+  };
 
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>User List | Minia - React Admin & Dashboard Template</title>
+          <title>User List | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
@@ -292,14 +292,18 @@ const ContactsList = props => {
                         bootstrap4
                         search
                       >
-                        {toolkitProps => (
+                        {(toolkitProps) => (
                           <React.Fragment>
                             <Row className="mb-2">
-
                               <div className="row align-ite  ms-center">
                                 <div className="col-md-6">
                                   <div className="mb-3">
-                                    <h5 className="card-title">Contact List <span className="text-muted fw-normal ms-2">(834)</span></h5>
+                                    <h5 className="card-title">
+                                      Contact List{" "}
+                                      <span className="text-muted fw-normal ms-2">
+                                        (834)
+                                      </span>
+                                    </h5>
                                   </div>
                                 </div>
 
@@ -308,30 +312,66 @@ const ContactsList = props => {
                                     <div>
                                       <Nav pills>
                                         <NavItem>
-                                          <NavLink href="/contacts-list" className="active" data-bs-toggle="tooltip" data-bs-placement="top" title="List"><i className="bx bx-list-ul"></i></NavLink>
+                                          <NavLink
+                                            href="/contacts-list"
+                                            className="active"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="List"
+                                          >
+                                            <i className="bx bx-list-ul"></i>
+                                          </NavLink>
                                         </NavItem>
                                         <NavItem>
-                                          <NavLink href="/contacts-grid" data-bs-toggle="tooltip" data-bs-placement="top" title="Grid"><i className="bx bx-grid-alt"></i></NavLink>
+                                          <NavLink
+                                            href="/contacts-grid"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="top"
+                                            title="Grid"
+                                          >
+                                            <i className="bx bx-grid-alt"></i>
+                                          </NavLink>
                                         </NavItem>
                                       </Nav>
                                     </div>
                                     <div>
-                                      <Link to="#" className="btn btn-light" onClick={handleUserClicks}><i className="bx bx-plus me-1"></i> Add New</Link>
+                                      <Link
+                                        to="#"
+                                        className="btn btn-light"
+                                        onClick={handleUserClicks}
+                                      >
+                                        <i className="bx bx-plus me-1"></i> Add
+                                        New
+                                      </Link>
                                     </div>
 
                                     <UncontrolledDropdown>
-                                      <DropdownToggle className="btn btn-link text-muted py-1 font-size-16 shadow-none" tag="a">
+                                      <DropdownToggle
+                                        className="btn btn-link text-muted py-1 font-size-16 shadow-none"
+                                        tag="a"
+                                      >
                                         <i className="bx bx-dots-horizontal-rounded"></i>
                                       </DropdownToggle>
 
                                       <ul className="dropdown-menu dropdown-menu-end">
-                                        <li><DropdownItem to="#">Action</DropdownItem></li>
-                                        <li><DropdownItem to="#">Another action</DropdownItem></li>
-                                        <li><DropdownItem to="#">Something else here</DropdownItem></li>
+                                        <li>
+                                          <DropdownItem to="#">
+                                            Action
+                                          </DropdownItem>
+                                        </li>
+                                        <li>
+                                          <DropdownItem to="#">
+                                            Another action
+                                          </DropdownItem>
+                                        </li>
+                                        <li>
+                                          <DropdownItem to="#">
+                                            Something else here
+                                          </DropdownItem>
+                                        </li>
                                       </ul>
                                     </UncontrolledDropdown>
                                   </div>
-
                                 </div>
                               </div>
                               <Col sm="4">
@@ -480,7 +520,7 @@ const ContactsList = props => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default withRouter(ContactsList)
+export default withRouter(ContactsList);

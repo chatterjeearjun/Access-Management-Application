@@ -1,28 +1,36 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
+import React from "react";
+import MetaTags from "react-meta-tags";
 
 // import apexChart
-import LineApexChart from "../AllCharts/apex/chartapex"
-import DashedLine from "../AllCharts/apex/dashedLine"
-import SplineArea from "../AllCharts/apex/SplineArea"
-import Apaexlinecolumn from "../AllCharts/apex/apaexlinecolumn"
-import ColumnWithDataLabels from "../AllCharts/apex/ColumnWithDataLabels"
-import BarChart from "../AllCharts/apex/barchart"
-import LineColumnArea from "../AllCharts/apex/LineColumnArea"
-import RadialChart from "../AllCharts/apex/RadialChart"
-import PieChart from "../AllCharts/apex/PieChart"
-import DonutChart from "../AllCharts/apex/dountchart"
+import LineApexChart from "../AllCharts/apex/chartapex";
+import DashedLine from "../AllCharts/apex/dashedLine";
+import SplineArea from "../AllCharts/apex/SplineArea";
+import Apaexlinecolumn from "../AllCharts/apex/apaexlinecolumn";
+import ColumnWithDataLabels from "../AllCharts/apex/ColumnWithDataLabels";
+import BarChart from "../AllCharts/apex/barchart";
+import LineColumnArea from "../AllCharts/apex/LineColumnArea";
+import RadialChart from "../AllCharts/apex/RadialChart";
+import PieChart from "../AllCharts/apex/PieChart";
+import DonutChart from "../AllCharts/apex/dountchart";
 
-import { Row, Col, Card, CardBody, CardTitle, CardHeader, Container } from "reactstrap"
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  CardHeader,
+  Container,
+} from "reactstrap";
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const Apexchart = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Apex Charts | Minia - React Admin & Dashboard Template</title>
+          <title>Apex Charts | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           <Breadcrumbs title="Charts" breadcrumbItem="Apex Charts" />
@@ -87,9 +95,7 @@ const Apexchart = () => {
             <Col xl={6}>
               <Card>
                 <CardHeader>
-                  <CardTitle>
-                    Column with Data Labels{" "}
-                  </CardTitle>
+                  <CardTitle>Column with Data Labels </CardTitle>
                 </CardHeader>
                 <CardBody>
                   <div dir="ltr">
@@ -116,9 +122,7 @@ const Apexchart = () => {
             <Col xl={6}>
               <Card>
                 <CardHeader>
-                  <CardTitle>
-                    Line, Column & Area Chart{" "}
-                  </CardTitle>
+                  <CardTitle>Line, Column & Area Chart </CardTitle>
                 </CardHeader>
                 <CardBody>
                   <div dir="ltr">
@@ -170,7 +174,7 @@ const Apexchart = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Apexchart
+export default Apexchart;

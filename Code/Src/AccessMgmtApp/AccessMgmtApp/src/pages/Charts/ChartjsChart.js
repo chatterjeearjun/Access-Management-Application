@@ -1,24 +1,32 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
+import React from "react";
+import MetaTags from "react-meta-tags";
 
-import { Row, Col, Card, CardBody, CardTitle, Container, CardHeader } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardTitle,
+  Container,
+  CardHeader,
+} from "reactstrap";
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 // import chartJs
-import LineChart from "../AllCharts/chartjs/linechart"
-import DountChart from "../AllCharts/chartjs/dountchart"
-import PieChart from "../AllCharts/chartjs/piechart"
-import BarChart from "../AllCharts/chartjs/barchart"
-import RadarChart from "../AllCharts/chartjs/radarchart"
-import PolarChart from "../AllCharts/chartjs/polarchart"
+import LineChart from "../AllCharts/chartjs/linechart";
+import DountChart from "../AllCharts/chartjs/dountchart";
+import PieChart from "../AllCharts/chartjs/piechart";
+import BarChart from "../AllCharts/chartjs/barchart";
+import RadarChart from "../AllCharts/chartjs/radarchart";
+import PolarChart from "../AllCharts/chartjs/polarchart";
 
 const ChartjsChart = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Chartjs | Minia - React Admin & Dashboard Template</title>
+          <title>Chartjs | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid={true}>
           <Breadcrumbs title="Charts" breadcrumbItem="Chartjs" />
@@ -218,7 +226,7 @@ const ChartjsChart = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default ChartjsChart
+export default ChartjsChart;

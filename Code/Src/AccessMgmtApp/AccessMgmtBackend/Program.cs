@@ -1,4 +1,5 @@
 using AccessMgmtBackend.Context;
+
 using AccessMgmtBackend.Data.Entities;
 using AccessMgmtBackend.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CompanyContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CompanyConnStr")));
+
 //builder.Services.AddDbContext<PayrollContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CompanyConnStr")));
 
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<CompanyContext>()
@@ -35,6 +37,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 //builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -63,6 +66,7 @@ using (var scope = scopedFactory.CreateScope())
 {
     var service = scope.ServiceProvider.GetService<CompanyContext>();
     service.Seed();
+
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     UserAndRoleDataInitializer.SeedData(userManager, roleManager);
@@ -84,6 +88,9 @@ app.UseCors(_policyName);
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

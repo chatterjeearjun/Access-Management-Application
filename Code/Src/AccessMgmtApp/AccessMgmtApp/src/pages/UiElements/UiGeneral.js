@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import MetaTags from 'react-meta-tags';
+import React, { useState } from "react";
+import MetaTags from "react-meta-tags";
 import {
   Button,
   Popover,
@@ -20,7 +20,7 @@ import {
   PaginationItem,
   PaginationLink,
   CardHeader,
-} from "reactstrap"
+} from "reactstrap";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -41,7 +41,7 @@ const UiGeneral = () => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>General | Minia - React Admin & Dashboard Template</title>
+          <title>General | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid={true}>
           <Breadcrumbs title="Components" breadcrumbItem="General" />
@@ -52,32 +52,20 @@ const UiGeneral = () => {
                 <CardHeader>
                   <CardTitle>Badges</CardTitle>
                   <CardSubtitle>
-                    Add any of the below mentioned modifier classes to
-                    change the appearance of a badge.
+                    Add any of the below mentioned modifier classes to change
+                    the appearance of a badge.
                   </CardSubtitle>
                 </CardHeader>
                 <CardBody>
                   <div>
                     <h5 className="font-size-14">Default</h5>
                     <div className="mt-1">
-                      <Badge className="me-2 bg-primary">
-                        Primary
-                      </Badge>
-                      <Badge className="me-2 bg-success">
-                        Success
-                      </Badge>
-                      <Badge className="me-2 bg-info">
-                        Info
-                      </Badge>
-                      <Badge className="me-2 bg-warning">
-                        Warning
-                      </Badge>
-                      <Badge className="me-2 bg-danger">
-                        Danger
-                      </Badge>
-                      <Badge className="me-2 bg-dark">
-                        Dark
-                      </Badge>
+                      <Badge className="me-2 bg-primary">Primary</Badge>
+                      <Badge className="me-2 bg-success">Success</Badge>
+                      <Badge className="me-2 bg-info">Info</Badge>
+                      <Badge className="me-2 bg-warning">Warning</Badge>
+                      <Badge className="me-2 bg-danger">Danger</Badge>
+                      <Badge className="me-2 bg-dark">Dark</Badge>
                     </div>
                   </div>
 
@@ -105,7 +93,6 @@ const UiGeneral = () => {
                     </div>
                   </div>
                 </CardBody>
-
               </Card>
             </Col>
             <Col lg={6}>
@@ -118,7 +105,6 @@ const UiGeneral = () => {
                   </CardSubtitle>
                 </CardHeader>
                 <CardBody>
-
                   <div>
                     <h5 className="font-size-14">Default</h5>
                     <div className="mt-1">
@@ -128,36 +114,44 @@ const UiGeneral = () => {
                       <Badge className="me-1 rounded-pill bg-success">
                         Success
                       </Badge>
-                      <Badge className="me-1 rounded-pill bg-info">
-                        Info
-                      </Badge>
+                      <Badge className="me-1 rounded-pill bg-info">Info</Badge>
                       <Badge className="me-1 rounded-pill bg-warning">
                         Warning
                       </Badge>
                       <Badge className="me-1 rounded-pill bg-danger">
                         Danger
                       </Badge>
-                      <Badge className="me-1 rounded-pill bg-dark">
-                        Dark
-                      </Badge>
+                      <Badge className="me-1 rounded-pill bg-dark">Dark</Badge>
                     </div>
                   </div>
                   <div className="mt-4">
                     <h5 className="font-size-14">Soft Badge</h5>
                     <div className="mt-1">
-                      <Badge pill className="rounded-pill badge-soft-primary ms-1">
+                      <Badge
+                        pill
+                        className="rounded-pill badge-soft-primary ms-1"
+                      >
                         Primary
                       </Badge>
-                      <Badge pill className="rounded-pill badge-soft-success ms-1">
+                      <Badge
+                        pill
+                        className="rounded-pill badge-soft-success ms-1"
+                      >
                         Success
                       </Badge>
                       <Badge pill className="rounded-pill badge-soft-info ms-1">
                         Info
                       </Badge>
-                      <Badge pill className="rounded-pill badge-soft-warning ms-1">
+                      <Badge
+                        pill
+                        className="rounded-pill badge-soft-warning ms-1"
+                      >
                         Warning
                       </Badge>
-                      <Badge pill className="rounded-pill badge-soft-danger ms-1">
+                      <Badge
+                        pill
+                        className="rounded-pill badge-soft-danger ms-1"
+                      >
                         Danger
                       </Badge>
                       <Badge pill className="rounded-pill badge-soft-dark ms-1">
@@ -173,18 +167,25 @@ const UiGeneral = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle>Badges in Buttons</CardTitle>
-                    <p className="card-title-desc">Badges can be used as part of links or buttons to provide a counter.</p>
+                    <p className="card-title-desc">
+                      Badges can be used as part of links or buttons to provide
+                      a counter.
+                    </p>
                   </CardHeader>
 
                   <CardBody>
                     <div className="d-flex flex-wrap gap-2">
                       <button type="button" className="btn btn-primary">
-                        Notifications <span className="badge bg-success ms-1">4</span>
+                        Notifications{" "}
+                        <span className="badge bg-success ms-1">4</span>
                       </button>
                       <button type="button" className="btn btn-success">
                         Messages <span className="badge bg-danger ms-1">2</span>
                       </button>
-                      <button type="button" className="btn btn-outline-secondary">
+                      <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                      >
                         Draft <span className="badge bg-success ms-1">2</span>
                       </button>
                     </div>
@@ -196,45 +197,79 @@ const UiGeneral = () => {
                 <Card>
                   <CardHeader>
                     <CardTitle>Badges Position Examples</CardTitle>
-                    <p className="card-title-desc">Example of Badges Position</p>
+                    <p className="card-title-desc">
+                      Example of Badges Position
+                    </p>
                   </CardHeader>
 
                   <CardBody>
                     <div className="d-flex flex-wrap gap-3">
-                      <button type="button" className="btn btn-primary position-relative">
-                        Mails <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">+99 <span className="visually-hidden">unread messages</span></span>
+                      <button
+                        type="button"
+                        className="btn btn-primary position-relative"
+                      >
+                        Mails{" "}
+                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                          +99{" "}
+                          <span className="visually-hidden">
+                            unread messages
+                          </span>
+                        </span>
                       </button>
 
-
-                      <button type="button" className="btn btn-light position-relative">
-                        Alerts <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-1"><span className="visually-hidden">unread messages</span></span>
+                      <button
+                        type="button"
+                        className="btn btn-light position-relative"
+                      >
+                        Alerts{" "}
+                        <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-1">
+                          <span className="visually-hidden">
+                            unread messages
+                          </span>
+                        </span>
                       </button>
 
-                      <button type="button" className="btn btn-primary position-relative p-0 avatar-sm rounded">
+                      <button
+                        type="button"
+                        className="btn btn-primary position-relative p-0 avatar-sm rounded"
+                      >
                         <span className="avatar-title bg-transparent">
                           <i className="bx bxs-envelope"></i>
                         </span>
-                        <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-1"><span className="visually-hidden">unread messages</span></span>
+                        <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-1">
+                          <span className="visually-hidden">
+                            unread messages
+                          </span>
+                        </span>
                       </button>
 
-                      <button type="button" className="btn btn-light position-relative p-0 avatar-sm rounded-circle">
+                      <button
+                        type="button"
+                        className="btn btn-light position-relative p-0 avatar-sm rounded-circle"
+                      >
                         <span className="avatar-title bg-transparent text-reset">
                           <i className="bx bxs-bell"></i>
                         </span>
                       </button>
 
-                      <button type="button" className="btn btn-light position-relative p-0 avatar-sm rounded-circle">
+                      <button
+                        type="button"
+                        className="btn btn-light position-relative p-0 avatar-sm rounded-circle"
+                      >
                         <span className="avatar-title bg-transparent text-reset">
                           <i className="bx bx-menu"></i>
                         </span>
-                        <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-success p-1"><span className="visually-hidden">unread messages</span></span>
+                        <span className="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-success p-1">
+                          <span className="visually-hidden">
+                            unread messages
+                          </span>
+                        </span>
                       </button>
                     </div>
                   </CardBody>
                 </Card>
               </Col>
             </Row>
-
           </Row>
 
           <Row>
@@ -253,7 +288,7 @@ const UiGeneral = () => {
                       id="Popovertop"
                       color="secondary"
                       onClick={() => {
-                        setpopovertop(!popovertop)
+                        setpopovertop(!popovertop);
                       }}
                     >
                       Popover on top
@@ -263,7 +298,7 @@ const UiGeneral = () => {
                       isOpen={popovertop}
                       target="Popovertop"
                       toggle={() => {
-                        setpopovertop(!popovertop)
+                        setpopovertop(!popovertop);
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -273,11 +308,10 @@ const UiGeneral = () => {
                         vestibulum.
                       </PopoverBody>
                     </Popover>{" "}
-
                     <Button
                       id="Popoverright"
                       onClick={() => {
-                        setpopoverright(!popoverright)
+                        setpopoverright(!popoverright);
                       }}
                       color="secondary"
                     >
@@ -288,7 +322,7 @@ const UiGeneral = () => {
                       isOpen={popoverright}
                       target="Popoverright"
                       toggle={() => {
-                        setpopoverright(!popoverright)
+                        setpopoverright(!popoverright);
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -298,11 +332,10 @@ const UiGeneral = () => {
                         vestibulum.
                       </PopoverBody>
                     </Popover>{" "}
-
                     <Button
                       id="Popoverbottom"
                       onClick={() => {
-                        setpopoverbottom(!popoverbottom)
+                        setpopoverbottom(!popoverbottom);
                       }}
                       color="secondary"
                     >
@@ -313,7 +346,7 @@ const UiGeneral = () => {
                       isOpen={popoverbottom}
                       target="Popoverbottom"
                       toggle={() => {
-                        setpopoverbottom(!popoverbottom)
+                        setpopoverbottom(!popoverbottom);
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -323,11 +356,10 @@ const UiGeneral = () => {
                         vestibulum.
                       </PopoverBody>
                     </Popover>{" "}
-
                     <Button
                       id="Popoverleft"
                       onClick={() => {
-                        setpopoverleft(!popoverleft)
+                        setpopoverleft(!popoverleft);
                       }}
                       color="secondary"
                     >
@@ -338,7 +370,7 @@ const UiGeneral = () => {
                       isOpen={popoverleft}
                       target="Popoverleft"
                       toggle={() => {
-                        setpopoverleft(!popoverleft)
+                        setpopoverleft(!popoverleft);
                       }}
                     >
                       <PopoverHeader>Popover Title</PopoverHeader>
@@ -348,12 +380,11 @@ const UiGeneral = () => {
                         vestibulum.
                       </PopoverBody>
                     </Popover>{" "}
-
                     <Button
                       id="Popoverdismiss"
                       className="btn btn-success"
                       onClick={() => {
-                        setpopoverdismiss(!popoverdismiss)
+                        setpopoverdismiss(!popoverdismiss);
                       }}
                     >
                       Dismissible popover
@@ -388,7 +419,7 @@ const UiGeneral = () => {
                       isOpen={ttop}
                       target="TooltipTop"
                       toggle={() => {
-                        setttop(!ttop)
+                        setttop(!ttop);
                       }}
                     >
                       Hello world!
@@ -398,7 +429,7 @@ const UiGeneral = () => {
                       isOpen={tright}
                       target="TooltipRight"
                       toggle={() => {
-                        settright(!tright)
+                        settright(!tright);
                       }}
                     >
                       Hello world!
@@ -408,7 +439,7 @@ const UiGeneral = () => {
                       isOpen={tbottom}
                       target="TooltipBottom"
                       toggle={() => {
-                        settbottom(!tbottom)
+                        settbottom(!tbottom);
                       }}
                     >
                       Hello world!
@@ -418,7 +449,7 @@ const UiGeneral = () => {
                       isOpen={tleft}
                       target="TooltipLeft"
                       toggle={() => {
-                        settleft(!tleft)
+                        settleft(!tleft);
                       }}
                     >
                       Hello world!
@@ -464,11 +495,15 @@ const UiGeneral = () => {
             <Col xl={6}>
               <Card>
                 <CardHeader>
-                  <CardTitle className="mb-4">Pagination Default Example</CardTitle>
-                  <p className="card-title-desc">Pagination links indicate a series of related content exists across multiple pages.</p>
+                  <CardTitle className="mb-4">
+                    Pagination Default Example
+                  </CardTitle>
+                  <p className="card-title-desc">
+                    Pagination links indicate a series of related content exists
+                    across multiple pages.
+                  </p>
                 </CardHeader>
                 <CardBody>
-
                   <Pagination aria-label="Page navigation example">
                     <PaginationItem>
                       <PaginationLink href="#">Previous</PaginationLink>
@@ -519,8 +554,8 @@ const UiGeneral = () => {
                   <CardSubtitle>
                     Pagination links are customizable for different
                     circumstances. Use <code>.disabled</code> for links that
-                    appear un-clickable and <code>.active</code> to indicate
-                    the current page.
+                    appear un-clickable and <code>.active</code> to indicate the
+                    current page.
                   </CardSubtitle>
                 </CardHeader>
 
@@ -581,16 +616,13 @@ const UiGeneral = () => {
                     <CardTitle>Pagination Sizing</CardTitle>
                     <CardSubtitle>
                       Fancy larger or smaller pagination? Add{" "}
-                      <code>.pagination-lg</code> or{" "}
-                      <code>.pagination-sm</code> for additional sizes.
+                      <code>.pagination-lg</code> or <code>.pagination-sm</code>{" "}
+                      for additional sizes.
                     </CardSubtitle>
                   </CardHeader>
 
                   <CardBody>
-                    <Pagination
-                      size="lg"
-                      aria-label="Page navigation example"
-                    >
+                    <Pagination size="lg" aria-label="Page navigation example">
                       <PaginationItem disabled>
                         <PaginationLink href="#" tabIndex="-1">
                           Previous
@@ -610,10 +642,7 @@ const UiGeneral = () => {
                       </PaginationItem>
                     </Pagination>
 
-                    <Pagination
-                      size="sm"
-                      aria-label="Page navigation example"
-                    >
+                    <Pagination size="sm" aria-label="Page navigation example">
                       <PaginationItem disabled>
                         <PaginationLink href="#" tabIndex="-1">
                           Previous
@@ -641,8 +670,8 @@ const UiGeneral = () => {
                   <CardHeader>
                     <CardTitle>Alignment</CardTitle>
                     <CardSubtitle>
-                      Change the alignment of pagination components with
-                      flexbox utilities.
+                      Change the alignment of pagination components with flexbox
+                      utilities.
                     </CardSubtitle>
                   </CardHeader>
                   <CardBody>
@@ -695,7 +724,6 @@ const UiGeneral = () => {
                 </Card>
               </Col>
             </Row>
-
           </Row>
 
           <Row>
@@ -749,7 +777,7 @@ const UiGeneral = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default UiGeneral
+export default UiGeneral;

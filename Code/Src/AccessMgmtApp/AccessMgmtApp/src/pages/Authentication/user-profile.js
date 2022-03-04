@@ -1,76 +1,68 @@
-import MetaTags from "react-meta-tags"
-import React, { useState, useEffect } from "react"
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Alert,
-  CardBody,
-  Button,
-} from "reactstrap"
+import MetaTags from "react-meta-tags";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Card, Alert, CardBody, Button } from "reactstrap";
 
 // availity-reactstrap-validation
-import { AvForm, AvField } from "availity-reactstrap-validation"
+import { AvForm, AvField } from "availity-reactstrap-validation";
 
 //redux
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 
-import { withRouter } from "react-router-dom"
+import { withRouter } from "react-router-dom";
 
 //Import Breadcrumb
-import Breadcrumb from "../../components/Common/Breadcrumb"
+import Breadcrumb from "../../components/Common/Breadcrumb";
 
-import avatar from "../../assets/images/users/avatar-1.jpg"
+import avatar from "../../assets/images/users/avatar-1.jpg";
 // actions
-import { editProfile, resetProfileFlag } from "../../store/actions"
+import { editProfile, resetProfileFlag } from "../../store/actions";
 
-const UserProfile = props => {
-  const dispatch = useDispatch()
+const UserProfile = (props) => {
+  const dispatch = useDispatch();
 
-  const { error, success } = useSelector(state => ({
+  const { error, success } = useSelector((state) => ({
     error: state.Profile.error,
     success: state.Profile.success,
-  }))
+  }));
 
-  const [email, setemail] = useState("")
-  const [name, setname] = useState("")
-  const [idx, setidx] = useState(1)
+  const [email, setemail] = useState("");
+  const [name, setname] = useState("");
+  const [idx, setidx] = useState(1);
 
   useEffect(() => {
     if (localStorage.getItem("authUser")) {
-      const obj = JSON.parse(localStorage.getItem("authUser"))
+      const obj = JSON.parse(localStorage.getItem("authUser"));
       if (process.env.REACT_APP_DEFAULTAUTH === "firebase") {
-        setname(obj.displayName)
-        setemail(obj.email)
-        setidx(obj.uid)
+        setname(obj.displayName);
+        setemail(obj.email);
+        setidx(obj.uid);
       } else if (
         process.env.REACT_APP_DEFAULTAUTH === "fake" ||
         process.env.REACT_APP_DEFAULTAUTH === "jwt"
       ) {
-        setname(obj.username)
-        setemail(obj.email)
-        setidx(obj.uid)
+        setname(obj.username);
+        setemail(obj.email);
+        setidx(obj.uid);
       }
       setTimeout(() => {
-        dispatch(resetProfileFlag())
-      }, 3000)
+        dispatch(resetProfileFlag());
+      }, 3000);
     }
-  }, [dispatch, success])
+  }, [dispatch, success]);
 
   function handleValidSubmit(event, values) {
-    dispatch(editProfile(values))
+    dispatch(editProfile(values));
   }
 
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Profile | Minia - React Admin & Dashboard Template</title>
+          <title>Profile | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumb */}
-          <Breadcrumb title="Minia" breadcrumbItem="Profile" />
+          <Breadcrumb title="Crossleaf" breadcrumbItem="Profile" />
 
           <Row>
             <Col lg="12">
@@ -107,7 +99,7 @@ const UserProfile = props => {
               <AvForm
                 className="form-horizontal"
                 onValidSubmit={(e, v) => {
-                  handleValidSubmit(e, v)
+                  handleValidSubmit(e, v);
                 }}
               >
                 <div className="form-group">
@@ -133,7 +125,7 @@ const UserProfile = props => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default withRouter(UserProfile)
+export default withRouter(UserProfile);

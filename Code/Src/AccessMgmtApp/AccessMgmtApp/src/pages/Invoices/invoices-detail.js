@@ -1,49 +1,47 @@
-import React, { useEffect } from "react"
-import MetaTags from "react-meta-tags"
-import { Link, withRouter } from "react-router-dom"
-import { Card, CardBody, Col, Container, Row, Table } from "reactstrap"
-import { isEmpty, map } from "lodash"
+import React, { useEffect } from "react";
+import MetaTags from "react-meta-tags";
+import { Link, withRouter } from "react-router-dom";
+import { Card, CardBody, Col, Container, Row, Table } from "reactstrap";
+import { isEmpty, map } from "lodash";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 //Import Image
-import logo from "../../assets/images/logo-sm.svg"
-import { getInvoiceDetail as onGetInvoiceDetail } from "../../store/invoices/actions"
+import logo from "../../assets/images/logo-sm.svg";
+import { getInvoiceDetail as onGetInvoiceDetail } from "../../store/invoices/actions";
 //redux
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 
-const InvoiceDetail = props => {
-  const dispatch = useDispatch()
+const InvoiceDetail = (props) => {
+  const dispatch = useDispatch();
 
-  const { invoiceDetail } = useSelector(state => ({
+  const { invoiceDetail } = useSelector((state) => ({
     invoiceDetail: state.invoices.invoiceDetail,
-  }))
+  }));
 
   const {
     match: { params },
-  } = props
+  } = props;
 
   useEffect(() => {
     if (params && params.id) {
-      dispatch(onGetInvoiceDetail(params.id))
+      dispatch(onGetInvoiceDetail(params.id));
     } else {
-      dispatch(onGetInvoiceDetail(1)) //remove this after full integration
+      dispatch(onGetInvoiceDetail(1)); //remove this after full integration
     }
-  }, [params, dispatch])
+  }, [params, dispatch]);
 
   //Print the Invoice
   const printInvoice = () => {
-    window.print()
-  }
+    window.print();
+  };
 
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>
-            Invoice Detail | Minia - React Admin & Dashboard Template
-          </title>
+          <title>Invoice Detail | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
@@ -57,12 +55,15 @@ const InvoiceDetail = props => {
                       <div className="d-flex align-items-start">
                         <div className="flex-grow-1">
                           <div className="mb-4">
-                            <img src={logo} alt="" height="24" /><span className="logo-txt">Minia</span>
+                            <img src={logo} alt="" height="24" />
+                            <span className="logo-txt">Crossleaf</span>
                           </div>
                         </div>
                         <div className="flex-shrink-0">
                           <div className="mb-4">
-                            <h4 className="float-end font-size-16">Invoice #  {invoiceDetail.orderId}</h4>
+                            <h4 className="float-end font-size-16">
+                              Invoice # {invoiceDetail.orderId}
+                            </h4>
                           </div>
                         </div>
                       </div>
@@ -108,7 +109,6 @@ const InvoiceDetail = props => {
                           <p>{invoiceDetail.email}</p>
                         </div>
                       </Col>
-
                     </Row>
                     <div className="py-2 mt-3">
                       <h3 className="font-size-15 fw-bold">Order summary</h3>
@@ -120,7 +120,12 @@ const InvoiceDetail = props => {
                             <tr>
                               <th style={{ width: "70px" }}>No.</th>
                               <th>Item</th>
-                              <th className="text-end" style={{ width: "120px" }}>Price</th>
+                              <th
+                                className="text-end"
+                                style={{ width: "120px" }}
+                              >
+                                Price
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
@@ -130,8 +135,12 @@ const InvoiceDetail = props => {
                                 <tr key={key}>
                                   <td>{item.id}</td>
                                   <td>
-                                    <h5 className="font-size-15 mb-1">{item.item}</h5>
-                                    <p className="font-size-13 text-muted mb-0">{item.adminName} </p>
+                                    <h5 className="font-size-15 mb-1">
+                                      {item.item}
+                                    </h5>
+                                    <p className="font-size-13 text-muted mb-0">
+                                      {item.adminName}{" "}
+                                    </p>
                                   </td>
                                   <td className="text-end">{item.price}</td>
                                 </tr>
@@ -189,7 +198,7 @@ const InvoiceDetail = props => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default withRouter(InvoiceDetail)
+export default withRouter(InvoiceDetail);

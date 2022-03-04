@@ -2047,23 +2047,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\chatt\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Project\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
+      "projectUniqueName": "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
       "projectName": "AccessMgmtBackend",
-      "projectPath": "F:\\Project\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
-      "packagesPath": "C:\\Users\\chatt\\.nuget\\packages\\",
-      "outputPath": "F:\\Project\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\obj\\",
+      "projectPath": "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\chatt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2071,7 +2067,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "http://build.glass.lu/guestAuth/app/nuget/v1/FeedService.svc/": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

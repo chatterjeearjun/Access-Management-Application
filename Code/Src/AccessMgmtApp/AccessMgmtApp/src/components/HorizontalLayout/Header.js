@@ -1,18 +1,18 @@
-import React, { useState } from "react"
-import PropTypes from 'prop-types'
-import ReactDrawer from 'react-drawer';
-import 'react-drawer/lib/react-drawer.css';
-import { connect } from "react-redux"
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import ReactDrawer from "react-drawer";
+import "react-drawer/lib/react-drawer.css";
+import { connect } from "react-redux";
 
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 //Import Icons
 import FeatherIcon from "feather-icons-react";
 
 // Redux Store
-import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions"
+import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions";
 // reactstrap
-import { Row, Col, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap"
+import { Row, Col, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 
 // Import menuDropdown
 import LanguageDropdown from "../CommonForBoth/TopbarDropdown/LanguageDropdown";
@@ -23,31 +23,31 @@ import LightDark from "../CommonForBoth/Menus/LightDark";
 
 // import images
 import logo from "../../assets/images/logo-sm.svg";
-import github from "../../assets/images/brands/github.png"
-import bitbucket from "../../assets/images/brands/bitbucket.png"
-import dribbble from "../../assets/images/brands/dribbble.png"
-import dropbox from "../../assets/images/brands/dropbox.png"
-import mail_chimp from "../../assets/images/brands/mail_chimp.png"
-import slack from "../../assets/images/brands/slack.png"
+import github from "../../assets/images/brands/github.png";
+import bitbucket from "../../assets/images/brands/bitbucket.png";
+import dribbble from "../../assets/images/brands/dribbble.png";
+import dropbox from "../../assets/images/brands/dropbox.png";
+import mail_chimp from "../../assets/images/brands/mail_chimp.png";
+import slack from "../../assets/images/brands/slack.png";
 
 //i18n
-import { withTranslation } from "react-i18next"
+import { withTranslation } from "react-i18next";
 
-const Header = props => {
+const Header = (props) => {
   const { onChangeLayoutMode } = props;
-  const [isSearch, setSearch] = useState(false)
-  const [socialDrp, setsocialDrp] = useState(false)
+  const [isSearch, setSearch] = useState(false);
+  const [socialDrp, setsocialDrp] = useState(false);
   const [position, setPosition] = useState();
   const [open, setOpen] = useState(false);
 
   const toggleTopDrawer = () => {
-    setPosition('right');
-    setOpen(!open)
-  }
+    setPosition("right");
+    setOpen(!open);
+  };
 
   const onDrawerClose = () => {
     setOpen(false);
-  }
+  };
   return (
     <React.Fragment>
       <header id="page-topbar">
@@ -60,7 +60,7 @@ const Header = props => {
                 </span>
                 <span className="logo-lg">
                   <img src={logo} alt="" height="24" />
-                  <span className="logo-txt">Minia</span>
+                  <span className="logo-txt">Crossleaf</span>
                 </span>
               </Link>
 
@@ -70,7 +70,7 @@ const Header = props => {
                 </span>
                 <span className="logo-lg">
                   <img src={logo} alt="" height="24" />
-                  <span className="logo-txt">Minia</span>
+                  <span className="logo-txt">Crossleaf</span>
                 </span>
               </Link>
             </div>
@@ -80,7 +80,7 @@ const Header = props => {
               className="btn btn-sm px-3 font-size-16 d-lg-none header-item"
               data-toggle="collapse"
               onClick={() => {
-                props.toggleLeftmenu(!props.leftMenu)
+                props.toggleLeftmenu(!props.leftMenu);
               }}
               data-target="#topnav-menu-content"
             >
@@ -89,10 +89,14 @@ const Header = props => {
 
             <form className="app-search d-none d-lg-block">
               <div className="position-relative">
-                <input type="text" className="form-control"
-                  placeholder="Search..." />
-                <button className="btn btn-primary" type="button"><i
-                  className="bx bx-search-alt align-middle"></i></button>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search..."
+                />
+                <button className="btn btn-primary" type="button">
+                  <i className="bx bx-search-alt align-middle"></i>
+                </button>
               </div>
             </form>
           </div>
@@ -138,13 +142,16 @@ const Header = props => {
             <LanguageDropdown />
 
             {/* light / dark mode */}
-            <LightDark layoutMode={props['layoutMode']} onChangeLayoutMode={onChangeLayoutMode} />
+            <LightDark
+              layoutMode={props["layoutMode"]}
+              onChangeLayoutMode={onChangeLayoutMode}
+            />
 
             <Dropdown
               className="d-none d-lg-inline-block ms-1"
               isOpen={socialDrp}
               toggle={() => {
-                setsocialDrp(!socialDrp)
+                setsocialDrp(!socialDrp);
               }}
             >
               <DropdownToggle
@@ -204,46 +211,42 @@ const Header = props => {
 
             <div className="dropdown d-inline-block">
               <button
-                onClick={toggleTopDrawer} disabled={open}
+                onClick={toggleTopDrawer}
+                disabled={open}
                 type="button"
                 className="btn header-item noti-icon right-bar-toggle "
               >
-                <FeatherIcon
-                  icon="settings"
-                  className="icon-lg"
-                />
+                <FeatherIcon icon="settings" className="icon-lg" />
               </button>
             </div>
 
             <ProfileMenu />
-
           </div>
         </div>
       </header>
-      <ReactDrawer
-        open={open}
-        position={position}
-        onClose={onDrawerClose}
-      >
-        <RightSidebar onClose={onDrawerClose} onChangeLayoutMode={onChangeLayoutMode} />
+      <ReactDrawer open={open} position={position} onClose={onDrawerClose}>
+        <RightSidebar
+          onClose={onDrawerClose}
+          onChangeLayoutMode={onChangeLayoutMode}
+        />
       </ReactDrawer>
     </React.Fragment>
-  )
-}
+  );
+};
 
 Header.propTypes = {
   leftMenu: PropTypes.any,
   showRightSidebar: PropTypes.any,
   showRightSidebarAction: PropTypes.func,
   t: PropTypes.any,
-  toggleLeftmenu: PropTypes.func
-}
+  toggleLeftmenu: PropTypes.func,
+};
 
-const mapStatetoProps = state => {
-  return { ...state.Layout }
-}
+const mapStatetoProps = (state) => {
+  return { ...state.Layout };
+};
 
 export default connect(mapStatetoProps, {
   showRightSidebarAction,
   toggleLeftmenu,
-})(withTranslation()(Header))
+})(withTranslation()(Header));
