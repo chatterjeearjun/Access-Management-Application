@@ -19,6 +19,8 @@
         public DbSet<JoinerChecklist> JoinerChecklists { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }
         public DbSet<SentNotification> SentNotifications { get; set; }
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<Approver> Approvers { get; set; }
 
     }
 }
