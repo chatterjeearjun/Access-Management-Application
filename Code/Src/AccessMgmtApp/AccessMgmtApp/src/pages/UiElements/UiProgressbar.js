@@ -1,6 +1,15 @@
 import React from "react";
-import MetaTags from 'react-meta-tags';
-import { Card, CardBody, CardHeader, CardTitle, Col, Container, Progress, Row } from "reactstrap";
+import MetaTags from "react-meta-tags";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Col,
+  Container,
+  Progress,
+  Row,
+} from "reactstrap";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -10,7 +19,7 @@ const UiProgressbar = () => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Progress Bars | Minia - React Admin & Dashboard Template</title>
+          <title>Progress Bars | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid={true}>
           <Breadcrumbs title="Components" breadcrumbItem="Progress Bars" />
@@ -30,15 +39,12 @@ const UiProgressbar = () => {
                     <div className="mb-4">
                       <Progress color="primary" value={25}></Progress>
                     </div>{" "}
-
                     <div className="mb-4">
                       <Progress color="primary" value={50}></Progress>
                     </div>
-
                     <div className="mb-4">
                       <Progress color="primary" value={75}></Progress>
                     </div>
-
                     <div>
                       <Progress color="primary" value={100}></Progress>
                     </div>
@@ -85,8 +91,7 @@ const UiProgressbar = () => {
                 <CardHeader>
                   <CardTitle className="h4">Labels Example</CardTitle>
                   <p className="card-title-desc">
-                    Add labels to your progress bars by placing text within
-                    the{" "}
+                    Add labels to your progress bars by placing text within the{" "}
                     <code className="highlighter-rouge">.progress-bar</code>.
                   </p>
                 </CardHeader>
@@ -130,9 +135,8 @@ const UiProgressbar = () => {
                   <p className="card-title-desc">
                     We only set a{" "}
                     <code className="highlighter-rouge">height</code> value on
-                    the{" "}
-                    <code className="highlighter-rouge">.progress-bar</code>,
-                    so if you change that value the outer{" "}
+                    the <code className="highlighter-rouge">.progress-bar</code>
+                    , so if you change that value the outer{" "}
                     <code className="highlighter-rouge">.progress</code> will
                     automatically resize accordingly.
                   </p>
@@ -181,9 +185,9 @@ const UiProgressbar = () => {
                 <CardHeader>
                   <CardTitle className="h4">Striped</CardTitle>
                   <p className="card-title-desc">
-                    Add <code className="highlighter-rouge"> striped </code>{" "}
-                    to any to apply a stripe via CSS gradient over the
-                    progress bar’s background color.
+                    Add <code className="highlighter-rouge"> striped </code> to
+                    any to apply a stripe via CSS gradient over the progress
+                    bar’s background color.
                   </p>
                 </CardHeader>
                 <CardBody>
@@ -195,7 +199,6 @@ const UiProgressbar = () => {
                     <div className="mb-4">
                       <Progress striped color="success" value={40}></Progress>
                     </div>
-
                   </div>
                 </CardBody>
               </Card>
@@ -203,9 +206,10 @@ const UiProgressbar = () => {
                 <CardHeader>
                   <CardTitle className="h4">Animated stripes</CardTitle>
                   <p className="card-title-desc">
-                    The striped gradient can also be
-                    animated. Add <code>.progress-bar-animated</code> to <code>.progress-bar</code> to animate the
-                    stripes right to left via CSS3 animations.
+                    The striped gradient can also be animated. Add{" "}
+                    <code>.progress-bar-animated</code> to{" "}
+                    <code>.progress-bar</code> to animate the stripes right to
+                    left via CSS3 animations.
                   </p>
                 </CardHeader>
                 <CardBody>
@@ -213,7 +217,7 @@ const UiProgressbar = () => {
                     <Progress
                       value={75}
                       color="primary"
-                      style={{ width: '75%' }}
+                      style={{ width: "75%" }}
                       animated
                     ></Progress>
                   </div>
@@ -228,40 +232,26 @@ const UiProgressbar = () => {
                 <CardHeader>
                   <CardTitle className="h4">Animated Progress</CardTitle>
                   <p className="card-title-desc">
-                    Add <code>.animated-progess</code> class with <code>.progress-bar</code> for animated progressbar.
+                    Add <code>.animated-progess</code> class with{" "}
+                    <code>.progress-bar</code> for animated progressbar.
                   </p>
                 </CardHeader>
                 <CardBody>
                   <div className="">
                     <div className="animated-progess mb-4">
-                      <Progress
-                        value={10}
-                        color="primary"
-                      ></Progress>
+                      <Progress value={10} color="primary"></Progress>
                     </div>
                     <div className="animated-progess mb-4">
-                      <Progress
-                        value={25}
-                        color="success"
-                      ></Progress>
+                      <Progress value={25} color="success"></Progress>
                     </div>
                     <div className="animated-progess mb-4">
-                      <Progress
-                        value={50}
-                        color="info"
-                      ></Progress>
+                      <Progress value={50} color="info"></Progress>
                     </div>
                     <div className="animated-progess mb-4">
-                      <Progress
-                        value={75}
-                        color="warning"
-                      ></Progress>
+                      <Progress value={75} color="warning"></Progress>
                     </div>
                     <div className="animated-progess">
-                      <Progress
-                        value={100}
-                        color="danger"
-                      ></Progress>
+                      <Progress value={100} color="danger"></Progress>
                     </div>
                   </div>
                 </CardBody>
@@ -327,26 +317,36 @@ const UiProgressbar = () => {
             <Col xl="6">
               <Card>
                 <CardHeader>
-                  <CardTitle className="h5">
-                    Progress Example
-                  </CardTitle>
+                  <CardTitle className="h5">Progress Example</CardTitle>
                 </CardHeader>
                 <CardBody>
-                  <p className="card-title-desc">You can use these classes with existing components to create new ones.</p>
+                  <p className="card-title-desc">
+                    You can use these classes with existing components to create
+                    new ones.
+                  </p>
                   <div className="mt-5">
                     <div className="position-relative m-4">
                       <Progress
                         value={50}
                         color="primary"
-                        style={{ height: '1px' }}
+                        style={{ height: "1px" }}
                       ></Progress>
-                      <button className="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style={{ width: "2rem", height: "2rem" }}>
+                      <button
+                        className="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill"
+                        style={{ width: "2rem", height: "2rem" }}
+                      >
                         1
                       </button>
-                      <button className="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style={{ width: "2rem", height: "2rem" }}>
+                      <button
+                        className="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill"
+                        style={{ width: "2rem", height: "2rem" }}
+                      >
                         2
                       </button>
-                      <button className="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style={{ width: "2rem", height: "2rem" }}>
+                      <button
+                        className="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill"
+                        style={{ width: "2rem", height: "2rem" }}
+                      >
                         3
                       </button>
                     </div>

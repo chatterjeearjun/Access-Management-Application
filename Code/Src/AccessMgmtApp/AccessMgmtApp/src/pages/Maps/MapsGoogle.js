@@ -1,27 +1,27 @@
-import PropTypes from 'prop-types'
-import React from "react"
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react"
-import { connect } from "react-redux"
-import MetaTags from 'react-meta-tags';
-import { LightData } from "./LightData"
-import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap"
+import PropTypes from "prop-types";
+import React from "react";
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
+import { connect } from "react-redux";
+import MetaTags from "react-meta-tags";
+import { LightData } from "./LightData";
+import { Row, Col, Card, CardBody, CardTitle, CardSubtitle } from "reactstrap";
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
-const LoadingContainer = () => <div>Loading...</div>
+const LoadingContainer = () => <div>Loading...</div>;
 
-const MapsGoogle = props => {
-  const selectedPlace = {}
+const MapsGoogle = (props) => {
+  const selectedPlace = {};
 
   function onMarkerClick() {
-    alert("You clicked in this marker")
+    alert("You clicked in this marker");
   }
 
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Google | Minia - React Admin & Dashboard Template</title>
+          <title>Google | Crossleaf - Access Management</title>
         </MetaTags>
         <div className="container-fluid">
           <Breadcrumbs title="Maps" breadcrumbItem="Google" />
@@ -84,7 +84,7 @@ const MapsGoogle = props => {
                     >
                       <Marker
                         onClick={(a, b, c) => {
-                          onMarkerClick(a, b, c)
+                          onMarkerClick(a, b, c);
                         }}
                       />
                       <InfoWindow>
@@ -148,7 +148,7 @@ const MapsGoogle = props => {
                     >
                       <Marker
                         onClick={(a, b, c) => {
-                          onMarkerClick(a, b, c)
+                          onMarkerClick(a, b, c);
                         }}
                       />
                       <InfoWindow>
@@ -165,12 +165,12 @@ const MapsGoogle = props => {
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
 MapsGoogle.propTypes = {
-  google: PropTypes.object
-}
+  google: PropTypes.object,
+};
 
 export default connect(
   null,
@@ -181,4 +181,4 @@ export default connect(
     LoadingContainer: LoadingContainer,
     v: "3",
   })(MapsGoogle)
-)
+);

@@ -1,11 +1,11 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import { Card, CardBody, Col, Row, UncontrolledTooltip } from "reactstrap"
-import * as images from "../../assets/images"
+import React from "react";
+import { Link } from "react-router-dom";
+import { Card, CardBody, Col, Row, UncontrolledTooltip } from "reactstrap";
+import * as images from "../../assets/images";
 
 const CardInvoice = ({ data }) => {
-  const name = data.founder
-  const nameIcon = name.charAt(0)
+  const name = data.founder;
+  const nameIcon = name.charAt(0);
 
   return (
     <React.Fragment>
@@ -39,7 +39,7 @@ const CardInvoice = ({ data }) => {
                     {data.founder}
                   </h5>
                   <Link to="#" className="text-muted">
-                    @Minia
+                    @Crossleaf
                   </Link>
                 </div>
               </Col>
@@ -86,7 +86,7 @@ const CardInvoice = ({ data }) => {
         </Card>
       </Col>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default CardInvoice
+export default CardInvoice;

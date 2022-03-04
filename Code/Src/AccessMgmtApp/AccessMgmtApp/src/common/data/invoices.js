@@ -27,7 +27,7 @@ const invoiceList = [
         },
         {
           id: 2,
-          item: "Minia",
+          item: "Crossleaf",
           adminName: "React Bootstrap 5 Landing Template",
           price: "$399.00",
         },
@@ -377,6 +377,6 @@ const invoiceList = [
       total: "$1410.00",
     },
   },
-]
+];
 
-export { invoiceList }
+export { invoiceList };

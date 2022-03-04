@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 //import drawer
-import ReactDrawer from 'react-drawer';
-import 'react-drawer/lib/react-drawer.css';
+import ReactDrawer from "react-drawer";
+import "react-drawer/lib/react-drawer.css";
 
 //Import Icons
 import FeatherIcon from "feather-icons-react";
@@ -37,10 +37,10 @@ import {
   showRightSidebarAction,
   toggleLeftmenu,
   changeSidebarType,
-  changelayoutMode
+  changelayoutMode,
 } from "../../store/actions";
 
-const Header = props => {
+const Header = (props) => {
   const { onChangeLayoutMode } = props;
   const [search, setsearch] = useState(false);
   const [socialDrp, setsocialDrp] = useState(false);
@@ -52,7 +52,7 @@ const Header = props => {
    * Rightsidebar drawer
    */
   const toggleTopDrawer = () => {
-    setPosition('right');
+    setPosition("right");
     setOpen(!open);
   };
 
@@ -66,10 +66,10 @@ const Header = props => {
     setClick(!isClick);
     if (isClick === true) {
       body.classList.add("sidebar-enable");
-      document.body.setAttribute('data-sidebar-size', 'sm');
+      document.body.setAttribute("data-sidebar-size", "sm");
     } else {
       body.classList.remove("sidebar-enable");
-      document.body.setAttribute('data-sidebar-size', 'lg');
+      document.body.setAttribute("data-sidebar-size", "lg");
     }
   }
 
@@ -84,7 +84,8 @@ const Header = props => {
                   <img src={logoSvg} alt="" height="24" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">Minia</span>
+                  <img src={logoSvg} alt="" height="24" />{" "}
+                  <span className="logo-txt">Crossleaf</span>
                 </span>
               </Link>
 
@@ -93,7 +94,8 @@ const Header = props => {
                   <img src={logoSvg} alt="" height="24" />
                 </span>
                 <span className="logo-lg">
-                  <img src={logoSvg} alt="" height="24" /> <span className="logo-txt">Minia</span>
+                  <img src={logoSvg} alt="" height="24" />{" "}
+                  <span className="logo-txt">Crossleaf</span>
                 </span>
               </Link>
             </div>
@@ -102,42 +104,61 @@ const Header = props => {
               onClick={() => {
                 tToggle();
               }}
-              type="button" className="btn btn-sm px-3 font-size-16 header-item" id="vertical-menu-btn">
+              type="button"
+              className="btn btn-sm px-3 font-size-16 header-item"
+              id="vertical-menu-btn"
+            >
               <i className="fa fa-fw fa-bars"></i>
             </button>
 
             <form className="app-search d-none d-lg-block">
               <div className="position-relative">
-                <input type="text" className="form-control" placeholder="Search..." />
-                <button className="btn btn-primary" type="button"><i className="bx bx-search-alt align-middle"></i></button>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search..."
+                />
+                <button className="btn btn-primary" type="button">
+                  <i className="bx bx-search-alt align-middle"></i>
+                </button>
               </div>
             </form>
           </div>
 
           <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
-              <button type="button" className="btn header-item" id="page-header-search-dropdown"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <FeatherIcon
-                  icon="search"
-                  className="icon-lg"
-                />
+              <button
+                type="button"
+                className="btn header-item"
+                id="page-header-search-dropdown"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <FeatherIcon icon="search" className="icon-lg" />
               </button>
-              <div className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                aria-labelledby="page-header-search-dropdown">
-
+              <div
+                className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                aria-labelledby="page-header-search-dropdown"
+              >
                 <form className="p-3">
                   <div className="form-group m-0">
                     <div className="input-group">
-                      <input type="text" className="form-control" placeholder="Search ..." aria-label="Search Result" />
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search ..."
+                        aria-label="Search Result"
+                      />
 
-                      <button className="btn btn-primary" type="submit"><i className="mdi mdi-magnify"></i></button>
+                      <button className="btn btn-primary" type="submit">
+                        <i className="mdi mdi-magnify"></i>
+                      </button>
                     </div>
                   </div>
                 </form>
               </div>
             </div>
-
           </div>
           <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
@@ -182,7 +203,10 @@ const Header = props => {
             <LanguageDropdown />
 
             {/* light / dark mode */}
-            <LightDark layoutMode={props['layoutMode']} onChangeLayoutMode={onChangeLayoutMode} />
+            <LightDark
+              layoutMode={props["layoutMode"]}
+              onChangeLayoutMode={onChangeLayoutMode}
+            />
 
             <Dropdown
               className="d-none d-lg-inline-block ms-1"
@@ -195,10 +219,7 @@ const Header = props => {
                 className="btn header-item noti-icon "
                 tag="button"
               >
-                <FeatherIcon
-                  icon="grid"
-                  className="icon-lg"
-                />
+                <FeatherIcon icon="grid" className="icon-lg" />
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-lg dropdown-menu-end">
                 <div className="p-2">
@@ -249,30 +270,26 @@ const Header = props => {
 
             <NotificationDropdown />
             <div
-              onClick={toggleTopDrawer} disabled={open}
+              onClick={toggleTopDrawer}
+              disabled={open}
               className="dropdown d-inline-block"
             >
               <button
                 type="button"
                 className="btn header-item noti-icon right-bar-toggle "
               >
-                <FeatherIcon
-                  icon="settings"
-                  className="icon-lg"
-                />
+                <FeatherIcon icon="settings" className="icon-lg" />
               </button>
             </div>
             <ProfileMenu />
-
           </div>
         </div>
       </header>
-      <ReactDrawer
-        open={open}
-        position={position}
-        onClose={onDrawerClose}
-      >
-        <RightSidebar onClose={onDrawerClose} onChangeLayoutMode={onChangeLayoutMode} />
+      <ReactDrawer open={open} position={position} onClose={onDrawerClose}>
+        <RightSidebar
+          onClose={onDrawerClose}
+          onChangeLayoutMode={onChangeLayoutMode}
+        />
       </ReactDrawer>
     </React.Fragment>
   );
@@ -289,13 +306,8 @@ Header.propTypes = {
   layoutMode: PropTypes.any,
 };
 
-const mapStatetoProps = state => {
-  const {
-    layoutType,
-    showRightSidebar,
-    leftMenu,
-    layoutMode
-  } = state.Layout;
+const mapStatetoProps = (state) => {
+  const { layoutType, showRightSidebar, leftMenu, layoutMode } = state.Layout;
   return { layoutType, showRightSidebar, leftMenu, layoutMode };
 };
 

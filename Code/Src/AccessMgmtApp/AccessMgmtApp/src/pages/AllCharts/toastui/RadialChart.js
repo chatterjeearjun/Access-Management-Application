@@ -1,52 +1,52 @@
-import React from "react"
-import "tui-chart/dist/tui-chart.css"
-import { RadialChart } from "@toast-ui/react-chart"
-import TuiChart from "tui-chart"
-import "./toastui.scss"
+import React from "react";
+import "tui-chart/dist/tui-chart.css";
+import { RadialChart } from "@toast-ui/react-chart";
+import TuiChart from "tui-chart";
+import "./toastui.scss";
 
 const theme = {
   chart: {
     background: {
       color: "#fff",
-      opacity: 0
-    }
+      opacity: 0,
+    },
   },
   title: {
-    color: "#8791af"
+    color: "#8791af",
   },
   xAxis: {
     title: {
-      color: "#8791af"
+      color: "#8791af",
     },
     label: {
-      color: "#8791af"
+      color: "#8791af",
     },
-    tickColor: "#8791af"
+    tickColor: "#8791af",
   },
   yAxis: {
     title: {
-      color: "#8791af"
+      color: "#8791af",
     },
     label: {
-      color: "#8791af"
+      color: "#8791af",
     },
-    tickColor: "#8791af"
+    tickColor: "#8791af",
   },
   plot: {
-    lineColor: "rgba(166, 176, 207, 0.1)"
+    lineColor: "rgba(166, 176, 207, 0.1)",
   },
   legend: {
     label: {
-      color: "#8791af"
-    }
+      color: "#8791af",
+    },
   },
   series: {
-    colors: ["#556ee6", "#34c38f", "#f1b44c", "#f46a6a"]
-  }
-}
-TuiChart.registerTheme("miniaTheme", theme)
+    colors: ["#556ee6", "#34c38f", "#f1b44c", "#f46a6a"],
+  },
+};
+TuiChart.registerTheme("Crossleaf", theme);
 
-const RadialChartToast = props => {
+const RadialChartToast = (props) => {
   const data = {
     categories: ["Jan", "Feb", "Mar", "April", "May", "Jun"],
     series: [
@@ -67,7 +67,7 @@ const RadialChartToast = props => {
         data: [6000, 3000, 3000, 1000, 2000, 4000],
       },
     ],
-  }
+  };
 
   const options = {
     chart: {
@@ -85,11 +85,11 @@ const RadialChartToast = props => {
     legend: {
       align: "bottom",
     },
-  }
+  };
   return (
     <React.Fragment>
       <RadialChart data={data} options={options} theme={theme} />
     </React.Fragment>
-  )
-}
-export default RadialChartToast
+  );
+};
+export default RadialChartToast;

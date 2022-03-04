@@ -1,17 +1,17 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
+import React from "react";
+import MetaTags from "react-meta-tags";
 
-import { Row, Col, Card, CardBody, Container, CardHeader } from "reactstrap"
+import { Row, Col, Card, CardBody, Container, CardHeader } from "reactstrap";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const IconDripicons = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Boxicons | Minia - React Admin & Dashboard Template</title>
+          <title>Boxicons | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           <Breadcrumbs title="Icons" breadcrumbItem="Boxicons" />
@@ -22,9 +22,7 @@ const IconDripicons = () => {
                 <CardHeader>
                   <h4 className="card-title">Examples</h4>
                   <p className="card-title-desc mb-2">
-                    Use{" "}
-                    <code>&lt;i className="bx bx-**"&gt;&lt;/i&gt;</code>
-                    .
+                    Use <code>&lt;i className="bx bx-**"&gt;&lt;/i&gt;</code>.
                   </p>
                 </CardHeader>
                 <CardBody>
@@ -34,7 +32,8 @@ const IconDripicons = () => {
                       <i className="bx bx-sticker"></i> bx bx-sticker
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-shield-quarter"></i> bx bx-shield-quarter
+                      <i className="bx bx-shield-quarter"></i> bx
+                      bx-shield-quarter
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-upside-down"></i> bx bx-upside-down
@@ -46,7 +45,8 @@ const IconDripicons = () => {
                       <i className="bx bx-meh-blank"></i> bx bx-meh-blank
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-happy-beaming"></i> bx bx-happy-beaming
+                      <i className="bx bx-happy-beaming"></i> bx
+                      bx-happy-beaming
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-shocked"></i> bx bx-shocked
@@ -64,7 +64,8 @@ const IconDripicons = () => {
                       <i className="bx bx-dizzy"></i> bx bx-dizzy
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-happy-heart-eyes"></i> bx bx-happy-heart-eyes
+                      <i className="bx bx-happy-heart-eyes"></i> bx
+                      bx-happy-heart-eyes
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-angry"></i> bx bx-angry
@@ -178,7 +179,8 @@ const IconDripicons = () => {
                       <i className="bx bx-add-to-queue"></i> bx bx-add-to-queue
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-border-radius"></i> bx bx-border-radius
+                      <i className="bx bx-border-radius"></i> bx
+                      bx-border-radius
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-check-shield"></i> bx bx-check-shield
@@ -220,28 +222,33 @@ const IconDripicons = () => {
                       <i className="bx bx-brush-alt"></i> bx bx-brush-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-briefcase-alt-2"></i> bx bx-briefcase-alt-2
+                      <i className="bx bx-briefcase-alt-2"></i> bx
+                      bx-briefcase-alt-2
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-time-five"></i> bx bx-time-five
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-pie-chart-alt-2"></i> bx bx-pie-chart-alt-2
+                      <i className="bx bx-pie-chart-alt-2"></i> bx
+                      bx-pie-chart-alt-2
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-gas-pump"></i> bx bx-gas-pump
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-mobile-vibration"></i> bx bx-mobile-vibration
+                      <i className="bx bx-mobile-vibration"></i> bx
+                      bx-mobile-vibration
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-mobile-landscape"></i> bx bx-mobile-landscape
+                      <i className="bx bx-mobile-landscape"></i> bx
+                      bx-mobile-landscape
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-border-all"></i> bx bx-border-all
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-border-bottom"></i> bx bx-border-bottom
+                      <i className="bx bx-border-bottom"></i> bx
+                      bx-border-bottom
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-border-top"></i> bx bx-border-top
@@ -262,13 +269,15 @@ const IconDripicons = () => {
                       <i className="bx bx-brightness"></i> bx bx-brightness
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-brightness-half"></i> bx bx-brightness-half
+                      <i className="bx bx-brightness-half"></i> bx
+                      bx-brightness-half
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-wifi-off"></i> bx bx-wifi-off
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-credit-card-alt"></i> bx bx-credit-card-alt
+                      <i className="bx bx-credit-card-alt"></i> bx
+                      bx-credit-card-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-band-aid"></i> bx bx-band-aid
@@ -286,7 +295,8 @@ const IconDripicons = () => {
                       <i className="bx bx-receipt"></i> bx bx-receipt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-purchase-tag-alt"></i> bx bx-purchase-tag-alt
+                      <i className="bx bx-purchase-tag-alt"></i> bx
+                      bx-purchase-tag-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-basket"></i> bx bx-basket
@@ -298,7 +308,8 @@ const IconDripicons = () => {
                       <i className="bx bx-no-entry"></i> bx bx-no-entry
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-message-alt-dots"></i> bx bx-message-alt-dots
+                      <i className="bx bx-message-alt-dots"></i> bx
+                      bx-message-alt-dots
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-message-alt"></i> bx bx-message-alt
@@ -307,19 +318,24 @@ const IconDripicons = () => {
                       <i className="bx bx-check-square"></i> bx bx-check-square
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-log-out-circle"></i> bx bx-log-out-circle
+                      <i className="bx bx-log-out-circle"></i> bx
+                      bx-log-out-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-log-in-circle"></i> bx bx-log-in-circle
+                      <i className="bx bx-log-in-circle"></i> bx
+                      bx-log-in-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-doughnut-chart"></i> bx bx-doughnut-chart
+                      <i className="bx bx-doughnut-chart"></i> bx
+                      bx-doughnut-chart
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-building-house"></i> bx bx-building-house
+                      <i className="bx bx-building-house"></i> bx
+                      bx-building-house
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-accessibility"></i> bx bx-accessibility
+                      <i className="bx bx-accessibility"></i> bx
+                      bx-accessibility
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-user-voice"></i> bx bx-user-voice
@@ -334,7 +350,8 @@ const IconDripicons = () => {
                       <i className="bx bx-polygon"></i> bx bx-polygon
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-square-rounded"></i> bx bx-square-rounded
+                      <i className="bx bx-square-rounded"></i> bx
+                      bx-square-rounded
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-square"></i> bx bx-square
@@ -373,19 +390,23 @@ const IconDripicons = () => {
                       <i className="bx bx-shape-circle"></i> bx bx-shape-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-down-arrow-alt"></i> bx bx-down-arrow-alt
+                      <i className="bx bx-down-arrow-alt"></i> bx
+                      bx-down-arrow-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-up-arrow-alt"></i> bx bx-up-arrow-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-right-arrow-alt"></i> bx bx-right-arrow-alt
+                      <i className="bx bx-right-arrow-alt"></i> bx
+                      bx-right-arrow-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-left-arrow-alt"></i> bx bx-left-arrow-alt
+                      <i className="bx bx-left-arrow-alt"></i> bx
+                      bx-left-arrow-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-lock-open-alt"></i> bx bx-lock-open-alt
+                      <i className="bx bx-lock-open-alt"></i> bx
+                      bx-lock-open-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-lock-alt"></i> bx bx-lock-alt
@@ -433,13 +454,15 @@ const IconDripicons = () => {
                       <i className="bx bx-ghost"></i> bx bx-ghost
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-shape-triangle"></i> bx bx-shape-triangle
+                      <i className="bx bx-shape-triangle"></i> bx
+                      bx-shape-triangle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-shape-square"></i> bx bx-shape-square
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-video-recording"></i> bx bx-video-recording
+                      <i className="bx bx-video-recording"></i> bx
+                      bx-video-recording
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-notepad"></i> bx bx-notepad
@@ -460,10 +483,12 @@ const IconDripicons = () => {
                       <i className="bx bx-book-content"></i> bx bx-book-content
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-message-square-dots"></i> bx bx-message-square-dots
+                      <i className="bx bx-message-square-dots"></i> bx
+                      bx-message-square-dots
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-message-square"></i> bx bx-message-square
+                      <i className="bx bx-message-square"></i> bx
+                      bx-message-square
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-slideshow"></i> bx bx-slideshow
@@ -475,13 +500,15 @@ const IconDripicons = () => {
                       <i className="bx bx-memory-card"></i> bx bx-memory-card
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-message-rounded-dots"></i> bx bx-message-rounded-dots
+                      <i className="bx bx-message-rounded-dots"></i> bx
+                      bx-message-rounded-dots
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-message-dots"></i> bx bx-message-dots
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-bar-chart-alt-2"></i> bx bx-bar-chart-alt-2
+                      <i className="bx bx-bar-chart-alt-2"></i> bx
+                      bx-bar-chart-alt-2
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-store-alt"></i> bx bx-store-alt
@@ -505,7 +532,8 @@ const IconDripicons = () => {
                       <i className="bx bx-font-family"></i> bx bx-font-family
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-joystick-button"></i> bx bx-joystick-button
+                      <i className="bx bx-joystick-button"></i> bx
+                      bx-joystick-button
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-paint"></i> bx bx-paint
@@ -538,13 +566,15 @@ const IconDripicons = () => {
                       <i className="bx bx-caret-left"></i> bx bx-caret-left
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-calendar-event"></i> bx bx-calendar-event
+                      <i className="bx bx-calendar-event"></i> bx
+                      bx-calendar-event
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-magnet"></i> bx bx-magnet
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-rewind-circle"></i> bx bx-rewind-circle
+                      <i className="bx bx-rewind-circle"></i> bx
+                      bx-rewind-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-card"></i> bx bx-card
@@ -574,16 +604,20 @@ const IconDripicons = () => {
                       <i className="bx bx-grid-small"></i> bx bx-grid-small
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-grid-vertical"></i> bx bx-grid-vertical
+                      <i className="bx bx-grid-vertical"></i> bx
+                      bx-grid-vertical
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-grid-horizontal"></i> bx bx-grid-horizontal
+                      <i className="bx bx-grid-horizontal"></i> bx
+                      bx-grid-horizontal
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-move-vertical"></i> bx bx-move-vertical
+                      <i className="bx bx-move-vertical"></i> bx
+                      bx-move-vertical
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-move-horizontal"></i> bx bx-move-horizontal
+                      <i className="bx bx-move-horizontal"></i> bx
+                      bx-move-horizontal
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-stats"></i> bx bx-stats
@@ -601,7 +635,8 @@ const IconDripicons = () => {
                       <i className="bx bx-search-alt"></i> bx bx-search-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-dollar-circle"></i> bx bx-dollar-circle
+                      <i className="bx bx-dollar-circle"></i> bx
+                      bx-dollar-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-football"></i> bx bx-football
@@ -628,7 +663,8 @@ const IconDripicons = () => {
                       <i className="bx bx-file-blank"></i> bx bx-file-blank
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-strikethrough"></i> bx bx-strikethrough
+                      <i className="bx bx-strikethrough"></i> bx
+                      bx-strikethrough
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-photo-album"></i> bx bx-photo-album
@@ -661,10 +697,12 @@ const IconDripicons = () => {
                       <i className="bx bx-box"></i> bx bx-box
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-menu-alt-right"></i> bx bx-menu-alt-right
+                      <i className="bx bx-menu-alt-right"></i> bx
+                      bx-menu-alt-right
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-menu-alt-left"></i> bx bx-menu-alt-left
+                      <i className="bx bx-menu-alt-left"></i> bx
+                      bx-menu-alt-left
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-video-plus"></i> bx bx-video-plus
@@ -715,7 +753,8 @@ const IconDripicons = () => {
                       <i className="bx bx-rocket"></i> bx bx-rocket
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-certification"></i> bx bx-certification
+                      <i className="bx bx-certification"></i> bx
+                      bx-certification
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-slider-alt"></i> bx bx-slider-alt
@@ -739,7 +778,8 @@ const IconDripicons = () => {
                       <i className="bx bx-loader-alt"></i> bx bx-loader-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-loader-circle"></i> bx bx-loader-circle
+                      <i className="bx bx-loader-circle"></i> bx
+                      bx-loader-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-wrench"></i> bx bx-wrench
@@ -796,7 +836,8 @@ const IconDripicons = () => {
                       <i className="bx bx-window-close"></i> bx bx-window-close
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-notification-off"></i> bx bx-notification-off
+                      <i className="bx bx-notification-off"></i> bx
+                      bx-notification-off
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-plug"></i> bx bx-plug
@@ -811,7 +852,8 @@ const IconDripicons = () => {
                       <i className="bx bx-hourglass"></i> bx bx-hourglass
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-briefcase-alt"></i> bx bx-briefcase-alt
+                      <i className="bx bx-briefcase-alt"></i> bx
+                      bx-briefcase-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-wallet"></i> bx bx-wallet
@@ -844,7 +886,8 @@ const IconDripicons = () => {
                       <i className="bx bx-images"></i> bx bx-images
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-pie-chart-alt"></i> bx bx-pie-chart-alt
+                      <i className="bx bx-pie-chart-alt"></i> bx
+                      bx-pie-chart-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-news"></i> bx bx-news
@@ -865,10 +908,12 @@ const IconDripicons = () => {
                       <i className="bx bx-hdd"></i> bx bx-hdd
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-skip-previous-circle"></i> bx bx-skip-previous-circle
+                      <i className="bx bx-skip-previous-circle"></i> bx
+                      bx-skip-previous-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-skip-next-circle"></i> bx bx-skip-next-circle
+                      <i className="bx bx-skip-next-circle"></i> bx
+                      bx-skip-next-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-chip"></i> bx bx-chip
@@ -880,10 +925,12 @@ const IconDripicons = () => {
                       <i className="bx bx-body"></i> bx bx-body
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-phone-outgoing"></i> bx bx-phone-outgoing
+                      <i className="bx bx-phone-outgoing"></i> bx
+                      bx-phone-outgoing
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-phone-incoming"></i> bx bx-phone-incoming
+                      <i className="bx bx-phone-incoming"></i> bx
+                      bx-phone-incoming
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-collapse"></i> bx bx-collapse
@@ -895,7 +942,8 @@ const IconDripicons = () => {
                       <i className="bx bx-rotate-right"></i> bx bx-rotate-right
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-horizontal-center"></i> bx bx-horizontal-center
+                      <i className="bx bx-horizontal-center"></i> bx
+                      bx-horizontal-center
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-ruler"></i> bx bx-ruler
@@ -940,7 +988,8 @@ const IconDripicons = () => {
                       <i className="bx bx-support"></i> bx bx-support
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-subdirectory-right"></i> bx bx-subdirectory-right
+                      <i className="bx bx-subdirectory-right"></i> bx
+                      bx-subdirectory-right
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-right-arrow"></i> bx bx-right-arrow
@@ -1060,7 +1109,8 @@ const IconDripicons = () => {
                       <i className="bx bx-share-alt"></i> bx bx-share-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-select-multiple"></i> bx bx-select-multiple
+                      <i className="bx bx-select-multiple"></i> bx
+                      bx-select-multiple
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-screenshot"></i> bx bx-screenshot
@@ -1114,7 +1164,8 @@ const IconDripicons = () => {
                       <i className="bx bx-minus"></i> bx bx-minus
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-microphone-off"></i> bx bx-microphone-off
+                      <i className="bx bx-microphone-off"></i> bx
+                      bx-microphone-off
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-log-out"></i> bx bx-log-out
@@ -1123,7 +1174,8 @@ const IconDripicons = () => {
                       <i className="bx bx-log-in"></i> bx bx-log-in
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-link-external"></i> bx bx-link-external
+                      <i className="bx bx-link-external"></i> bx
+                      bx-link-external
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-joystick"></i> bx bx-joystick
@@ -1144,10 +1196,12 @@ const IconDripicons = () => {
                       <i className="bx bx-group"></i> bx bx-group
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-git-repo-forked"></i> bx bx-git-repo-forked
+                      <i className="bx bx-git-repo-forked"></i> bx
+                      bx-git-repo-forked
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-git-pull-request"></i> bx bx-git-pull-request
+                      <i className="bx bx-git-pull-request"></i> bx
+                      bx-git-pull-request
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-git-merge"></i> bx bx-git-merge
@@ -1204,13 +1258,16 @@ const IconDripicons = () => {
                       <i className="bx bx-cloud-rain"></i> bx bx-cloud-rain
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-cloud-lightning"></i> bx bx-cloud-lightning
+                      <i className="bx bx-cloud-lightning"></i> bx
+                      bx-cloud-lightning
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-cloud-light-rain"></i> bx bx-cloud-light-rain
+                      <i className="bx bx-cloud-light-rain"></i> bx
+                      bx-cloud-light-rain
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-cloud-drizzle"></i> bx bx-cloud-drizzle
+                      <i className="bx bx-cloud-drizzle"></i> bx
+                      bx-cloud-drizzle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-check"></i> bx bx-check
@@ -1315,7 +1372,8 @@ const IconDripicons = () => {
                       <i className="bx bx-message"></i> bx bx-message
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-message-rounded"></i> bx bx-message-rounded
+                      <i className="bx bx-message-rounded"></i> bx
+                      bx-message-rounded
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-map"></i> bx bx-map
@@ -1375,16 +1433,20 @@ const IconDripicons = () => {
                       <i className="bx bx-download"></i> bx bx-download
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-dots-vertical"></i> bx bx-dots-vertical
+                      <i className="bx bx-dots-vertical"></i> bx
+                      bx-dots-vertical
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-dots-vertical-rounded"></i> bx bx-dots-vertical-rounded
+                      <i className="bx bx-dots-vertical-rounded"></i> bx
+                      bx-dots-vertical-rounded
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-dots-horizontal"></i> bx bx-dots-horizontal
+                      <i className="bx bx-dots-horizontal"></i> bx
+                      bx-dots-horizontal
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-dots-horizontal-rounded"></i> bx bx-dots-horizontal-rounded
+                      <i className="bx bx-dots-horizontal-rounded"></i> bx
+                      bx-dots-horizontal-rounded
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-dollar"></i> bx bx-dollar
@@ -1414,7 +1476,8 @@ const IconDripicons = () => {
                       <i className="bx bx-cloud-upload"></i> bx bx-cloud-upload
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-cloud-download"></i> bx bx-cloud-download
+                      <i className="bx bx-cloud-download"></i> bx
+                      bx-cloud-download
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-chart"></i> bx bx-chart
@@ -1426,13 +1489,16 @@ const IconDripicons = () => {
                       <i className="bx bx-calendar-x"></i> bx bx-calendar-x
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-calendar-minus"></i> bx bx-calendar-minus
+                      <i className="bx bx-calendar-minus"></i> bx
+                      bx-calendar-minus
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-calendar-check"></i> bx bx-calendar-check
+                      <i className="bx bx-calendar-check"></i> bx
+                      bx-calendar-check
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-calendar-plus"></i> bx bx-calendar-plus
+                      <i className="bx bx-calendar-plus"></i> bx
+                      bx-calendar-plus
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-buoy"></i> bx bx-buoy
@@ -1456,16 +1522,19 @@ const IconDripicons = () => {
                       <i className="bx bx-briefcase"></i> bx bx-briefcase
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-bookmark-plus"></i> bx bx-bookmark-plus
+                      <i className="bx bx-bookmark-plus"></i> bx
+                      bx-bookmark-plus
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-bookmark-minus"></i> bx bx-bookmark-minus
+                      <i className="bx bx-bookmark-minus"></i> bx
+                      bx-bookmark-minus
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-book"></i> bx bx-book
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-book-bookmark"></i> bx bx-book-bookmark
+                      <i className="bx bx-book-bookmark"></i> bx
+                      bx-book-bookmark
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-block"></i> bx bx-block
@@ -1477,10 +1546,12 @@ const IconDripicons = () => {
                       <i className="bx bx-bar-chart"></i> bx bx-bar-chart
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-bar-chart-square"></i> bx bx-bar-chart-square
+                      <i className="bx bx-bar-chart-square"></i> bx
+                      bx-bar-chart-square
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-bar-chart-alt"></i> bx bx-bar-chart-alt
+                      <i className="bx bx-bar-chart-alt"></i> bx
+                      bx-bar-chart-alt
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-at"></i> bx bx-at
@@ -1513,16 +1584,19 @@ const IconDripicons = () => {
                       <i className="bx bx-video"></i> bx bx-video
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-vertical-center"></i> bx bx-vertical-center
+                      <i className="bx bx-vertical-center"></i> bx
+                      bx-vertical-center
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-up-arrow-circle"></i> bx bx-up-arrow-circle
+                      <i className="bx bx-up-arrow-circle"></i> bx
+                      bx-up-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-trending-up"></i> bx bx-trending-up
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-trending-down"></i> bx bx-trending-down
+                      <i className="bx bx-trending-down"></i> bx
+                      bx-trending-down
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-toggle-right"></i> bx bx-toggle-right
@@ -1546,7 +1620,8 @@ const IconDripicons = () => {
                       <i className="bx bx-stop-circle"></i> bx bx-stop-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-skip-previous"></i> bx bx-skip-previous
+                      <i className="bx bx-skip-previous"></i> bx
+                      bx-skip-previous
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-skip-next"></i> bx bx-skip-next
@@ -1561,16 +1636,19 @@ const IconDripicons = () => {
                       <i className="bx bx-rss"></i> bx bx-rss
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-right-top-arrow-circle"></i> bx bx-right-top-arrow-circle
+                      <i className="bx bx-right-top-arrow-circle"></i> bx
+                      bx-right-top-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-right-indent"></i> bx bx-right-indent
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-right-down-arrow-circle"></i> bx bx-right-down-arrow-circle
+                      <i className="bx bx-right-down-arrow-circle"></i> bx
+                      bx-right-down-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-right-arrow-circle"></i> bx bx-right-arrow-circle
+                      <i className="bx bx-right-arrow-circle"></i> bx
+                      bx-right-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-reset"></i> bx bx-reset
@@ -1585,10 +1663,12 @@ const IconDripicons = () => {
                       <i className="bx bx-radio-circle"></i> bx bx-radio-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-radio-circle-marked"></i> bx bx-radio-circle-marked
+                      <i className="bx bx-radio-circle-marked"></i> bx
+                      bx-radio-circle-marked
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-question-mark"></i> bx bx-question-mark
+                      <i className="bx bx-question-mark"></i> bx
+                      bx-question-mark
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-plus-circle"></i> bx bx-plus-circle
@@ -1618,16 +1698,19 @@ const IconDripicons = () => {
                       <i className="bx bx-menu"></i> bx bx-menu
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-left-top-arrow-circle"></i> bx bx-left-top-arrow-circle
+                      <i className="bx bx-left-top-arrow-circle"></i> bx
+                      bx-left-top-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-left-indent"></i> bx bx-left-indent
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-left-down-arrow-circle"></i> bx bx-left-down-arrow-circle
+                      <i className="bx bx-left-down-arrow-circle"></i> bx
+                      bx-left-down-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-left-arrow-circle"></i> bx bx-left-arrow-circle
+                      <i className="bx bx-left-arrow-circle"></i> bx
+                      bx-left-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-last-page"></i> bx bx-last-page
@@ -1636,7 +1719,8 @@ const IconDripicons = () => {
                       <i className="bx bx-key"></i> bx bx-key
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-align-justify"></i> bx bx-align-justify
+                      <i className="bx bx-align-justify"></i> bx
+                      bx-align-justify
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-info-circle"></i> bx bx-info-circle
@@ -1666,10 +1750,12 @@ const IconDripicons = () => {
                       <i className="bx bx-fast-forward"></i> bx bx-fast-forward
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-fast-forward-circle"></i> bx bx-fast-forward-circle
+                      <i className="bx bx-fast-forward-circle"></i> bx
+                      bx-fast-forward-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-exit-fullscreen"></i> bx bx-exit-fullscreen
+                      <i className="bx bx-exit-fullscreen"></i> bx
+                      bx-exit-fullscreen
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-error"></i> bx bx-error
@@ -1678,7 +1764,8 @@ const IconDripicons = () => {
                       <i className="bx bx-error-circle"></i> bx bx-error-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-down-arrow-circle"></i> bx bx-down-arrow-circle
+                      <i className="bx bx-down-arrow-circle"></i> bx
+                      bx-down-arrow-circle
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-copyright"></i> bx bx-copyright
@@ -1699,19 +1786,23 @@ const IconDripicons = () => {
                       <i className="bx bx-clipboard"></i> bx bx-clipboard
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-chevrons-left"></i> bx bx-chevrons-left
+                      <i className="bx bx-chevrons-left"></i> bx
+                      bx-chevrons-left
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-chevrons-right"></i> bx bx-chevrons-right
+                      <i className="bx bx-chevrons-right"></i> bx
+                      bx-chevrons-right
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-chevrons-up"></i> bx bx-chevrons-up
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-chevrons-down"></i> bx bx-chevrons-down
+                      <i className="bx bx-chevrons-down"></i> bx
+                      bx-chevrons-down
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-chevron-right"></i> bx bx-chevron-right
+                      <i className="bx bx-chevron-right"></i> bx
+                      bx-chevron-right
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-chevron-left"></i> bx bx-chevron-left
@@ -1723,13 +1814,15 @@ const IconDripicons = () => {
                       <i className="bx bx-chevron-down"></i> bx bx-chevron-down
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-checkbox-square"></i> bx bx-checkbox-square
+                      <i className="bx bx-checkbox-square"></i> bx
+                      bx-checkbox-square
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-checkbox"></i> bx bx-checkbox
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
-                      <i className="bx bx-checkbox-checked"></i> bx bx-checkbox-checked
+                      <i className="bx bx-checkbox-checked"></i> bx
+                      bx-checkbox-checked
                     </Col>
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-captions"></i> bx bx-captions
@@ -1773,7 +1866,6 @@ const IconDripicons = () => {
                     <Col xl={3} lg={4} sm={6}>
                       <i className="bx bx-align-left"></i> bx bx-align-left
                     </Col>
-
                   </Row>
                 </CardBody>
               </Card>
@@ -1782,7 +1874,7 @@ const IconDripicons = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default IconDripicons
+export default IconDripicons;

@@ -43,7 +43,7 @@ const ContactsGrid = (props) => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>User Grid | Minia - React Admin & Dashboard Template</title>
+          <title>User Grid | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}

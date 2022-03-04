@@ -1,5 +1,5 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
+import React from "react";
+import MetaTags from "react-meta-tags";
 
 import {
   Row,
@@ -9,17 +9,17 @@ import {
   CardTitle,
   CardSubtitle,
   Container,
-} from "reactstrap"
-import Vector from "./Vectormap"
+} from "reactstrap";
+import Vector from "./Vectormap";
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const MapsVector = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Vector | Minia - React Admin & Dashboard Template</title>
+          <title>Vector | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid={true}>
           <Breadcrumbs title="Maps" breadcrumbItem="Vector" />
@@ -105,7 +105,7 @@ const MapsVector = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default MapsVector
+export default MapsVector;

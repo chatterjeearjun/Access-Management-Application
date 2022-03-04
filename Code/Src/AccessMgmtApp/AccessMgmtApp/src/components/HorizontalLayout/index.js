@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -9,7 +9,7 @@ import {
   changeTopbarTheme,
   changeLayoutWidth,
   changelayoutMode,
-  changeLayoutPosition
+  changeLayoutPosition,
 } from "../../store/actions";
 
 //redux
@@ -21,18 +21,22 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 const Layout = (props) => {
-
   const dispatch = useDispatch();
 
   const {
-    topbarTheme, layoutWidth, isPreloader, layoutPosition, layoutMode,layoutType
-  } = useSelector(state => ({
+    topbarTheme,
+    layoutWidth,
+    isPreloader,
+    layoutPosition,
+    layoutMode,
+    layoutType,
+  } = useSelector((state) => ({
     topbarTheme: state.Layout.topbarTheme,
     layoutWidth: state.Layout.layoutWidth,
     isPreloader: state.Layout.isPreloader,
     layoutPosition: state.Layout.layoutPosition,
     layoutMode: state.Layout.layoutMode,
-    layoutType : state.Layout.layoutType
+    layoutType: state.Layout.layoutType,
   }));
 
   /*
@@ -42,8 +46,7 @@ const Layout = (props) => {
     const title = props.location.pathname;
     let currentage = title.charAt(1).toUpperCase() + title.slice(2);
 
-    document.title =
-      currentage + " | Minia - React Admin & Dashboard Template";
+    document.title = currentage + " | Crossleaf - Access Management";
   }, [props.location.pathname]);
 
   useEffect(() => {
@@ -95,7 +98,7 @@ const Layout = (props) => {
     if (layoutMode) {
       dispatch(changelayoutMode(layoutMode, layoutType));
     }
-  }, [dispatch,changelayoutMode, layoutMode,layoutType]);
+  }, [dispatch, changelayoutMode, layoutMode, layoutType]);
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const openMenu = () => {
@@ -151,10 +154,10 @@ Layout.propTypes = {
   layoutWidth: PropTypes.any,
   location: PropTypes.object,
   showRightSidebar: PropTypes.any,
-  topbarTheme: PropTypes.any
+  topbarTheme: PropTypes.any,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return { ...state.Layout };
 };
 

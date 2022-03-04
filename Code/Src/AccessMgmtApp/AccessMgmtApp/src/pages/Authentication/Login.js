@@ -60,22 +60,22 @@ const Login = (props) => {
   };
 
   //handleGoogleLoginResponse
-  const googleResponse = (response) => {
-    signIn(response, "google");
-  };
+  // const googleResponse = (response) => {
+  //   signIn(response, "google");
+  // };
 
-  //handleTwitterLoginResponse
-  // const twitterResponse = e => {}
+  // //handleTwitterLoginResponse
+  // // const twitterResponse = e => {}
 
-  //handleFacebookLoginResponse
-  const facebookResponse = (response) => {
-    signIn(response, "facebook");
-  };
+  // //handleFacebookLoginResponse
+  // const facebookResponse = (response) => {
+  //   signIn(response, "facebook");
+  // };
 
   return (
     <React.Fragment>
       <MetaTags>
-        <title>Login | Minia - React Admin & Dashboard Template</title>
+        <title>Login | Crossleaf - Access Management</title>
       </MetaTags>
       <div className="auth-page">
         <Container fluid className="p-0">
@@ -87,14 +87,14 @@ const Login = (props) => {
                     <div className="mb-4 mb-md-5 text-center">
                       <Link to="/dashboard" className="d-block auth-logo">
                         <img src={logo} alt="" height="28" />{" "}
-                        <span className="logo-txt">Minia</span>
+                        <span className="logo-txt">Crossleaf</span>
                       </Link>
                     </div>
                     <div className="auth-content my-auto">
                       <div className="text-center">
                         <h5 className="mb-0">Welcome Back !</h5>
                         <p className="text-muted mt-2">
-                          Sign in to continue to Minia.
+                          Sign in to continue to Crossleaf.
                         </p>
                       </div>
                       <AvForm
@@ -108,7 +108,7 @@ const Login = (props) => {
                           <AvField
                             name="email"
                             label="Email"
-                            value="admin@themesbrand.com"
+                            value="admin@crossleaf.com"
                             className="form-control"
                             placeholder="Enter email"
                             type="email"
@@ -170,7 +170,7 @@ const Login = (props) => {
                         </div>
                       </AvForm>
 
-                      <div className="mt-4 text-center">
+                      {/* <div className="mt-4 text-center">
                         <h5 className="font-size-14 mb-3">Sign in with</h5>
 
                         <ul className="list-inline">
@@ -221,13 +221,13 @@ const Login = (props) => {
                             Signup now{" "}
                           </Link>{" "}
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
                       <p className="mb-0">
-                        © {new Date().getFullYear()} Minia . Crafted with{" "}
+                        © {new Date().getFullYear()} Crossleaf . Crafted with{" "}
                         <i className="mdi mdi-heart text-danger"></i> by
-                        Themesbrand
+                        Crossleaf
                       </p>
                     </div>
                   </div>

@@ -132,7 +132,7 @@ const InvoiceList = () => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Invoice List | Minia - React Admin & Dashboard Template</title>
+          <title>Invoice List | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
@@ -152,7 +152,7 @@ const InvoiceList = () => {
                         bootstrap4
                         search
                       >
-                        {toolkitProps => (
+                        {(toolkitProps) => (
                           <React.Fragment>
                             <Row className="mb-2">
                               <div className="row align-ite  ms-center">

@@ -19,9 +19,7 @@ const UiTypography = () => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>
-            Typography | Minia - React Admin & Dashboard Template
-          </title>
+          <title>Typography | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid={true}>
           <Breadcrumbs title="Components" breadcrumbItem="Typography" />
@@ -45,19 +43,14 @@ const UiTypography = () => {
                 <CardHeader>
                   <CardTitle className="h4">Headings</CardTitle>
                   <p className="card-title-desc">
-                    All HTML headings,{" "}
-                    <code>&lt;h1&gt;</code>{" "}
-                    through{" "}
-                    <code>&lt;h6&gt;</code>, are
-                    available.
+                    All HTML headings, <code>&lt;h1&gt;</code> through{" "}
+                    <code>&lt;h6&gt;</code>, are available.
                   </p>
                 </CardHeader>
                 <CardBody>
                   <h1 className="mb-3">
                     h1. Bootstrap heading{" "}
-                    <small className="text-muted">
-                      Semibold 2.5rem (40px)
-                    </small>
+                    <small className="text-muted">Semibold 2.5rem (40px)</small>
                   </h1>
                   <h2 className="mb-3">
                     h2. Bootstrap heading{" "}
@@ -71,9 +64,7 @@ const UiTypography = () => {
                   </h3>
                   <h4 className="mb-3">
                     h4. Bootstrap heading{" "}
-                    <small className="text-muted">
-                      Semibold 1.5rem (24px)
-                    </small>
+                    <small className="text-muted">Semibold 1.5rem (24px)</small>
                   </h4>
                   <h5 className="mb-3">
                     h5. Bootstrap heading{" "}
@@ -104,7 +95,9 @@ const UiTypography = () => {
                     <Col sm="6">
                       <Media className="d-flex align-items-center">
                         <div className="flex-shrink-0 me-4">
-                          <h1 className="font-weight-semibold display-4 mb-0">Aa</h1>
+                          <h1 className="font-weight-semibold display-4 mb-0">
+                            Aa
+                          </h1>
                         </div>
                         <div className="flex-grow-1">
                           <p className="text-muted mb-2">Font Weight</p>
@@ -120,7 +113,10 @@ const UiTypography = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="h4">Display headings</CardTitle>
-                  <p className="card-title-desc">Traditional heading elements are designed to work best in the meat of your page content. </p>
+                  <p className="card-title-desc">
+                    Traditional heading elements are designed to work best in
+                    the meat of your page content.{" "}
+                  </p>
                 </CardHeader>
                 <CardBody>
                   <h1 className="display-1">Display 1</h1>
@@ -152,8 +148,7 @@ const UiTypography = () => {
                   </p>
                   <p>
                     <del>
-                      This line of text is meant to be treated as deleted
-                      text.
+                      This line of text is meant to be treated as deleted text.
                     </del>
                   </p>
                   <p>
@@ -164,8 +159,8 @@ const UiTypography = () => {
                   </p>
                   <p>
                     <ins>
-                      This line of text is meant to be treated as an addition
-                      to the document.
+                      This line of text is meant to be treated as an addition to
+                      the document.
                     </ins>
                   </p>
                   <p>
@@ -196,8 +191,8 @@ const UiTypography = () => {
                     <strong>
                       This only applies to immediate children list items
                     </strong>
-                    , meaning you will need to add the className for any
-                    nested lists as well.
+                    , meaning you will need to add the className for any nested
+                    lists as well.
                   </p>
                 </CardHeader>
                 <CardBody>
@@ -217,13 +212,15 @@ const UiTypography = () => {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle className="h4">
-                    Inline List
-                  </CardTitle>
-                  <p className="card-title-desc">Remove a list’s bullets and apply some
-                    light <code className="highlighter-rouge">margin</code> with a combination
-                    of two classes, <code className="highlighter-rouge">.list-inline</code> and
-                    <code className="highlighter-rouge">.list-inline-item</code>.</p>
+                  <CardTitle className="h4">Inline List</CardTitle>
+                  <p className="card-title-desc">
+                    Remove a list’s bullets and apply some light{" "}
+                    <code className="highlighter-rouge">margin</code> with a
+                    combination of two classes,{" "}
+                    <code className="highlighter-rouge">.list-inline</code> and
+                    <code className="highlighter-rouge">.list-inline-item</code>
+                    .
+                  </p>
                 </CardHeader>
                 <CardBody>
                   <ul className="list-inline mb-0">
@@ -257,8 +254,8 @@ const UiTypography = () => {
                       <div>
                         <blockquote className="blockquote font-size-16 mb-0">
                           <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            Integer posuere erat a ante.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit. Integer posuere erat a ante.
                           </p>
                           <footer className="blockquote-footer">
                             Someone famous in{" "}
@@ -270,8 +267,8 @@ const UiTypography = () => {
                     <Col xs="6">
                       <blockquote className="blockquote  blockquote-reverse font-size-16 mb-0">
                         <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                          Integer posuere erat a ante.
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit. Integer posuere erat a ante.
                         </p>
                         <footer className="blockquote-footer">
                           Someone famous in{" "}
@@ -288,11 +285,13 @@ const UiTypography = () => {
             <Col className="col-12">
               <Card>
                 <CardHeader>
-                  <CardTitle className="h4">Description list alignment</CardTitle>
+                  <CardTitle className="h4">
+                    Description list alignment
+                  </CardTitle>
                   <p className="card-title-desc">
-                    Align terms and descriptions horizontally by using our
-                    grid system’s predefined classNamees (or semantic mixins).
-                    For longer terms, you can optionally add a{" "}
+                    Align terms and descriptions horizontally by using our grid
+                    system’s predefined classNamees (or semantic mixins). For
+                    longer terms, you can optionally add a{" "}
                     <code className="highlighter-rouge">.text-truncate</code>{" "}
                     className to truncate the text with an ellipsis.
                   </p>
@@ -323,8 +322,7 @@ const UiTypography = () => {
                     </dt>
                     <dd className="col-sm-9">
                       Fusce dapibus, tellus ac cursus commodo, tortor mauris
-                      condimentum nibh, ut fermentum massa justo sit amet
-                      risus.
+                      condimentum nibh, ut fermentum massa justo sit amet risus.
                     </dd>
 
                     <dt className="col-sm-3">Nesting</dt>
@@ -332,8 +330,8 @@ const UiTypography = () => {
                       <dl className="row mb-0">
                         <dt className="col-sm-4">Nested definition list</dt>
                         <dd className="col-sm-8">
-                          Aenean posuere, tortor sed cursus feugiat, nunc
-                          augue blandit nunc.
+                          Aenean posuere, tortor sed cursus feugiat, nunc augue
+                          blandit nunc.
                         </dd>
                       </dl>
                     </dd>

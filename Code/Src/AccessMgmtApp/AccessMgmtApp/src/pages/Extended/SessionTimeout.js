@@ -1,56 +1,56 @@
-import React, { Component } from "react"
-import MetaTags from 'react-meta-tags';
+import React, { Component } from "react";
+import MetaTags from "react-meta-tags";
 
-import SweetAlert from "react-bootstrap-sweetalert"
-import { Card, Row, Col, CardBody, CardTitle, Container } from "reactstrap"
+import SweetAlert from "react-bootstrap-sweetalert";
+import { Card, Row, Col, CardBody, CardTitle, Container } from "reactstrap";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 class SessionTimeout extends Component {
   constructor(props) {
-    super(props)
-    this.state = { timeralert: null, timerswitch: false, seconds: 0 }
-    this.tick = this.tick.bind(this)
+    super(props);
+    this.state = { timeralert: null, timerswitch: false, seconds: 0 };
+    this.tick = this.tick.bind(this);
   }
   tick() {
     this.interval = setInterval(() => {
-      this.setState(prevState => ({ seconds: prevState.seconds + 1 }))
-    }, 1000)
+      this.setState((prevState) => ({ seconds: prevState.seconds + 1 }));
+    }, 1000);
   }
 
   componentDidMount() {
-    this.main_function()
+    this.main_function();
   }
 
   hideAlert() {
-    window.location = "/login"
+    window.location = "/login";
   }
   confirmAlert() {
-    this.setState({ timeralert: null })
+    this.setState({ timeralert: null });
   }
   main_function() {
     setTimeout(
       function () {
         setTimeout(
           function () {
-            this.function1()
+            this.function1();
           }.bind(this),
           6000
-        )
-        this.function2()
+        );
+        this.function2();
       }.bind(this),
       6000
-    )
+    );
   }
   function1() {
     if (window.location.pathname === "/ui-session-timeout") {
-      window.location = "/login"
+      window.location = "/login";
     } else {
     }
   }
   function2() {
-    this.tick()
+    this.tick();
     const nextmsg = () => (
       <SweetAlert
         showCancel
@@ -64,15 +64,15 @@ class SessionTimeout extends Component {
       >
         Redirecting in 10s seconds.<br></br>
       </SweetAlert>
-    )
-    this.setState({ timeralert: nextmsg() })
+    );
+    this.setState({ timeralert: nextmsg() });
   }
   render() {
     return (
       <React.Fragment>
         <div className="page-content">
           <MetaTags>
-            <title>Session Timeout | Minia - React Admin & Dashboard Template</title>
+            <title>Session Timeout | Crossleaf - Access Management</title>
           </MetaTags>
           <Container fluid={true}>
             {this.state.timeralert}
@@ -122,8 +122,8 @@ class SessionTimeout extends Component {
           </Container>
         </div>
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default SessionTimeout
+export default SessionTimeout;

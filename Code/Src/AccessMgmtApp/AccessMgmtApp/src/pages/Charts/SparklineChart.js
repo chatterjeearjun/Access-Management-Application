@@ -1,9 +1,9 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
-import { Row, Col, Card, CardBody, CardTitle, CardHeader } from "reactstrap"
+import React from "react";
+import MetaTags from "react-meta-tags";
+import { Row, Col, Card, CardBody, CardTitle, CardHeader } from "reactstrap";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 import {
   Sparklines,
   SparklinesLine,
@@ -11,14 +11,14 @@ import {
   SparklinesSpots,
   SparklinesReferenceLine,
   SparklinesCurve,
-} from "react-sparklines"
+} from "react-sparklines";
 
 const SparklineChart = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Sparkline | Minia - React Admin & Dashboard Template</title>
+          <title>Sparkline | Crossleaf - Access Management</title>
         </MetaTags>
         <div className="container-fluid">
           {/* Render Breadcrumb */}
@@ -127,21 +127,7 @@ const SparklineChart = () => {
                   <Sparklines
                     height={100}
                     data={[
-                      5,
-                      10,
-                      5,
-                      20,
-                      18,
-                      17,
-                      29,
-                      10,
-                      18,
-                      15,
-                      20,
-                      18,
-                      17,
-                      29,
-                      10,
+                      5, 10, 5, 20, 18, 17, 29, 10, 18, 15, 20, 18, 17, 29, 10,
                       18,
                     ]}
                   >
@@ -162,34 +148,8 @@ const SparklineChart = () => {
                   <Sparklines
                     height={80}
                     data={[
-                      4,
-                      6,
-                      7,
-                      7,
-                      4,
-                      3,
-                      2,
-                      1,
-                      4,
-                      4,
-                      5,
-                      6,
-                      3,
-                      4,
-                      5,
-                      8,
-                      7,
-                      6,
-                      9,
-                      3,
-                      2,
-                      4,
-                      1,
-                      5,
-                      6,
-                      4,
-                      3,
-                      7,
+                      4, 6, 7, 7, 4, 3, 2, 1, 4, 4, 5, 6, 3, 4, 5, 8, 7, 6, 9,
+                      3, 2, 4, 1, 5, 6, 4, 3, 7,
                     ]}
                     width={200}
                   >
@@ -230,7 +190,7 @@ const SparklineChart = () => {
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default SparklineChart
+export default SparklineChart;

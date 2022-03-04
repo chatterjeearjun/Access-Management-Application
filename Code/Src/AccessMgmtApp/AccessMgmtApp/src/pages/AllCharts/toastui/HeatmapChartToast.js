@@ -1,21 +1,21 @@
-import React from "react"
+import React from "react";
 
-import "tui-chart/dist/tui-chart.css"
-import { HeatMapChart } from "@toast-ui/react-chart"
-import TuiChart from "tui-chart"
-import "./toastui.scss"
+import "tui-chart/dist/tui-chart.css";
+import { HeatMapChart } from "@toast-ui/react-chart";
+import TuiChart from "tui-chart";
+import "./toastui.scss";
 
 const theme = {
   chart: {
     background: {
       color: "rgba(243, 243, 249, 0.05)",
-      opacity: 0
-    }
-  }
-}
-TuiChart.registerTheme("miniaTheme", theme)
+      opacity: 0,
+    },
+  },
+};
+TuiChart.registerTheme("Crossleaf", theme);
 
-const HeatmapChartToast = props => {
+const HeatmapChartToast = (props) => {
   const data = {
     categories: {
       x: [
@@ -40,28 +40,18 @@ const HeatmapChartToast = props => {
       [22.1, 22.0, 20.9, 18.3, 15.2, 12.8, 11.8, 13.0, 15.2, 17.6, 19.4, 21.2],
       [-10.3, -9.1, -4.1, 4.4, 12.2, 16.3, 18.5, 16.7, 10.9, 4.2, -2.0, -7.5],
       [
-        -13.2,
-        -13.7,
-        -13.1,
-        -10.3,
-        -6.1,
-        -3.2,
-        0.0,
-        -0.1,
-        -1.8,
-        -4.5,
-        -9.0,
+        -13.2, -13.7, -13.1, -10.3, -6.1, -3.2, 0.0, -0.1, -1.8, -4.5, -9.0,
         -10.9,
       ],
     ],
-  }
+  };
 
   var options = {
     chart: {
       width: props.chartWidth,
       height: 450,
     },
-    theme: "miniaTheme",
+    theme: "Crossleaf",
     yAxis: {
       title: "City",
     },
@@ -74,7 +64,7 @@ const HeatmapChartToast = props => {
     tooltip: {
       suffix: "°C",
     },
-  }
+  };
   var theme = {
     series: {
       startColor: "#ffefef",
@@ -82,12 +72,12 @@ const HeatmapChartToast = props => {
       overColor: "#75b5aa",
       borderColor: "#F4511E",
     },
-  }
+  };
 
   return (
     <React.Fragment>
       <HeatMapChart data={data} options={options} theme={theme} />
     </React.Fragment>
-  )
-}
-export default HeatmapChartToast
+  );
+};
+export default HeatmapChartToast;

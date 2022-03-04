@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import MetaTags from 'react-meta-tags';
+import React, { useState } from "react";
+import MetaTags from "react-meta-tags";
 import {
   Row,
   Col,
@@ -9,45 +9,45 @@ import {
   CardTitle,
   CardSubtitle,
   Container,
-} from "reactstrap"
-import Dropzone from "react-dropzone"
+} from "reactstrap";
+import Dropzone from "react-dropzone";
 
 // Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const FormUpload = () => {
-  const [selectedFiles, setselectedFiles] = useState([])
+  const [selectedFiles, setselectedFiles] = useState([]);
 
   function handleAcceptedFiles(files) {
-    files.map(file =>
+    files.map((file) =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
         formattedSize: formatBytes(file.size),
       })
-    )
-    setselectedFiles(files)
+    );
+    setselectedFiles(files);
   }
 
   /**
    * Formats the size
    */
   function formatBytes(bytes, decimals = 2) {
-    if (bytes === 0) return "0 Bytes"
-    const k = 1024
-    const dm = decimals < 0 ? 0 : decimals
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   }
 
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Form File Upload | Minia - React Admin & Dashboard Template</title>
+          <title>Form File Upload | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid={true}>
           <Breadcrumbs title="Forms" breadcrumbItem="Form File Upload" />
@@ -64,8 +64,8 @@ const FormUpload = () => {
                   </CardSubtitle>
                   <Form>
                     <Dropzone
-                      onDrop={acceptedFiles => {
-                        handleAcceptedFiles(acceptedFiles)
+                      onDrop={(acceptedFiles) => {
+                        handleAcceptedFiles(acceptedFiles);
                       }}
                     >
                       {({ getRootProps, getInputProps }) => (
@@ -115,16 +115,13 @@ const FormUpload = () => {
                               </Row>
                             </div>
                           </Card>
-                        )
+                        );
                       })}
                     </div>
                   </Form>
 
                   <div className="text-center mt-4">
-                    <button
-                      type="button"
-                      className="btn btn-primary "
-                    >
+                    <button type="button" className="btn btn-primary ">
                       Send Files
                     </button>
                   </div>
@@ -135,7 +132,7 @@ const FormUpload = () => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default FormUpload
+export default FormUpload;

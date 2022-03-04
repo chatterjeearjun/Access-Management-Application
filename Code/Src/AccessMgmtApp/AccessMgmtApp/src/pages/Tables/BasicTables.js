@@ -1,5 +1,5 @@
-import React from "react"
-import MetaTags from 'react-meta-tags';
+import React from "react";
+import MetaTags from "react-meta-tags";
 
 import {
   Table,
@@ -10,17 +10,17 @@ import {
   CardTitle,
   CardSubtitle,
   CardHeader,
-} from "reactstrap"
+} from "reactstrap";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb"
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const BasicTable = () => {
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Bootstrap Basic | Minia - React Admin & Dashboard Template</title>
+          <title>Bootstrap Basic | Crossleaf - Access Management</title>
         </MetaTags>
         <div className="container-fluid">
           <Breadcrumbs title="Tables" breadcrumbItem="Bootstrap Basic" />
@@ -314,12 +314,16 @@ const BasicTable = () => {
                 <div className="table-responsive">
                   <CardHeader>
                     <h4 className="card-title">Vertical alignment</h4>
-                    <p className="card-title-desc">Table cells in <code>&lt;tbody&gt;</code> inherit their alignment from <code>&lt;table&gt;</code> and are aligned to the the top by default. Use the vertical align classes to re-align where needed.</p>
+                    <p className="card-title-desc">
+                      Table cells in <code>&lt;tbody&gt;</code> inherit their
+                      alignment from <code>&lt;table&gt;</code> and are aligned
+                      to the the top by default. Use the vertical align classes
+                      to re-align where needed.
+                    </p>
                   </CardHeader>
                   <CardBody>
                     <div className="table-responsive">
                       <Table className="align-middle mb-0">
-
                         <thead>
                           <tr>
                             <th>#</th>
@@ -334,7 +338,12 @@ const BasicTable = () => {
                             <td>Mark</td>
                             <td>Otto</td>
                             <td>
-                              <button type="button" className="btn btn-light btn-sm">View</button>
+                              <button
+                                type="button"
+                                className="btn btn-light btn-sm"
+                              >
+                                View
+                              </button>
                             </td>
                           </tr>
                           <tr>
@@ -342,7 +351,12 @@ const BasicTable = () => {
                             <td>Jacob</td>
                             <td>Thornton</td>
                             <td>
-                              <button type="button" className="btn btn-light btn-sm">View</button>
+                              <button
+                                type="button"
+                                className="btn btn-light btn-sm"
+                              >
+                                View
+                              </button>
                             </td>
                           </tr>
                           <tr>
@@ -350,7 +364,12 @@ const BasicTable = () => {
                             <td>Larry</td>
                             <td>the Bird</td>
                             <td>
-                              <button type="button" className="btn btn-light btn-sm">View</button>
+                              <button
+                                type="button"
+                                className="btn btn-light btn-sm"
+                              >
+                                View
+                              </button>
                             </td>
                           </tr>
                           <tr>
@@ -358,13 +377,17 @@ const BasicTable = () => {
                             <td>Jacob</td>
                             <td>Thornton</td>
                             <td>
-                              <button type="button" className="btn btn-light btn-sm">View</button>
+                              <button
+                                type="button"
+                                className="btn btn-light btn-sm"
+                              >
+                                View
+                              </button>
                             </td>
                           </tr>
                         </tbody>
                       </Table>
                     </div>
-
                   </CardBody>
                 </div>
               </Card>
@@ -373,7 +396,11 @@ const BasicTable = () => {
               <Card>
                 <CardHeader>
                   <h4 className="card-title">Nesting</h4>
-                  <p className="card-title-desc"> Border styles, active styles, and table variants are not inherited by nested tables.</p>
+                  <p className="card-title-desc">
+                    {" "}
+                    Border styles, active styles, and table variants are not
+                    inherited by nested tables.
+                  </p>
                 </CardHeader>
                 <CardBody>
                   <div className="table-responsive">
@@ -427,7 +454,6 @@ const BasicTable = () => {
                       </tbody>
                     </Table>
                   </div>
-
                 </CardBody>
               </Card>
             </Col>
@@ -716,7 +742,7 @@ const BasicTable = () => {
         </div>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default BasicTable
+export default BasicTable;

@@ -1,22 +1,31 @@
-import React from "react"
-import { Redirect } from "react-router-dom"
+import React from "react";
+import { Redirect } from "react-router-dom";
 
 //Dashboard
 import Dashboard from "../pages/Dashboard/index";
 
+//Approvers
+import Approvers from "../pages/Approvers/index";
+
+//Users
+import Users from "../pages/Users/index";
+
+//Users
+import Assets from "../pages/Assets/assets";
+
 // Calendar
 import Calendar from "../pages/Calendar/index";
 
-//Chat 
+//Chat
 import Chat from "../pages/Chat/Chat";
 
-//Email 
+//Email
 import EmailInbox from "../pages/Email/email-inbox";
 import EmailRead from "../pages/Email/email-read";
 
 //Invoice
 import InvoicesList from "../pages/Invoices/invoices-list";
-import InvoiceDetail from "../pages/Invoices/invoices-detail"
+import InvoiceDetail from "../pages/Invoices/invoices-detail";
 
 //Contact
 import ContactsGrid from "../pages/Contacts/contacts-grid";
@@ -87,15 +96,15 @@ import IconDripicons from "../pages/Icons/IconDripicons";
 import IconFontawesome from "../pages/Icons/IconFontawesome";
 
 // Maps
-import MapsGoogle from "../pages/Maps/MapsGoogle"
-import MapsVector from "../pages/Maps/MapsVector"
-import MapsLeaflet from "../pages/Maps/MapsLeaflet"
+import MapsGoogle from "../pages/Maps/MapsGoogle";
+import MapsVector from "../pages/Maps/MapsVector";
+import MapsLeaflet from "../pages/Maps/MapsLeaflet";
 
 // Authentication related pages
-import Login from "../pages/Authentication/Login"
-import Logout from "../pages/Authentication/Logout"
-import Register from "../pages/Authentication/Register"
-import ForgetPwd from "../pages/Authentication/ForgetPassword"
+import Login from "../pages/Authentication/Login";
+import Logout from "../pages/Authentication/Logout";
+import Register from "../pages/Authentication/Register";
+import ForgetPwd from "../pages/Authentication/ForgetPassword";
 
 //AuthenticationInner related pages
 import PageLogin from "../pages/AuthenticationInner/PageLogin";
@@ -108,9 +117,17 @@ import TwoStepVerfication from "../pages/AuthenticationInner/TwoStepVerfication"
 import userProfile from "../pages/Authentication/user-profile";
 
 const userRoutes = [
-
   //dashboard
   { path: "/dashboard", component: Dashboard },
+
+  //approvers
+  { path: "/approvers", component: Approvers },
+
+  //users
+  { path: "/users", component: Users },
+
+  //assets
+  { path: "/assets", component: Assets },
 
   //profile
   { path: "/profile", component: userProfile },
@@ -118,10 +135,10 @@ const userRoutes = [
   //Calendar
   { path: "/apps-calendar", component: Calendar },
 
-  //Chat 
+  //Chat
   { path: "/apps-chat", component: Chat },
 
-  //Email 
+  //Email
   { path: "/email-inbox", component: EmailInbox },
   { path: "/email-read", component: EmailRead },
 
@@ -200,7 +217,7 @@ const userRoutes = [
 
   // this route should be at the end of all other routes
   { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
-]
+];
 
 const authRoutes = [
   //authencation page
@@ -223,6 +240,6 @@ const authRoutes = [
   { path: "/pages-comingsoon", component: PagesComingsoon },
   { path: "/pages-404", component: Error404 },
   { path: "/pages-500", component: Error500 },
-]
+];
 
-export { userRoutes, authRoutes }
+export { userRoutes, authRoutes };

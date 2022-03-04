@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Github\\Access-Management\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj": {}
+    "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj": {}
   },
   "projects": {
-    "D:\\Github\\Access-Management\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj": {
+    "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Github\\Access-Management\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
+        "projectUniqueName": "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
         "projectName": "AccessMgmtBackend",
-        "projectPath": "D:\\Github\\Access-Management\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
-        "packagesPath": "C:\\Users\\arjun.c\\.nuget\\packages\\",
-        "outputPath": "D:\\Github\\Access-Management\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\obj\\",
+        "projectPath": "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\AccessMgmtBackend.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\CrossLeaf\\ACM\\Access-Management-Application\\Code\\Src\\AccessMgmtApp\\AccessMgmtBackend\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\arjun.c\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -44,9 +40,27 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.2.3, )"
+            },
+            "System.Configuration.ConfigurationManager": {
+              "target": "Package",
+              "version": "[6.0.0, )"
             }
           },
           "imports": [
