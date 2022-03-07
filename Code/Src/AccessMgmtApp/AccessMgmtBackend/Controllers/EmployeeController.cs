@@ -9,7 +9,7 @@ namespace AccessMgmtBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class EmployeeController : ControllerBase
     {
         private CompanyContext _companyContext;
