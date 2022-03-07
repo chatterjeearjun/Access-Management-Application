@@ -11,36 +11,39 @@ namespace AccessMgmtBackend.Migrations
             {
                 dbContext.Employees.Add(new Employee
                 {
-                    EmployeeName = "Employee001",
-                    Gender = "Male",
-                    DateOfBirth = "01-01-1990",
-                    Nationality = "Indian",
-                    City = "Bangalore",
-                    CurrentAddress = "Current Address",
-                    PermanentAddress = "Permanent Address",
-                    PINCode = "560078"
+                    emp_first_name = "Employee001",
+                    emp_email = "Employee1@gmail.com",
+                    emp_guid = Guid.NewGuid().ToString(),
+                    company_id = 1,
+                    emp_dob = Convert.ToDateTime("01-01-1990"),
+                    emp_joining_date = DateTime.Now,
+                    emp_relieving_date = DateTime.Now,
+                    is_active= true,
+                    emp_mobile_number = "1234567892"
                 });
                 dbContext.Employees.Add(new Employee
                 {
-                    EmployeeName = "Employee002",
-                    Gender = "Female",
-                    DateOfBirth = "01-01-1994",
-                    Nationality = "Indian",
-                    City = "Bangalore",
-                    CurrentAddress = "Current Address",
-                    PermanentAddress = "Permanent Address",
-                    PINCode = "560078"
+                    emp_first_name = "Employee002",
+                    emp_email = "Employee2@gmail.com",
+                    emp_guid = Guid.NewGuid().ToString(),
+                    company_id = 1,
+                    emp_dob = Convert.ToDateTime("01-01-1991"),
+                    emp_joining_date = DateTime.Now,
+                    emp_relieving_date = DateTime.Now,
+                    is_active = true,
+                    emp_mobile_number ="1234567890"
                 });
                 dbContext.Employees.Add(new Employee
                 {
-                    EmployeeName = "Employee003",
-                    Gender = "Female",
-                    DateOfBirth = "01-01-1995",
-                    Nationality = "Indian",
-                    City = "Bangalore",
-                    CurrentAddress = "Current Address",
-                    PermanentAddress = "Permanent Address",
-                    PINCode = "560078"
+                    emp_first_name = "Employee003",
+                    emp_email = "Employee3@gmail.com",
+                    emp_guid = Guid.NewGuid().ToString(),
+                    company_id = 1,
+                    emp_dob = Convert.ToDateTime("01-01-1992"),
+                    emp_joining_date = DateTime.Now,
+                    emp_relieving_date = DateTime.Now,
+                    is_active = true,
+                    emp_mobile_number = "1234567891"
                 });
 
                 dbContext.SaveChanges();

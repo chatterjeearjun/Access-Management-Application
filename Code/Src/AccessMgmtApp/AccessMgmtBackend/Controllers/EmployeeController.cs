@@ -30,7 +30,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{id}")]
         public Employee Get(int id)
         {
-            return _companyContext.Employees.FirstOrDefault(s => s.EmployeeId == id);
+            return _companyContext.Employees.FirstOrDefault(s => s.id == id);
         }
 
         // POST api/<EmployeeController>
@@ -45,7 +45,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Employee value)
         {
-            var employee = _companyContext.Employees.FirstOrDefault(s => s.EmployeeId == id);
+            var employee = _companyContext.Employees.FirstOrDefault(s => s.id == id);
             if (employee != null)
             {
                 _companyContext.Entry<Employee>(employee).CurrentValues.SetValues(value);
@@ -57,7 +57,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            var student = _companyContext.Employees.FirstOrDefault(s => s.EmployeeId == id);
+            var student = _companyContext.Employees.FirstOrDefault(s => s.id == id);
             if (student != null)
             {
                 _companyContext.Employees.Remove(student);
