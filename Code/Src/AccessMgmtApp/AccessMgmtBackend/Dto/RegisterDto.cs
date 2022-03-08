@@ -23,5 +23,10 @@ namespace AccessMgmtBackend.Dto
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
+
+        public string UserRole { get; set; }
+
+        public string UserGroup { get; set; }
+
     }
 }

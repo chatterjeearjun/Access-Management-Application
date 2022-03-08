@@ -15,6 +15,7 @@
         }
 
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Group> Groups { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<JoinerChecklist> JoinerChecklists { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }

@@ -25,7 +25,7 @@ namespace AccessMgmtBackend.Migrations
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "User").Wait();
+                    userManager.AddToRoleAsync(user, "Approver").Wait();
                 }
             }
 
@@ -49,15 +49,20 @@ namespace AccessMgmtBackend.Migrations
 
         private static void SeedRoles(RoleManager<IdentityRole> roleManager)
         {
-            if (!roleManager.RoleExistsAsync("User").Result)
+            if (!roleManager.RoleExistsAsync("Approver").Result)
             {
                 IdentityRole role = new IdentityRole();
-                role.Name = "User";
+                role.Name = "Approver";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }
-
-
+            if (!roleManager.RoleExistsAsync("HR").Result)
+            {
+                IdentityRole role = new IdentityRole();
+                role.Name = "HR";
+                IdentityResult roleResult = roleManager.
+                CreateAsync(role).Result;
+            }
             if (!roleManager.RoleExistsAsync("Admin").Result)
             {
                 IdentityRole role = new IdentityRole();

@@ -18,9 +18,16 @@ namespace AccessMgmtBackend.Controllers
 
         // GET: api/<AssetController>
         [HttpGet]
-        public IEnumerable<Asset> Get()
+        public IEnumerable<Asset> Get(string companyId)
         {
-            return _companyContext.Assets;
+            if (!string.IsNullOrEmpty(companyId))
+            {
+                return _companyContext.Assets.Where(x => x.company_id == Convert.ToInt32(companyId));
+            }
+            else
+            {
+                return null;
+            }
         }
 
         // GET api/<AssetController>/5
@@ -32,33 +39,48 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<AssetController>
         [HttpPost]
-        public void Post([FromBody] Asset value)
+        public Asset Post([FromBody] Asset value)
         {
+            value.created_date = DateTime.UtcNow;
+            value.created_by = "Application";
             _companyContext.Assets.Add(value);
             _companyContext.SaveChanges();
+            return _companyContext.Assets.FirstOrDefault(s => s.asset_id == value.asset_id);
         }
 
         // PUT api/<AssetController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Asset value)
+        public Asset Put(int id, [FromBody] Asset value)
         {
-            var employee = _companyContext.Assets.FirstOrDefault(s => s.id == id);
-            if (employee != null)
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.id == id);
+            if (asset != null)
             {
-                _companyContext.Entry<Asset>(employee).CurrentValues.SetValues(value);
+                value.modified_date = DateTime.UtcNow;
+                value.modified_by = "Application";
+                _companyContext.Entry<Asset>(asset).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
+                return _companyContext.Assets.FirstOrDefault(s => s.id == id);
+            }
+            else
+            {
+                return null;
             }
         }
 
         // DELETE api/<AssetController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IEnumerable<Asset> Delete(int id)
         {
-            var student = _companyContext.Assets.FirstOrDefault(s => s.id == id);
-            if (student != null)
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.id == id);
+            if (asset != null)
             {
-                _companyContext.Assets.Remove(student);
+                _companyContext.Assets.Remove(asset);
                 _companyContext.SaveChanges();
+                return _companyContext.Assets.Where(x => x.company_id == asset.company_id);
+            }
+            else
+            {
+                return null;
             }
         }
     }
