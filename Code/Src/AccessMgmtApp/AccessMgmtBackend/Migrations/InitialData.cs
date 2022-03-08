@@ -32,6 +32,45 @@ namespace AccessMgmtBackend.Migrations
 
                 dbContext.SaveChanges();
             }
+
+            if (!dbContext.Groups.Any())
+            {
+                dbContext.Groups.Add(new Group
+                {
+                    id = 0,
+                    company_id = 1,
+                    group_name = "L1",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.Groups.Add(new Group
+                {
+                    id = 0,
+                    company_id = 1,
+                    group_name = "L2",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.Groups.Add(new Group
+                {
+                    id = 0,
+                    company_id = 1,
+                    group_name = "L3",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+
+                dbContext.SaveChanges();
+            }
         }
     }
 }

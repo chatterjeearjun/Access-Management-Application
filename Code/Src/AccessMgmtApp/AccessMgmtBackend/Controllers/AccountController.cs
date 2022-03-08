@@ -45,9 +45,9 @@ namespace AccessMgmtBackend.Controllers
 
                     IdentityResult result = userManager.CreateAsync(user, model.Password).Result;
 
-                    if (result.Succeeded)
+                    if (result.Succeeded && !string.IsNullOrEmpty(model.UserRole))
                     {
-                        await userManager.AddToRoleAsync(user, "User");
+                        await userManager.AddToRoleAsync(user, model.UserRole);
                         return Created("", model);
                     }
                 }
