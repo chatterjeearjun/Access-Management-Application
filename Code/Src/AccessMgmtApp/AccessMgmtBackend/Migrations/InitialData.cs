@@ -14,7 +14,7 @@ namespace AccessMgmtBackend.Migrations
                     id= 0,
     company_id = 1,
     emp_guid = "6c0276ec-fea1-4fa8-bb1f-5d428a850214",
-    emp_role = "HR",
+    emp_designation = "Team Lead",
     emp_first_name = "Arjun",
     emp_last_name = "Chatterjee",
     emp_email = "arjun.chatterjee@gmail.com",

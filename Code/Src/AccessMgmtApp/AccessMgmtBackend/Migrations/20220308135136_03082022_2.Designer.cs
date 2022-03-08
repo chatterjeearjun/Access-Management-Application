@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220304132205_Migration04032022")]
-    partial class Migration04032022
+    [Migration("20220308135136_03082022_2")]
+    partial class _03082022_2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -253,47 +253,68 @@ namespace AccessMgmtBackend.Migrations
 
             modelBuilder.Entity("AccessMgmtBackend.Models.Employee", b =>
                 {
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<string>("City")
+                    b.Property<int>("company_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("emp_designation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CurrentAddress")
+                    b.Property<DateTime?>("emp_dob")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("emp_email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DateOfBirth")
+                    b.Property<string>("emp_first_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmployeeName")
+                    b.Property<string>("emp_guid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("emp_joining_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("emp_last_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
+                    b.Property<string>("emp_mobile_number")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nationality")
-                        .IsRequired()
+                    b.Property<string>("emp_office_phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PINCode")
-                        .IsRequired()
+                    b.Property<DateTime?>("emp_relieving_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PermanentAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("EmployeeId");
+                    b.HasKey("id");
 
-                    b.ToTable("Employee");
+                    b.ToTable("ac_employees");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.JoinerChecklist", b =>
