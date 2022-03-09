@@ -5,13 +5,13 @@ import { Redirect } from "react-router-dom";
 import Dashboard from "../pages/Dashboard/index";
 
 //Approvers
-import Approvers from "../pages/Approvers/index";
+import AdminTeam from "../pages/AdminTeam/index";
 
 //Users
-import Users from "../pages/Users/index";
+import EmployeeManagement from "../pages/EmployeeManagement/index";
 
 //Users
-import Assets from "../pages/Assets/assets";
+import AssetsManagement from "../pages/AssetsManagement/assets";
 
 // Calendar
 import Calendar from "../pages/Calendar/index";
@@ -121,13 +121,13 @@ const userRoutes = [
   { path: "/dashboard", component: Dashboard },
 
   //approvers
-  { path: "/approvers", component: Approvers },
+  { path: "/AdminTeam", component: AdminTeam },
 
   //users
-  { path: "/users", component: Users },
+  { path: "/employeemanagement", component: EmployeeManagement },
 
   //assets
-  { path: "/assets", component: Assets },
+  { path: "/assetsmanagement", component: AssetsManagement },
 
   //profile
   { path: "/profile", component: userProfile },

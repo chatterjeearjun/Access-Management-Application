@@ -106,25 +106,25 @@ const SidebarContent = (props) => {
               </Link>
             </li>
             <li>
-              <Link to="/approvers" className="">
+              <Link to="/AdminTeam" className="">
                 <FeatherIcon icon="user-check" />
-                <span>{props.t("Approvers")}</span>
+                <span>{props.t("Admin Team")}</span>
               </Link>
             </li>
             <li>
-              <Link to="/users" className="">
+              <Link to="/EmployeeManagement" className="">
                 <FeatherIcon icon="users" />
-                <span>{props.t("Users")}</span>
+                <span>{props.t("Employee Management")}</span>
               </Link>
             </li>
             <li>
-              <Link to="/assets" className="">
+              <Link to="/AssetsManagement" className="">
                 <FeatherIcon icon="hard-drive" />
-                <span>{props.t("Assets")}</span>
+                <span>{props.t("Assets Management")}</span>
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link to="/#" className="has-arrow">
                 <FeatherIcon icon="grid" />
                 <span>{props.t("Apps")}</span>
@@ -487,7 +487,7 @@ const SidebarContent = (props) => {
                   </ul>
                 </li>
               </ul>
-            </li>
+            </li> */}
           </ul>
         </div>
       </SimpleBar>

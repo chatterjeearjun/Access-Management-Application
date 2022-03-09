@@ -118,7 +118,7 @@ const users = [
     startdate: "10/01/2012",
   },
 ];
-const users1 = [
+const groups = [
   {
     id: 1,
     name: "David McHenry",
@@ -325,59 +325,5 @@ const userProfile = {
     },
   ],
 };
-const users2 = [
-  {
-    id: 1,
-    name: "Airi Satou",
-    email: "AiriSatou@crossleaf.ca",
-    designation: "Accountant",
-    office: "Tokyo",
-    startdate: "2008/11/28",
-  },
 
-  {
-    id: 2,
-    name: "Angelica Ramos",
-    email: "Angelica@crossleaf.ca",
-    designation: "Chief Executive Officer (CEO)",
-    office: "London",
-    startdate: "2009/10/09",
-  },
-
-  {
-    id: 3,
-    name: "Ashton Cox",
-    email: "Ashton@crossleaf.ca",
-    designation: "Junior Technical Author",
-    office: "San Francisco",
-    startdate: "2009/01/12",
-  },
-
-  {
-    id: 4,
-    name: "Bradley Greer",
-    email: "Bradley@crossleaf.ca",
-    designation: "Software Engineer",
-    office: "London",
-    startdate: "2012/10/13",
-  },
-
-  {
-    id: 5,
-    name: "Brenden Wagner",
-    email: "Brenden@crossleaf.ca",
-    designation: "Software Engineer",
-    office: "San Francisco",
-    startdate: "2011/06/07",
-  },
-
-  {
-    id: 6,
-    name: "Brielle Williamson",
-    email: "Brielle@crossleaf.ca",
-    designation: "Integration Specialist",
-    office: "New York",
-    startdate: "2012/12/02",
-  },
-];
-export { users, userProfile, users1, users2 };
+export { users, userProfile, groups };

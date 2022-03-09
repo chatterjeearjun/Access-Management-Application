@@ -87,12 +87,19 @@ export const DELETE_PROJECT = "/delete/project";
 export const GET_TASKS = "/tasks";
 
 //CONTACTS
-export const GET_USERS = "/api/Employee";
-export const GET_Approvers = "/users1";
-export const GET_USER_PROFILE = "/user";
-export const ADD_NEW_USER = "/api/Employee";
-export const UPDATE_USER = "/update/user";
+export const GET_USERS = "/api/Employee?companyId=";
+export const GET_USER_PROFILE = "/api/Employee/";
+export const ADD_NEW_USER = "/api/Employee?companyId=";
+export const UPDATE_USER = "/api/Employee/";
 export const DELETE_USER = "/api/Employee/";
+export const GET_EMPLOYEE_GROUPS = "/api/Group?companyId=";
+
+//APPROVERS
+export const GET_APPROVERS = "/api/Approver";
+export const GET_APPROVER_PROFILE = "/api/Approver/";
+export const ADD_NEW_APPROVER = "/api/Approver";
+export const UPDATE_APPROVER = "/api/Approver/";
+export const DELETE_APPROVER = "/api/Approver/";
 
 //dashboard charts data
 export const GET_WEEKLY_DATA = "/weekly-data";
@@ -110,3 +117,9 @@ export const ON_LIKNE_COMMENT = "/comments-product-action";
 export const ON_ADD_REPLY = "/comments-product-add-reply";
 
 export const ON_ADD_COMMENT = "/comments-product-add-comment";
+
+//AssetsManagement
+export const GET_ASSETS = "/api/Asset?companyId=";
+export const ADD_NEW_ASSET = "/api/Asset";
+export const UPDATE_ASSET = "/api/Asset/";
+export const DELETE_ASSET = "/api/Asset/";

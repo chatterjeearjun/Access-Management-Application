@@ -10,12 +10,6 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  Nav,
-  NavItem,
-  NavLink,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
 } from "reactstrap";
 
 import paginationFactory, {
@@ -27,30 +21,28 @@ import { AvForm, AvField } from "availity-reactstrap-validation";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 
-import * as images from "../../assets/images";
-import InputMask from "react-input-mask";
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 import {
-  getUsers as onGetUsers,
-  addNewUser as onAddNewUser,
-  updateUser as onUpdateUser,
-  deleteUser as onDeleteUser,
+  getApprovers as onGetApprovers,
+  addNewApprover as onAddNewApprover,
+  updateApprover as onUpdateApprover,
+  deleteApprover as onDeleteApprover,
 } from "../../store/actions";
-import { isEmpty, size, map } from "lodash";
+import { isEmpty } from "lodash";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-
-const Users = (props) => {
+import moment from "moment";
+const AdminTeam = (props) => {
   const dispatch = useDispatch();
 
-  const { users } = useSelector((state) => ({
-    users: state.contacts.users,
+  const { approvers } = useSelector((state) => ({
+    approvers: state.contacts.approvers,
   }));
 
-  const [userList, setUserList] = useState([]);
+  const [approverList, setApproverList] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -58,13 +50,13 @@ const Users = (props) => {
 
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: users.length, // replace later with size(users),
+    totalSize: approvers?.length, // replace later with size(approvers),
     custom: true,
   };
 
   const defaultSorted = [
     {
-      dataField: "employeeId", // if dataField is not match to any column you defined, it will be ignored.
+      dataField: "id", // if dataField is not match to any column you defined, it will be ignored.
       order: "desc", // desc or asc
     },
   ];
@@ -76,60 +68,61 @@ const Users = (props) => {
   const contactListColumns = [
     {
       text: "id",
-      dataField: "employeeId",
+      dataField: "id",
       sort: true,
       hidden: true,
-      formatter: (cellContent, user) => <>{user.employeeId}</>,
+      formatter: (cellContent, approver) => <>{approver.id}</>,
     },
     {
       text: "Name",
-      dataField: "name",
+      dataField: "approver_name",
       sort: true,
-      formatter: (cellContent, user) => (
+      formatter: (cellContent, approver) => (
         <>
-          <h5 className="font-size-14 mb-1">
-            <Link to="#" className="text-dark">
-              {user.employeeName}
-            </Link>
+          <h5 className="font-size-14 mb-1 text-dark">
+            {approver.approver_name}
           </h5>
-          {/* <p className="text-muted mb-0">{user.designation}</p> */}
+          {/* <p className="text-muted mb-0">{approver.designation}</p> */}
         </>
       ),
     },
     {
-      dataField: "gender",
-      text: "Designation",
+      dataField: "approver_role",
+      text: "Approver Role",
       sort: true,
     },
     {
-      dataField: "currentAddress",
-      text: "Email",
+      dataField: "approver_email",
+      text: "Approver Email",
       sort: true,
     },
     {
-      dataField: "dateOfBirth",
+      dataField: "created_date",
       text: "Start Date",
       sort: true,
+      formatter: (cellContent, approver) => (
+        <>{approver.created_date.split("T")[0]}</>
+      ),
     },
     {
       dataField: "menu",
       isDummyField: true,
       editable: false,
       text: "Action",
-      formatter: (cellContent, user) => (
+      formatter: (cellContent, approver) => (
         <div className="d-flex gap-3">
           <Link className="text-success" to="#">
             <i
               className="mdi mdi-pencil font-size-18"
               id="edittooltip"
-              onClick={() => handleUserClick(user)}
+              onClick={() => handleApproverClick(approver)}
             ></i>
           </Link>
           <Link className="text-danger" to="#">
             <i
               className="mdi mdi-delete font-size-18"
               id="deletetooltip"
-              onClick={() => handleDeleteUser(user)}
+              onClick={() => handleDeleteApprover(approver)}
             ></i>
           </Link>
         </div>
@@ -138,94 +131,83 @@ const Users = (props) => {
   ];
 
   useEffect(() => {
-    if (users && !users.length) {
-      dispatch(onGetUsers());
+    if (approvers && !approvers.length) {
+      dispatch(onGetApprovers());
       setIsEdit(false);
     }
-  }, [dispatch, users]);
+  }, [dispatch, approvers]);
 
   useEffect(() => {
-    setUserList(users);
+    setApproverList(approvers);
     setIsEdit(false);
-  }, [users]);
+  }, [approvers]);
 
   const toggle = () => {
     setModal(!modal);
-    if (!modal && !isEmpty(users) && !!isEdit) {
+    if (!modal && !isEmpty(approvers) && !!isEdit) {
       setTimeout(() => {
-        setUserList(users);
+        setApproverList(approvers);
         setIsEdit(false);
       }, 500);
     }
   };
 
-  const handleUserClick = (arg) => {
-    const user = arg;
-
-    setUserList({
-      id: user.employeeId,
-      name: user.employeeName,
-      designation: user.gender,
-      email: user.currentAddress,
-      startdate: user.dateOfBirth,
-      projects: user.projects,
+  const handleApproverClick = (arg) => {
+    const approver = arg;
+    setApproverList({
+      id: approver.id,
+      name: approver.approver_name,
+      designation: approver.approver_role,
+      email: approver.approver_email,
+      startdate: approver.created_date.split("T")[0],
     });
     setIsEdit(true);
 
     toggle();
   };
 
-  const handleDeleteUser = (user) => {
-    dispatch(onDeleteUser(user));
+  const handleDeleteApprover = (approver) => {
+    const del = dispatch(onDeleteApprover(approver));
+    console.log(del);
   };
-  function getRandomString(length) {
-    var randomChars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var result = "";
-    for (var i = 0; i < length; i++) {
-      result += randomChars.charAt(
-        Math.floor(Math.random() * randomChars.length)
-      );
-    }
-    return result;
-  }
 
   /**
-   * Handling submit user on user form
+   * Handling submit approver on approver form
    */
-  const handleValidUserSubmit = (e, values) => {
+  const handleValidApproverSubmit = (e, values) => {
     if (isEdit) {
-      const updateUser = {
-        id: userList.employeeId,
-        name: values.employeeName,
-        designation: values.gender,
-        email: values.currentAddress,
-        startdate: values.dateOfBirth,
-        projects: values.projects,
+      const updateApprover = {
+        id: approverList.id,
+        approver_name: values["name"],
+        approver_email: values["email"],
+        approver_role: values["designation"],
+        created_date: moment(values["startdate"]).format().slice(0, 19),
       };
-
-      // update user
-      dispatch(onUpdateUser(updateUser));
+      console.log(moment(values["startdate"]).format().slice(0, 19));
+      // update approver
+      dispatch(onUpdateApprover(updateApprover));
       setIsEdit(false);
     } else {
-      const newUser = {
-        employeeId: Math.floor(Math.random() * (30 - 20)) + 20,
-        employeeName: values["name"],
-        dateOfBirth: values["startdate"].toString(),
-        gender: values["designation"],
-        currentAddress: values["email"],
-        permanentAddress: getRandomString(10),
-        city: getRandomString(6),
-        nationality: "India",
-        pinCode: getRandomString(6),
+      const newApprover = {
+        id: 0,
+        approver_name: values["name"],
+        approver_email: values["email"],
+        approver_role: values["designation"],
+        created_date: new Date(
+          values["startdate"].split("-")[0],
+          values["startdate"].split("-")[1],
+          values["startdate"].split("-")[2]
+        )
+          .toISOString()
+          .slice(0, 19),
       };
-      // save new user
-      dispatch(onAddNewUser(newUser));
+      // save new approver
+      dispatch(onAddNewApprover(newApprover));
     }
     toggle();
   };
-  const handleUserClicks = () => {
-    setUserList("");
+  const handleApproverClicks = () => {
+    setApproverList("");
     setIsEdit(false);
     toggle();
   };
@@ -234,27 +216,26 @@ const Users = (props) => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Users List | Crossleaf - Access Management</title>
+          <title>Approvers | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Users" breadcrumbItem="User List" />
+          <Breadcrumbs title="Approvers" breadcrumbItem="Approver List" />
           <Row>
             <Col lg="12">
               <Card>
                 <CardBody>
                   <PaginationProvider
                     pagination={paginationFactory(pageOptions)}
-                    keyField="employeeId"
+                    keyField="id"
                     columns={contactListColumns}
-                    data={users}
+                    data={approvers}
                   >
                     {({ paginationProps, paginationTableProps }) => (
                       <ToolkitProvider
-                        keyField="employeeId"
-                        data={users}
+                        keyField="id"
+                        data={approvers}
                         columns={contactListColumns}
-                        bootstrap4
                         search
                       >
                         {(toolkitProps) => (
@@ -264,9 +245,9 @@ const Users = (props) => {
                                 <div className="col-md-6">
                                   <div className="mb-3">
                                     <h5 className="card-title">
-                                      Users List{" "}
+                                      Current Approvers{" "}
                                       <span className="text-muted fw-normal ms-2">
-                                        ({users.length})
+                                        ({approvers.length})
                                       </span>
                                     </h5>
                                   </div>
@@ -278,39 +259,12 @@ const Users = (props) => {
                                       <Link
                                         to="#"
                                         className="btn btn-light"
-                                        onClick={handleUserClicks}
+                                        onClick={handleApproverClicks}
                                       >
                                         <i className="bx bx-plus me-1"></i> Add
-                                        New
+                                        Approver
                                       </Link>
                                     </div>
-
-                                    <UncontrolledDropdown>
-                                      <DropdownToggle
-                                        className="btn btn-link text-muted py-1 font-size-16 shadow-none"
-                                        tag="a"
-                                      >
-                                        <i className="bx bx-dots-horizontal-rounded"></i>
-                                      </DropdownToggle>
-
-                                      <ul className="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                          <DropdownItem to="#">
-                                            Action
-                                          </DropdownItem>
-                                        </li>
-                                        <li>
-                                          <DropdownItem to="#">
-                                            Another action
-                                          </DropdownItem>
-                                        </li>
-                                        <li>
-                                          <DropdownItem to="#">
-                                            Something else here
-                                          </DropdownItem>
-                                        </li>
-                                      </ul>
-                                    </UncontrolledDropdown>
                                   </div>
                                 </div>
                               </div>
@@ -327,25 +281,29 @@ const Users = (props) => {
                               <Col xl="12">
                                 <div className="table-responsive">
                                   <BootstrapTable
-                                    {...toolkitProps.baseProps}
-                                    {...paginationTableProps}
-                                    selectRow={selectRow}
-                                    defaultSorted={defaultSorted}
-                                    classes={
-                                      "table align-middle table-nowrap table-hover"
-                                    }
+                                    keyField={"id"}
+                                    responsive
                                     bordered={false}
                                     striped={false}
-                                    responsive
+                                    defaultSorted={defaultSorted}
+                                    selectRow={selectRow}
+                                    classes={"table align-middle table-nowrap"}
+                                    headerWrapperClasses={"thead-light"}
+                                    {...toolkitProps.baseProps}
+                                    {...paginationTableProps}
                                   />
 
                                   <Modal isOpen={modal} toggle={toggle}>
                                     <ModalHeader toggle={toggle} tag="h4">
-                                      {!!isEdit ? "Edit User" : "Add User"}
+                                      {!!isEdit
+                                        ? "Edit Approver"
+                                        : "Add Approver"}
                                     </ModalHeader>
                                     <ModalBody>
                                       <AvForm
-                                        onValidSubmit={handleValidUserSubmit}
+                                        onValidSubmit={
+                                          handleValidApproverSubmit
+                                        }
                                       >
                                         <Row form>
                                           <Col xs={12}>
@@ -353,24 +311,26 @@ const Users = (props) => {
                                               <AvField
                                                 name="name"
                                                 label="Name"
+                                                placeholder="approver name"
                                                 type="text"
-                                                errorMessage="Invalid name"
+                                                errorMessage="please provide valid name"
                                                 validate={{
                                                   required: { value: true },
                                                 }}
-                                                value={userList.name || ""}
+                                                value={approverList.name || ""}
                                               />
                                             </div>
                                             <div className="mb-3">
                                               <AvField
                                                 name="email"
                                                 label="Email"
+                                                placeholder="acs@crossleaf.ca"
                                                 type="email"
-                                                errorMessage="Invalid Email"
+                                                errorMessage="please provide valid Email"
                                                 validate={{
                                                   required: { value: true },
                                                 }}
-                                                value={userList.email || ""}
+                                                value={approverList.email || ""}
                                               />
                                             </div>
                                             <div className="mb-3">
@@ -379,12 +339,16 @@ const Users = (props) => {
                                                 name="designation"
                                                 className="form-select"
                                                 label="Designation"
+                                                errorMessage="please select role/designation"
                                                 multiple={false}
                                                 required
                                                 value={
-                                                  userList.designation || ""
+                                                  approverList.designation || ""
                                                 }
                                               >
+                                                <option>
+                                                  select role/designation
+                                                </option>
                                                 <option>SE</option>
                                                 <option>SSE</option>
                                                 <option>Developer</option>
@@ -407,11 +371,13 @@ const Users = (props) => {
                                                 type="date"
                                                 // disabled={true}
                                                 mask="99/99/9999"
-                                                errorMessage="Invalid Date"
+                                                errorMessage="please select start date"
                                                 validate={{
                                                   required: { value: true },
                                                 }}
-                                                value={userList.startdate || ""}
+                                                value={
+                                                  approverList.startdate || ""
+                                                }
                                               />
                                             </div>
                                           </Col>
@@ -421,7 +387,7 @@ const Users = (props) => {
                                             <div className="text-end">
                                               <button
                                                 type="submit"
-                                                className="btn btn-success save-user"
+                                                className="btn btn-success save-approver"
                                               >
                                                 Save
                                               </button>
@@ -456,4 +422,4 @@ const Users = (props) => {
   );
 };
 
-export default withRouter(Users);
+export default withRouter(AdminTeam);

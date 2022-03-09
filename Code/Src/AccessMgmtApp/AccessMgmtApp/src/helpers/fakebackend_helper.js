@@ -126,7 +126,7 @@ export const getCategories = () => get(url.GET_CATEGORIES);
 export const getChats = () => get(url.GET_CHATS);
 
 // get groups
-export const getGroups = () => get(url.GET_GROUPS);
+export const getGroups = () => get(url.GET_EMPLOYEE_GROUPS, 1);
 
 // get Contacts
 export const getContacts = () => get(url.GET_CONTACTS);
@@ -195,19 +195,31 @@ export const getProjectsDetails = (id) =>
 export const getTasks = () => get(url.GET_TASKS);
 
 // get contacts
-export const getUsers = () => get(url.GET_USERS);
+export const getUsers = () => get(url.GET_USERS, 1);
 
-export const getApprovers = () => get(url.GET_USERS);
+export const getEmployeeGroups = () => get(url.GET_EMPLOYEE_GROUPS, 1);
 
 // add user
 export const addNewUser = (user) => post(url.ADD_NEW_USER, user);
 
 // update user
 export const updateUser = (user) => put(url.UPDATE_USER, user);
+export const updateApprover = (approver) => put(url.UPDATE_APPROVER, approver);
 
 // delete user
 export const deleteUser = (user) => {
   del(url.DELETE_USER, user);
+};
+// get approvers
+export const getApprovers = () => get(url.GET_APPROVERS);
+
+// add user
+export const addNewApprover = (approver) =>
+  post(url.ADD_NEW_APPROVER, approver);
+
+// delete user
+export const deleteApprover = (approver) => {
+  del(url.DELETE_APPROVER, approver);
 };
 //{ headers: { user } }
 
@@ -223,6 +235,8 @@ export const deleteProject = (project) =>
   del(url.DELETE_PROJECT, { headers: { project } });
 
 export const getUserProfile = () => get(url.GET_USER_PROFILE);
+
+export const getApproverProfile = () => get(url.GET_APPROVER_PROFILE);
 
 // get inboxmail
 export const getInboxMails = () => get(url.GET_INBOX_MAILS);
@@ -285,6 +299,19 @@ const onAddComment = (productId, commentText) => {
     params: { productId, commentText },
   });
 };
+
+//AssetsManagement
+//add asset
+export const getAssets = () => get(url.GET_ASSETS, 1);
+
+// add asset
+export const addNewAsset = (asset) => post(url.ADD_NEW_ASSET, asset);
+
+// update asset
+export const updateAsset = (asset) => put(url.UPDATE_ASSET, asset);
+
+// delete asset
+export const deleteAsset = (asset) => del(url.DELETE_ASSET, asset);
 
 export {
   getLoggedInUser,
