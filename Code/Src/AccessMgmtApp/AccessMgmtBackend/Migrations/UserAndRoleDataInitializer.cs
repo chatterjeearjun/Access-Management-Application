@@ -42,7 +42,7 @@ namespace AccessMgmtBackend.Migrations
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "Admin").Wait();
+                    userManager.AddToRoleAsync(user, "Administrator").Wait();
                 }
             }
         }
@@ -56,17 +56,17 @@ namespace AccessMgmtBackend.Migrations
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }
-            if (!roleManager.RoleExistsAsync("HR").Result)
+            if (!roleManager.RoleExistsAsync("HR Manager").Result)
             {
                 IdentityRole role = new IdentityRole();
-                role.Name = "HR";
+                role.Name = "HR Manager";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }
-            if (!roleManager.RoleExistsAsync("Admin").Result)
+            if (!roleManager.RoleExistsAsync("Administrator").Result)
             {
                 IdentityRole role = new IdentityRole();
-                role.Name = "Admin";
+                role.Name = "Administrator";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }

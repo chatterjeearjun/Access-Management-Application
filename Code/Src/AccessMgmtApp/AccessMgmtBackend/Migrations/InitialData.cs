@@ -11,24 +11,24 @@ namespace AccessMgmtBackend.Migrations
             {
                 dbContext.Employees.Add(new Employee
                 {
-                    id= 0,
-    company_id = 1,
-    emp_guid = "6c0276ec-fea1-4fa8-bb1f-5d428a850214",
-    emp_designation = "Team Lead",
-    emp_first_name = "Arjun",
-    emp_last_name = "Chatterjee",
-    emp_email = "arjun.chatterjee@gmail.com",
-    emp_office_phone = "7047338810",
-    emp_mobile_number = "8050633895",
-    emp_dob = Convert.ToDateTime("2022-03-07"),
-    emp_joining_date = Convert.ToDateTime("2022-03-07"),
-    emp_relieving_date = Convert.ToDateTime("2022-03-07"),
-    is_active = true,
-    created_date = Convert.ToDateTime("2022-03-07"),
-    created_by = "Application",
-    modified_date = Convert.ToDateTime("2022-03-07"),
-    modified_by = "Application"
-                });                
+                    id = 0,
+                    company_id = 1,
+                    emp_guid = "6c0276ec-fea1-4fa8-bb1f-5d428a850214",
+                    emp_designation = "Team Lead",
+                    emp_first_name = "Arjun",
+                    emp_last_name = "Chatterjee",
+                    emp_email = "arjun.chatterjee@gmail.com",
+                    emp_office_phone = "7047338810",
+                    emp_mobile_number = "8050633895",
+                    emp_dob = Convert.ToDateTime("2022-03-07"),
+                    emp_joining_date = Convert.ToDateTime("2022-03-07"),
+                    emp_relieving_date = Convert.ToDateTime("2022-03-07"),
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
 
                 dbContext.SaveChanges();
             }
@@ -62,6 +62,106 @@ namespace AccessMgmtBackend.Migrations
                     id = 0,
                     company_id = 1,
                     group_name = "L3",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+
+                dbContext.SaveChanges();
+            }
+
+            if (!dbContext.CompanyRoles.Any())
+            {
+                dbContext.CompanyRoles.Add(new Role
+                {
+                    id = 0,
+                    company_id = 1,
+                    role_name = "Administrator",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.CompanyRoles.Add(new Role
+                {
+                    id = 0,
+                    company_id = 1,
+                    role_name = "HR Manager",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.CompanyRoles.Add(new Role
+                {
+                    id = 0,
+                    company_id = 1,
+                    role_name = "Approver",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+
+                dbContext.SaveChanges();
+            }
+
+            if (!dbContext.AppUsers.Any())
+            {
+                dbContext.AppUsers.Add(new AppUser
+                {
+                    id = 0,
+                    company_id = 1,
+                    user_name = "Contractor",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.AppUsers.Add(new AppUser
+                {
+                    id = 0,
+                    company_id = 1,
+                    user_name = "Full Time",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.AppUsers.Add(new AppUser
+                {
+                    id = 0,
+                    company_id = 1,
+                    user_name = "Part Time",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.AppUsers.Add(new AppUser
+                {
+                    id = 0,
+                    company_id = 1,
+                    user_name = "Guest",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.AppUsers.Add(new AppUser
+                {
+                    id = 0,
+                    company_id = 1,
+                    user_name = "External",
                     is_active = true,
                     created_date = Convert.ToDateTime("2022-03-07"),
                     created_by = "Application",
