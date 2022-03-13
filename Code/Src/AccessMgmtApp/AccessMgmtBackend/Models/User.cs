@@ -9,7 +9,9 @@
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        public int company_id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid user_identifier { get; set; }
+        public string company_identifier { get; set; }
         public string user_name { get; set; }
         public string? user_description { get; set; }
         public string? user_description_attachment { get; set; }

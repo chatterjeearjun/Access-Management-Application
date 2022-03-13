@@ -17,48 +17,63 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET: api/<ApproverController>
-        [HttpGet]
-        public IEnumerable<Approver> Get()
+        [HttpGet("{companyId}")]
+        public IEnumerable<Approver> GetByCompany(string companyId)
         {
-            return _companyContext.Approvers;
+            return _companyContext.Approvers.Where(x => x.company_identifier == companyId);
         }
 
         // GET api/<ApproverController>/5
-        [HttpGet("{id}")]
-        public Approver Get(int id)
+        [HttpGet("{guid}")]
+        public Approver Get(string guid)
         {
-            return _companyContext.Approvers.FirstOrDefault(s => s.id == id);
+            return _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
         }
 
         // POST api/<ApproverController>
         [HttpPost]
-        public void Post([FromBody] Approver value)
+        public Approver Post([FromBody] Approver value)
         {
+            value.created_date = DateTime.UtcNow;
+            value.created_by = "Application";
             _companyContext.Approvers.Add(value);
             _companyContext.SaveChanges();
+            return _companyContext.Approvers.FirstOrDefault(s => s.approver_email == value.approver_email);
         }
 
         // PUT api/<ApproverController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Approver value)
+        [HttpPut("{guid}")]
+        public Approver Put(string guid, [FromBody] Approver value)
         {
-            var employee = _companyContext.Approvers.FirstOrDefault(s => s.id == id);
-            if (employee != null)
+            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            if (approver != null)
             {
-                _companyContext.Entry<Approver>(employee).CurrentValues.SetValues(value);
+                value.modified_date = DateTime.UtcNow;
+                value.modified_by = "Application";
+                _companyContext.Entry<Approver>(approver).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
+                return _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            }
+            else
+            {
+                return null;
             }
         }
 
         // DELETE api/<ApproverController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{guid}")]
+        public IEnumerable<Approver> Delete(string guid, string companyId)
         {
-            var student = _companyContext.Approvers.FirstOrDefault(s => s.id == id);
-            if (student != null)
+            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            if (approver != null)
             {
-                _companyContext.Approvers.Remove(student);
+                _companyContext.Approvers.Remove(approver);
                 _companyContext.SaveChanges();
+                return _companyContext.Approvers.Where(x => x.company_identifier == companyId);
+            }
+            else
+            {
+                return _companyContext.Approvers.Where(x => x.company_identifier == companyId);
             }
         }
     }

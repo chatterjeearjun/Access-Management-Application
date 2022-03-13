@@ -9,7 +9,9 @@ namespace AccessMgmtBackend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        public int company_id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid asset_identifier { get; set; }
+        public string company_identifier { get; set; }
         public int asset_id { get; set; }
         public string asset_name { get; set; }
         public string? asset_owner { get; set; }
@@ -18,7 +20,7 @@ namespace AccessMgmtBackend.Models
         public string? asset_type { get; set; }
         public string? asset_description { get; set; }
         public string? asset_description_attachment { get; set; }
-        public bool? is_active { get; set; }
+        public bool is_active { get; set; }
         public bool? is_mda_required { get; set; }
         public bool? is_bc_required { get; set; }
         public bool? certification_required { get; set; }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AccessMgmtBackend.Migrations
 {
-    public partial class _03082022 : Migration
+    public partial class Migration13032022 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,9 +15,15 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    approver_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    approver_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    approver_first_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    approver_last_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     approver_email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    approver_office_phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    approver_mobile_number = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     approver_role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -34,7 +40,8 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    company_id = table.Column<int>(type: "int", nullable: false),
+                    asset_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     asset_id = table.Column<int>(type: "int", nullable: false),
                     asset_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     asset_owner = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -43,7 +50,7 @@ namespace AccessMgmtBackend.Migrations
                     asset_type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     asset_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     asset_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    is_active = table.Column<bool>(type: "bit", nullable: true),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
                     is_mda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     certification_required = table.Column<bool>(type: "bit", nullable: true),
@@ -65,10 +72,10 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    company_guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    company_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     company_email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    company_email2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    company_email2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     company_phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     company_country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     company_city = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -76,11 +83,11 @@ namespace AccessMgmtBackend.Migrations
                     company_address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     company_activation_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     company_deactivation_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    is_active = table.Column<bool>(type: "bit", nullable: true),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -93,8 +100,8 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    company_id = table.Column<int>(type: "int", nullable: false),
-                    emp_guid = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    employee_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     emp_role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     emp_first_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -137,7 +144,8 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    company_id = table.Column<int>(type: "int", nullable: false),
+                    group_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     group_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     group_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     group_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -163,7 +171,9 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    company_id = table.Column<int>(type: "int", nullable: false),
+                    checklist_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    checklist_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     resume = table.Column<bool>(type: "bit", nullable: true),
                     photo = table.Column<bool>(type: "bit", nullable: true),
                     nda = table.Column<bool>(type: "bit", nullable: true),
@@ -174,9 +184,9 @@ namespace AccessMgmtBackend.Migrations
                     nominee_details = table.Column<bool>(type: "bit", nullable: true),
                     mobile_number = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    created_by = table.Column<bool>(type: "bit", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    modified_by = table.Column<bool>(type: "bit", nullable: true)
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -189,6 +199,8 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    notification_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_body = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -210,18 +222,71 @@ namespace AccessMgmtBackend.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    company_id = table.Column<int>(type: "int", nullable: true),
+                    notification_sent_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    sent_notification_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_type_id = table.Column<int>(type: "int", nullable: true),
                     sent_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     notification_sent_to = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ac_notifications_sent", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_role",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    role_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    role_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_mda_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_bc_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_certification_required = table.Column<bool>(type: "bit", nullable: true),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_role", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_user",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    user_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    user_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    user_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    user_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_mda_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_bc_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_certification_required = table.Column<bool>(type: "bit", nullable: true),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_user", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -436,6 +501,12 @@ namespace AccessMgmtBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "ac_notifications_sent");
+
+            migrationBuilder.DropTable(
+                name: "ac_role");
+
+            migrationBuilder.DropTable(
+                name: "ac_user");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

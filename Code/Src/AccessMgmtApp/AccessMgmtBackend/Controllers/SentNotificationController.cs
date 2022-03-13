@@ -17,48 +17,62 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET: api/<SentNotificationController>
-        [HttpGet]
-        public IEnumerable<SentNotification> Get()
+        [HttpGet("{companyId}")]
+        public IEnumerable<SentNotification> GetByCompany(string companyId)
         {
-            return _companyContext.SentNotifications;
+            return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId);
         }
 
         // GET api/<SentNotificationController>/5
-        [HttpGet("{id}")]
-        public SentNotification Get(int id)
+        [HttpGet("{guid}")]
+        public SentNotification Get(string guid)
         {
-            return _companyContext.SentNotifications.FirstOrDefault(s => s.id == id);
+            return _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == new Guid(guid));
         }
 
         // POST api/<SentNotificationController>
         [HttpPost]
-        public void Post([FromBody] SentNotification value)
+        public SentNotification Post([FromBody] SentNotification value)
         {
+            value.created_date = DateTime.UtcNow;
+            value.created_by = "Application";
             _companyContext.SentNotifications.Add(value);
             _companyContext.SaveChanges();
+            return _companyContext.SentNotifications.FirstOrDefault(s => s.sent_notification_name == value.sent_notification_name);
         }
 
         // PUT api/<SentNotificationController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{guid}")]
+        public SentNotification Put(string guid, [FromBody] SentNotification value)
         {
-            var employee = _companyContext.SentNotifications.FirstOrDefault(s => s.id == id);
-            if (employee != null)
+            var notification = _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == new Guid(guid));
+            if (notification != null)
             {
-                _companyContext.Entry<SentNotification>(employee).CurrentValues.SetValues(value);
+                notification.modified_date = DateTime.UtcNow;
+                notification.modified_by = "Application";
+                _companyContext.Entry<SentNotification>(notification).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
+                return _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == new Guid(guid));
+            }
+            else
+            {
+                return null;
             }
         }
 
         // DELETE api/<SentNotificationController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{guid}")]
+        public IEnumerable<SentNotification> Delete(string guid, string companyId)
         {
-            var student = _companyContext.SentNotifications.FirstOrDefault(s => s.id == id);
-            if (student != null)
+            var notification = _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == new Guid(guid));
+            if (notification != null)
             {
-                _companyContext.SentNotifications.Remove(student);
+                _companyContext.SentNotifications.Remove(notification);
                 _companyContext.SaveChanges();
+                return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId);
+            }
+            else {
+                return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId);
             }
         }
     }

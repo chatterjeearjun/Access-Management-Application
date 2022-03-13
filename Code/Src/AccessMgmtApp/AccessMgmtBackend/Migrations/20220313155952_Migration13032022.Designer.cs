@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220308163035_03082022")]
-    partial class _03082022
+    [Migration("20220313155952_Migration13032022")]
+    partial class Migration13032022
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -109,11 +109,30 @@ namespace AccessMgmtBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("approver_name")
+                    b.Property<string>("approver_first_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("approver_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("approver_last_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("approver_mobile_number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("approver_office_phone")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("approver_role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("company_identifier")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -122,6 +141,9 @@ namespace AccessMgmtBackend.Migrations
 
                     b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
                         .HasColumnType("nvarchar(max)");
@@ -132,6 +154,61 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("id");
 
                     b.ToTable("ac_approvers");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.AppUser", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("is_bc_required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("is_certification_required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("is_mda_required")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("user_description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user_description_attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("user_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("user_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_user");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.Asset", b =>
@@ -157,6 +234,10 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<int>("asset_id")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("asset_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("asset_location")
                         .HasColumnType("nvarchar(max)");
 
@@ -176,8 +257,9 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("certification_required")
                         .HasColumnType("bit");
 
-                    b.Property<int>("company_id")
-                        .HasColumnType("int");
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("created_by")
                         .HasColumnType("nvarchar(max)");
@@ -185,7 +267,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("is_active")
+                    b.Property<bool>("is_active")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("is_bc_required")
@@ -236,12 +318,11 @@ namespace AccessMgmtBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("company_email2")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("company_guid")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("company_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("company_name")
                         .IsRequired()
@@ -256,17 +337,15 @@ namespace AccessMgmtBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("created_by")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("is_active")
+                    b.Property<bool>("is_active")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("modified_date")
@@ -285,8 +364,9 @@ namespace AccessMgmtBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int>("company_id")
-                        .HasColumnType("int");
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("created_by")
                         .HasColumnType("nvarchar(max)");
@@ -339,9 +419,6 @@ namespace AccessMgmtBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("emp_guid")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("emp_joining_date")
                         .HasColumnType("datetime2");
 
@@ -377,6 +454,10 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<string>("emp_role")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("employee_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("is_active")
                         .HasColumnType("bit");
 
@@ -399,8 +480,9 @@ namespace AccessMgmtBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int>("company_id")
-                        .HasColumnType("int");
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("created_by")
                         .HasColumnType("nvarchar(max)");
@@ -416,6 +498,10 @@ namespace AccessMgmtBackend.Migrations
 
                     b.Property<DateTime?>("group_end_date")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("group_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("group_name")
                         .IsRequired()
@@ -455,11 +541,20 @@ namespace AccessMgmtBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int>("company_id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("checklist_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool?>("created_by")
-                        .HasColumnType("bit");
+                    b.Property<string>("checklist_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime2");
@@ -473,8 +568,8 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("mobile_number")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("modified_by")
-                        .HasColumnType("bit");
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime2");
@@ -510,6 +605,10 @@ namespace AccessMgmtBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("created_by")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -534,6 +633,10 @@ namespace AccessMgmtBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("notification_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("notification_name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -547,6 +650,61 @@ namespace AccessMgmtBackend.Migrations
                     b.ToTable("ac_notification_types");
                 });
 
+            modelBuilder.Entity("AccessMgmtBackend.Models.Role", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("is_bc_required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("is_certification_required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("is_mda_required")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("role_description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("role_description_attachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("role_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("role_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_role");
+                });
+
             modelBuilder.Entity("AccessMgmtBackend.Models.SentNotification", b =>
                 {
                     b.Property<int>("id")
@@ -555,22 +713,28 @@ namespace AccessMgmtBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int?>("company_id")
-                        .HasColumnType("int");
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("created_by")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
                     b.Property<string>("modified_by")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("modified_date")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("notification_sent_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("notification_sent_to")
                         .IsRequired()
@@ -581,6 +745,10 @@ namespace AccessMgmtBackend.Migrations
 
                     b.Property<DateTime?>("sent_date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("sent_notification_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 

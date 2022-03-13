@@ -16,25 +16,18 @@ namespace AccessMgmtBackend.Controllers
             _companyContext = companyContext;
         }
 
-        // GET: api/<AssetController>
-        [HttpGet]
-        public IEnumerable<Asset> Get(string companyId)
+        // GET: api/<AssetController>/GetByCompany/{companyId}
+        [HttpGet("{companyId}")]
+        public IEnumerable<Asset> GetByCompany(string companyId)
         {
-            if (!string.IsNullOrEmpty(companyId))
-            {
-                return _companyContext.Assets.Where(x => x.company_id == Convert.ToInt32(companyId));
-            }
-            else
-            {
-                return null;
-            }
+            return _companyContext.Assets.Where(x => x.company_identifier == companyId);
         }
 
-        // GET api/<AssetController>/5
-        [HttpGet("{id}")]
-        public Asset Get(int id)
+        // GET api/<AssetController>/{guid}
+        [HttpGet("{guid}")]
+        public Asset Get(string guid)
         {
-            return _companyContext.Assets.FirstOrDefault(s => s.id == id);
+            return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
         }
 
         // POST api/<AssetController>
@@ -49,17 +42,17 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // PUT api/<AssetController>/5
-        [HttpPut("{id}")]
-        public Asset Put(int id, [FromBody] Asset value)
+        [HttpPut("{guid}")]
+        public Asset Put(string guid, [FromBody] Asset value)
         {
-            var asset = _companyContext.Assets.FirstOrDefault(s => s.id == id);
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
             if (asset != null)
             {
                 value.modified_date = DateTime.UtcNow;
                 value.modified_by = "Application";
                 _companyContext.Entry<Asset>(asset).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
-                return _companyContext.Assets.FirstOrDefault(s => s.id == id);
+                return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
             }
             else
             {
@@ -68,19 +61,19 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<AssetController>/5
-        [HttpDelete("{id}")]
-        public IEnumerable<Asset> Delete(int id)
+        [HttpDelete("{guid}")]
+        public IEnumerable<Asset> Delete(string guid, string companyId)
         {
-            var asset = _companyContext.Assets.FirstOrDefault(s => s.id == id);
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
             if (asset != null)
             {
                 _companyContext.Assets.Remove(asset);
                 _companyContext.SaveChanges();
-                return _companyContext.Assets.Where(x => x.company_id == asset.company_id);
+                return _companyContext.Assets.Where(x => x.company_identifier == companyId);
             }
             else
             {
-                return null;
+                return _companyContext.Assets.Where(x => x.company_identifier == companyId);
             }
         }
     }

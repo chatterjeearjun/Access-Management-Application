@@ -18,11 +18,11 @@ namespace AccessMgmtBackend.Controllers
 
         // GET: api/<AppUserController>
         [HttpGet]
-        public IEnumerable<AppUser> Get(string companyId)
+        public IEnumerable<AppUser> GetByCompany(string companyId)
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.AppUsers.Where(x => x.company_id == Convert.ToInt32(companyId));
+                return _companyContext.AppUsers.Where(x => x.company_identifier == companyId);
             }
             else
             {
@@ -31,10 +31,10 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET api/<AppUserController>/5
-        [HttpGet("{id}")]
-        public AppUser Get(int id)
+        [HttpGet("{guid}")]
+        public AppUser Get(string guid)
         {
-            return _companyContext.AppUsers.FirstOrDefault(s => s.id == id);
+            return _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));
         }
 
         // POST api/<AppUserController>
@@ -45,21 +45,21 @@ namespace AccessMgmtBackend.Controllers
             value.created_by = "Application";
             _companyContext.AppUsers.Add(value);
             _companyContext.SaveChanges();
-            return _companyContext.AppUsers.FirstOrDefault(s => s.user_name == value.user_name && s.company_id == value.company_id);
+            return _companyContext.AppUsers.FirstOrDefault(s => s.user_name == value.user_name);
         }
 
         // PUT api/<AppUserController>/5
-        [HttpPut("{id}")]
-        public AppUser Put(int id, [FromBody] AppUser value)
+        [HttpPut("{guid}")]
+        public AppUser Put(string guid, [FromBody] AppUser value)
         {
-            var role = _companyContext.AppUsers.FirstOrDefault(s => s.id == id);
+            var role = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));
             if (role != null)
             {
                 value.modified_date = DateTime.UtcNow;
                 value.modified_by = "Application";
                 _companyContext.Entry<AppUser>(role).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
-                return _companyContext.AppUsers.FirstOrDefault(s => s.id == id);
+                return _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));
             }
             else
             {
@@ -69,18 +69,18 @@ namespace AccessMgmtBackend.Controllers
 
         // DELETE api/<AppUserController>/5
         [HttpDelete("{id}")]
-        public IEnumerable<AppUser> Delete(int id)
+        public IEnumerable<AppUser> Delete(string guid, string companyId)
         {
-            var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.id == id);
+            var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));
             if (appuser != null)
             {
                 _companyContext.AppUsers.Remove(appuser);
                 _companyContext.SaveChanges();
-                return _companyContext.AppUsers.Where(x => x.company_id == appuser.company_id);
+                return _companyContext.AppUsers.Where(x => x.company_identifier == companyId);
             }
             else
             {
-                return null;
+                return _companyContext.AppUsers.Where(x => x.company_identifier == companyId);
             }
         }
     }

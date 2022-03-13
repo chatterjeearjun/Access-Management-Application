@@ -9,33 +9,22 @@ namespace AccessMgmtBackend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-
-        public int company_id { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid checklist_identifier { get; set; }
+        public string company_identifier { get; set; }
+        public string checklist_name { get; set; }
         public bool? resume { get; set; }
-
         public bool? photo { get; set; }
-
         public bool? nda { get; set; }
-
         public bool? prev_company_relieving_letter { get; set; }
-
         public bool? offer_letter_signed { get; set; }
-
         public bool? educational_certificates { get; set; }
-
         public bool? home_address { get; set; }
-
         public bool? nominee_details { get; set; }
-
         public bool? mobile_number { get; set; }
-
         public DateTime? created_date { get; set; }
-
-        public bool? created_by { get; set; }
-
+        public string? created_by { get; set; }
         public DateTime? modified_date { get; set; }
-
-        public bool? modified_by { get; set; }
+        public string? modified_by { get; set; }
     }
 }

@@ -18,11 +18,11 @@ namespace AccessMgmtBackend.Controllers
 
         // GET: api/<GroupController>
         [HttpGet]
-        public IEnumerable<Group> Get(string companyId)
+        public IEnumerable<Group> GetByCompany(string companyId)
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.Groups.Where(x => x.company_id == Convert.ToInt32(companyId));
+                return _companyContext.Groups.Where(x => x.company_identifier == companyId);
             }
             else
             {
@@ -31,10 +31,10 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET api/<GroupController>/5
-        [HttpGet("{id}")]
-        public Group Get(int id)
+        [HttpGet("{guid}")]
+        public Group Get(string guid)
         {
-            return _companyContext.Groups.FirstOrDefault(s => s.id == id);
+            return _companyContext.Groups.FirstOrDefault(s => s.group_identifier == new Guid(guid));
         }
 
         // POST api/<GroupController>
@@ -45,21 +45,21 @@ namespace AccessMgmtBackend.Controllers
             value.created_by = "Application";
             _companyContext.Groups.Add(value);
             _companyContext.SaveChanges();
-            return _companyContext.Groups.FirstOrDefault(s => s.group_name == value.group_name && s.company_id == value.company_id);
+            return _companyContext.Groups.FirstOrDefault(s => s.group_name == value.group_name);
         }
 
         // PUT api/<GroupController>/5
-        [HttpPut("{id}")]
-        public Group Put(int id, [FromBody] Group value)
+        [HttpPut("{guid}")]
+        public Group Put(string guid, [FromBody] Group value)
         {
-            var group = _companyContext.Groups.FirstOrDefault(s => s.id == id);
+            var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier == new Guid(guid));
             if (group != null)
             {
                 value.modified_date = DateTime.UtcNow;
                 value.modified_by = "Application";
                 _companyContext.Entry<Group>(group).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
-                return _companyContext.Groups.FirstOrDefault(s => s.id == id);
+                return _companyContext.Groups.FirstOrDefault(s => s.group_identifier == new Guid(guid));
             }
             else
             {
@@ -68,19 +68,19 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<GroupController>/5
-        [HttpDelete("{id}")]
-        public IEnumerable<Group> Delete(int id)
+        [HttpDelete("{guid}")]
+        public IEnumerable<Group> Delete(string guid, string companyId)
         {
-            var asset = _companyContext.Groups.FirstOrDefault(s => s.id == id);
-            if (asset != null)
+            var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier == new Guid(guid));
+            if (group != null)
             {
-                _companyContext.Groups.Remove(asset);
+                _companyContext.Groups.Remove(group);
                 _companyContext.SaveChanges();
-                return _companyContext.Groups.Where(x => x.company_id == asset.company_id);
+                return _companyContext.Groups.Where(x => x.company_identifier == companyId);
             }
             else
             {
-                return null;
+                return _companyContext.Groups.Where(x => x.company_identifier == companyId);
             }
         }
     }

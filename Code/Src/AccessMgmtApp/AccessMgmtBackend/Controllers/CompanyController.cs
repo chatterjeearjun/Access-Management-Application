@@ -28,38 +28,53 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public Company Get(string guid)
         {
-            return _companyContext.Companies.FirstOrDefault(s => s.company_guid == guid);
+            return _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
         }
 
         // POST api/<CompanyController>
         [HttpPost]
-        public void Post([FromBody] Company value)
+        public Company Post([FromBody] Company value)
         {
+            value.created_date = DateTime.UtcNow;
+            value.created_by = "Application";
             _companyContext.Companies.Add(value);
             _companyContext.SaveChanges();
+            return _companyContext.Companies.FirstOrDefault(s => s.company_email == value.company_email);
         }
 
         // PUT api/<CompanyController>/''
         [HttpPut("{guid}")]
-        public void Put(string guid, [FromBody] string value)
+        public Company Put(string guid, [FromBody] string value)
         {
-            var employee = _companyContext.Companies.FirstOrDefault(s => s.company_guid == guid);
+            var employee = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
             if (employee != null)
             {
+                employee.modified_date = DateTime.UtcNow;
+                employee.modified_by = "Application";
                 _companyContext.Entry<Company>(employee).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
+                return _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
+            }
+            else
+            {
+                return null;
             }
         }
 
         // DELETE api/<CompanyController>/''
         [HttpDelete("{guid}")]
-        public void Delete(string guid)
+        public IEnumerable<Company> Delete(string guid)
         {
-            var student = _companyContext.Companies.FirstOrDefault(s => s.company_guid == guid);
+            var student = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
             if (student != null)
             {
                 _companyContext.Companies.Remove(student);
                 _companyContext.SaveChanges();
+                return _companyContext.Companies.Where(x => x.company_identifier == new Guid(guid));
+            }
+            else
+            {
+                return _companyContext.Companies.Where(x => x.company_identifier == new Guid(guid));
             }
         }
     }

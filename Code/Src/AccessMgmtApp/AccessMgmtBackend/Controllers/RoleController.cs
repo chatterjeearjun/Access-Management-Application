@@ -18,11 +18,11 @@ namespace AccessMgmtBackend.Controllers
 
         // GET: api/<RoleController>
         [HttpGet]
-        public IEnumerable<Role> Get(string companyId)
+        public IEnumerable<Role> GetByCompany(string companyId)
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.CompanyRoles.Where(x => x.company_id == Convert.ToInt32(companyId));
+                return _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId);
             }
             else
             {
@@ -31,10 +31,10 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET api/<RoleController>/5
-        [HttpGet("{id}")]
-        public Role Get(int id)
+        [HttpGet("{guid}")]
+        public Role Get(string guid)
         {
-            return _companyContext.CompanyRoles.FirstOrDefault(s => s.id == id);
+            return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
         }
 
         // POST api/<RoleController>
@@ -45,21 +45,21 @@ namespace AccessMgmtBackend.Controllers
             value.created_by = "Application";
             _companyContext.CompanyRoles.Add(value);
             _companyContext.SaveChanges();
-            return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name && s.company_id == value.company_id);
+            return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
         }
 
         // PUT api/<RoleController>/5
-        [HttpPut("{id}")]
-        public Role Put(int id, [FromBody] Role value)
+        [HttpPut("{guid}")]
+        public Role Put(string guid, [FromBody] Role value)
         {
-            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.id == id);
+            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
             if (role != null)
             {
                 value.modified_date = DateTime.UtcNow;
                 value.modified_by = "Application";
                 _companyContext.Entry<Role>(role).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
-                return _companyContext.CompanyRoles.FirstOrDefault(s => s.id == id);
+                return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
             }
             else
             {
@@ -68,19 +68,19 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<RoleController>/5
-        [HttpDelete("{id}")]
-        public IEnumerable<Role> Delete(int id)
+        [HttpDelete("{guid}")]
+        public IEnumerable<Role> Delete(string guid, string companyId)
         {
-            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.id == id);
+            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
             if (role != null)
             {
                 _companyContext.CompanyRoles.Remove(role);
                 _companyContext.SaveChanges();
-                return _companyContext.CompanyRoles.Where(x => x.company_id == role.company_id);
+                return _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId);
             }
             else
             {
-                return null;
+                return _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId);
             }
         }
     }

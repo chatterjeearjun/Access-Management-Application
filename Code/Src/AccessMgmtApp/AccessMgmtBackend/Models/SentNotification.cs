@@ -9,21 +9,17 @@ namespace AccessMgmtBackend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-
-        public int? company_id { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid notification_sent_identifier { get; set; }
+        public string company_identifier { get; set; }
+        public string sent_notification_name { get; set; }
         public int? notification_type_id { get; set; }
-
         public DateTime? sent_date { get; set; }
-
         public string notification_sent_to { get; set; }
-
+        public bool is_active { get; set; }
         public DateTime? created_date { get; set; }
-
-        public string created_by { get; set; }
-
+        public string? created_by { get; set; }
         public DateTime? modified_date { get; set; }
-
-        public string modified_by { get; set; }
+        public string? modified_by { get; set; }
     }
 }

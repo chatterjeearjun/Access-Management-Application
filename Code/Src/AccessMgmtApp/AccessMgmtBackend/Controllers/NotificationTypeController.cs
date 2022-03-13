@@ -17,48 +17,63 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET: api/<NotificationTypeController>
-        [HttpGet]
-        public IEnumerable<NotificationType> Get()
+        [HttpGet("{guid}")]
+        public NotificationType Get(string guid)
         {
-            return _companyContext.NotificationTypes;
+             return _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == new Guid(guid));
         }
 
         // GET api/<NotificationTypeController>/5
-        [HttpGet("{id}")]
-        public NotificationType Get(int id)
+        [HttpGet("{companyId}")]
+        public IEnumerable<NotificationType> GetByCompany(string companyId)
         {
-            return _companyContext.NotificationTypes.FirstOrDefault(s => s.id == id);
+            return _companyContext.NotificationTypes.Where(s => s.company_identifier == companyId);
         }
 
         // POST api/<NotificationTypeController>
         [HttpPost]
-        public void Post([FromBody] NotificationType value)
+        public NotificationType Post([FromBody] NotificationType value)
         {
+            value.created_date = DateTime.UtcNow;
+            value.created_by = "Application";
             _companyContext.NotificationTypes.Add(value);
             _companyContext.SaveChanges();
+            return _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_name == value.notification_name);
         }
 
         // PUT api/<NotificationTypeController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{guid}")]
+        public NotificationType Put(string guid, [FromBody] NotificationType value)
         {
-            var employee = _companyContext.NotificationTypes.FirstOrDefault(s => s.id == id);
-            if (employee != null)
+            var notification = _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == new Guid(guid));
+            if (notification != null)
             {
-                _companyContext.Entry<NotificationType>(employee).CurrentValues.SetValues(value);
+                value.modified_date = DateTime.UtcNow;
+                value.modified_by = "Application";
+                _companyContext.Entry<NotificationType>(notification).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
+                return _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == new Guid(guid));
+            }
+            else
+            {
+                return null;
             }
         }
 
         // DELETE api/<NotificationTypeController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{guid}")]
+        public IEnumerable<NotificationType> Delete(string guid, string companyId)
         {
-            var student = _companyContext.NotificationTypes.FirstOrDefault(s => s.id == id);
-            if (student != null)
+            var notification = _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == new Guid(guid));
+            if (notification != null)
             {
-                _companyContext.NotificationTypes.Remove(student);
+                _companyContext.NotificationTypes.Remove(notification);
                 _companyContext.SaveChanges();
+                return _companyContext.NotificationTypes.Where(x => x.company_identifier == companyId);
+            }
+            else
+            {
+                return _companyContext.NotificationTypes.Where(x => x.company_identifier == companyId);
             }
         }
     }
