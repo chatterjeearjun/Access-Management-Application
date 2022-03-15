@@ -6,10 +6,10 @@ namespace AccessMgmtBackend.Models
     [Table("ac_new_joiner_checklist")]
     public class JoinerChecklist
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid checklist_identifier { get; set; }
         public string company_identifier { get; set; }
         public string checklist_name { get; set; }

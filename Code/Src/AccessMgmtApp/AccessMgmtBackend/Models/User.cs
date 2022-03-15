@@ -6,10 +6,10 @@
     [Table("ac_user")]
     public class AppUser
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid user_identifier { get; set; }
         public string company_identifier { get; set; }
         public string user_name { get; set; }

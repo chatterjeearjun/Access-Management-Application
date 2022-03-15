@@ -6,10 +6,10 @@
     [Table("ac_employees")]
     public class Employee
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid employee_identifier { get; set; }
         public string company_identifier { get; set; }
         public string? emp_role { get; set; }

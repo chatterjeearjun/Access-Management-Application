@@ -58,17 +58,17 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // PUT api/<EmployeeController>/5
-        [HttpPut("{employeeId}")]
-        public Employee Put(string employeeId, [FromBody] Employee value)
+        [HttpPut("{guid}")]
+        public Employee Put(string guid, [FromBody] Employee value)
         {
-            var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == new Guid(employeeId));
+            var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == new Guid(guid));
             if (employeeStore != null)
             {
                 value.modified_date = DateTime.UtcNow;
                 value.modified_by = "Application";
                 _companyContext.Entry<Employee>(employeeStore).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
-                return _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == new Guid(employeeId));
+                return _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == new Guid(guid));
             }
             else
             {

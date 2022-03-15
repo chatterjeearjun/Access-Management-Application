@@ -1,5 +1,6 @@
 ﻿using AccessMgmtBackend.Context;
 using AccessMgmtBackend.Models;
+using AccessMgmtBackend.Models.ApproverModels;
 
 namespace AccessMgmtBackend.Migrations
 {
@@ -46,6 +47,27 @@ namespace AccessMgmtBackend.Migrations
                     emp_dob = Convert.ToDateTime("2022-03-07"),
                     emp_joining_date = Convert.ToDateTime("2022-03-07"),
                     emp_relieving_date = Convert.ToDateTime("2022-03-07"),
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+
+                dbContext.SaveChanges();
+            }
+            if (!dbContext.Approvers.Any())
+            {
+                dbContext.Approvers.Add(new Approver
+                {
+                    id = 0,
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    approver_identifier = new Guid("6c0276ec-fea1-4fa8-bb1f-5d428a850299"),
+                    approver_role = "Team Lead",
+                    approver_first_name = "Arjun",
+                    approver_last_name = "Chatterjee",
+                    approver_email = "arjun.chatterjee@gmail.com",
+                    approver_mobile_number = "8050633895",                    
                     is_active = true,
                     created_date = Convert.ToDateTime("2022-03-07"),
                     created_by = "Application",

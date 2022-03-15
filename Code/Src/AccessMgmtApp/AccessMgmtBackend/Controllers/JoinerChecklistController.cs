@@ -17,14 +17,14 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET: api/<JoinerChecklistController>
-        [HttpGet]
-        public IEnumerable<JoinerChecklist> Get()
+        [HttpGet("{guid}")]
+        public IEnumerable<JoinerChecklist> Get(string guid)
         {
-            return _companyContext.JoinerChecklists;
+            return _companyContext.JoinerChecklists.Where(s => s.checklist_identifier == new Guid(guid));
         }
 
         // GET api/<JoinerChecklistController>/5
-        [HttpGet("{companyId}")]
+        [HttpGet]
         public IEnumerable<JoinerChecklist> GetByCompany(string companyId)
         {
             if (!string.IsNullOrEmpty(companyId))
@@ -49,17 +49,17 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // PUT api/<JoinerChecklistController>/5
-        [HttpPut("{companyId}")]
-        public JoinerChecklist Put(string companyId, [FromBody] string value)
+        [HttpPut("{guid}")]
+        public JoinerChecklist Put(string guid, [FromBody] string value)
         {
-            var employee = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == new Guid(companyId));
+            var employee = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == new Guid(guid));
             if (employee != null)
             {
                 employee.modified_date = DateTime.UtcNow;
                 employee.modified_by = "Application";
                 _companyContext.Entry<JoinerChecklist>(employee).CurrentValues.SetValues(value);
                 _companyContext.SaveChanges();
-                return _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == new Guid(companyId));
+                return _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == new Guid(guid));
             }
             else
             {

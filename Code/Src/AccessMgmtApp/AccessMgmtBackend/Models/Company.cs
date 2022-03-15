@@ -6,10 +6,10 @@ namespace AccessMgmtBackend.Models
     [Table("ac_companies")]
     public class Company
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid company_identifier { get; set; }
         public string company_name { get; set; }
         public string company_email { get; set; }

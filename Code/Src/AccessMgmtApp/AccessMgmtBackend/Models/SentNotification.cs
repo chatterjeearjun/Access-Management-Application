@@ -6,10 +6,10 @@ namespace AccessMgmtBackend.Models
     [Table("ac_notifications_sent")]
     public class SentNotification
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid notification_sent_identifier { get; set; }
         public string company_identifier { get; set; }
         public string sent_notification_name { get; set; }

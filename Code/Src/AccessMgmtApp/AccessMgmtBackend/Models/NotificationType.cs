@@ -6,10 +6,10 @@ namespace AccessMgmtBackend.Models
     [Table("ac_notification_types")]
     public class NotificationType
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid notification_identifier { get; set; }
         public string company_identifier { get; set; }
         public string notification_name { get; set; }

@@ -6,10 +6,10 @@
     [Table("ac_group")]
     public class Group
     {
-        [Key]
+        
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid group_identifier { get; set; }
         public string company_identifier { get; set; }
         public string group_name { get; set; }

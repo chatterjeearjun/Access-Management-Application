@@ -6,10 +6,9 @@ namespace AccessMgmtBackend.Models
     [Table("ac_assets")]
     public class Asset
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; } 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid asset_identifier { get; set; }
         public string company_identifier { get; set; }
         public int asset_id { get; set; }

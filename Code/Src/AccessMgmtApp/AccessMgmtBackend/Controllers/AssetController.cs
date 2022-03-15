@@ -17,7 +17,7 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET: api/<AssetController>/GetByCompany/{companyId}
-        [HttpGet("{companyId}")]
+        [HttpGet]
         public IEnumerable<Asset> GetByCompany(string companyId)
         {
             return _companyContext.Assets.Where(x => x.company_identifier == companyId);

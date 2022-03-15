@@ -1,5 +1,6 @@
 ﻿using AccessMgmtBackend.Context;
-using AccessMgmtBackend.Models;
+using AccessMgmtBackend.Generic;
+using AccessMgmtBackend.Models.ApproverModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,7 +18,7 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET: api/<ApproverController>
-        [HttpGet("{companyId}")]
+        [HttpGet]
         public IEnumerable<Approver> GetByCompany(string companyId)
         {
             return _companyContext.Approvers.Where(x => x.company_identifier == companyId);
@@ -32,27 +33,35 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<ApproverController>
         [HttpPost]
-        public Approver Post([FromBody] Approver value)
+        public Approver Post([FromBody] CreateApprover value)
         {
-            value.created_date = DateTime.UtcNow;
-            value.created_by = "Application";
-            _companyContext.Approvers.Add(value);
+            var approver = new Approver();
+            approver.created_date = DateTime.UtcNow;
+            approver.created_by = "Application";
+            approver.is_active = true;            
+            PropertyCopier<CreateApprover, Approver>.Copy(value, approver);
+            _companyContext.Approvers.Add(approver);
             _companyContext.SaveChanges();
             return _companyContext.Approvers.FirstOrDefault(s => s.approver_email == value.approver_email);
         }
 
         // PUT api/<ApproverController>/5
-        [HttpPut("{guid}")]
-        public Approver Put(string guid, [FromBody] Approver value)
+        [HttpPut]
+        public Approver Put([FromBody] UpdateApprover value)
         {
-            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == value.approver_identifier);
             if (approver != null)
             {
-                value.modified_date = DateTime.UtcNow;
-                value.modified_by = "Application";
-                _companyContext.Entry<Approver>(approver).CurrentValues.SetValues(value);
+                var approverNew = new Approver();
+                approverNew.id = approver.id;
+                approverNew.created_by = approver.created_by;
+                approverNew.created_date = approver.created_date;
+                approverNew.modified_date = DateTime.UtcNow;
+                approverNew.modified_by = "Application";                
+                PropertyCopier<UpdateApprover, Approver>.Copy(value, approverNew);
+                _companyContext.Entry<Approver>(approver).CurrentValues.SetValues(approverNew);
                 _companyContext.SaveChanges();
-                return _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+                return _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == value.approver_identifier);
             }
             else
             {
@@ -61,19 +70,19 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<ApproverController>/5
-        [HttpDelete("{guid}")]
-        public IEnumerable<Approver> Delete(string guid, string companyId)
+        [HttpDelete]
+        public IEnumerable<Approver> Delete(DeleteApprover deleteApprover)
         {
-            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == deleteApprover.approver_identifier);
             if (approver != null)
             {
                 _companyContext.Approvers.Remove(approver);
                 _companyContext.SaveChanges();
-                return _companyContext.Approvers.Where(x => x.company_identifier == companyId);
+                return _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier);
             }
             else
             {
-                return _companyContext.Approvers.Where(x => x.company_identifier == companyId);
+                return _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier);
             }
         }
     }

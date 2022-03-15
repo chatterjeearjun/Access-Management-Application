@@ -68,7 +68,7 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<AppUserController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{guid}")]
         public IEnumerable<AppUser> Delete(string guid, string companyId)
         {
             var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));

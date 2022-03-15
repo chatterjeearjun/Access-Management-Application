@@ -6,10 +6,9 @@
     [Table("ac_role")]
     public class Role
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid role_identifier { get; set; }
         public string company_identifier { get; set; }
         public string role_name { get; set; }

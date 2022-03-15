@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AccessMgmtBackend.Migrations
 {
-    public partial class Migration13032022 : Migration
+    public partial class MigrationV1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,9 +13,9 @@ namespace AccessMgmtBackend.Migrations
                 name: "ac_approvers",
                 columns: table => new
                 {
+                    approver_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    approver_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     approver_first_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     approver_last_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -31,16 +31,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_approvers", x => x.id);
+                    table.PrimaryKey("PK_ac_approvers", x => x.approver_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_assets",
                 columns: table => new
                 {
+                    asset_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    asset_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     asset_id = table.Column<int>(type: "int", nullable: false),
                     asset_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -63,16 +63,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_assets", x => x.id);
+                    table.PrimaryKey("PK_ac_assets", x => x.asset_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_companies",
                 columns: table => new
                 {
+                    company_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    company_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     company_email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     company_email2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -91,16 +91,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_companies", x => x.id);
+                    table.PrimaryKey("PK_ac_companies", x => x.company_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_employees",
                 columns: table => new
                 {
+                    employee_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    employee_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     emp_role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -135,16 +135,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_employees", x => x.id);
+                    table.PrimaryKey("PK_ac_employees", x => x.employee_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_group",
                 columns: table => new
                 {
+                    group_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    group_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     group_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     group_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -162,16 +162,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_group", x => x.id);
+                    table.PrimaryKey("PK_ac_group", x => x.group_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_new_joiner_checklist",
                 columns: table => new
                 {
+                    checklist_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    checklist_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     checklist_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     resume = table.Column<bool>(type: "bit", nullable: true),
@@ -190,16 +190,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_new_joiner_checklist", x => x.id);
+                    table.PrimaryKey("PK_ac_new_joiner_checklist", x => x.checklist_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_notification_types",
                 columns: table => new
                 {
+                    notification_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    notification_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -213,16 +213,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_notification_types", x => x.id);
+                    table.PrimaryKey("PK_ac_notification_types", x => x.notification_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_notifications_sent",
                 columns: table => new
                 {
+                    notification_sent_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    notification_sent_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     sent_notification_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_type_id = table.Column<int>(type: "int", nullable: true),
@@ -236,16 +236,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_notifications_sent", x => x.id);
+                    table.PrimaryKey("PK_ac_notifications_sent", x => x.notification_sent_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_role",
                 columns: table => new
                 {
+                    role_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    role_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -261,16 +261,16 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_role", x => x.id);
+                    table.PrimaryKey("PK_ac_role", x => x.role_identifier);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ac_user",
                 columns: table => new
                 {
+                    user_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    user_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     user_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     user_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -286,7 +286,7 @@ namespace AccessMgmtBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ac_user", x => x.id);
+                    table.PrimaryKey("PK_ac_user", x => x.user_identifier);
                 });
 
             migrationBuilder.CreateTable(
