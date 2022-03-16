@@ -71,7 +71,7 @@ namespace AccessMgmtBackend.Controllers
 
         // DELETE api/<ApproverController>/5
         [HttpDelete]
-        public IEnumerable<Approver> Delete(DeleteApprover deleteApprover)
+        public IEnumerable<Approver> Delete([FromBody] DeleteApprover deleteApprover)
         {
             var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == deleteApprover.approver_identifier);
             if (approver != null)

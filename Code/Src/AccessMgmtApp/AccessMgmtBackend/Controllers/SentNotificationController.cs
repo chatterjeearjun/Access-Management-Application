@@ -1,4 +1,5 @@
 ﻿using AccessMgmtBackend.Context;
+using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,27 +33,35 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<SentNotificationController>
         [HttpPost]
-        public SentNotification Post([FromBody] SentNotification value)
+        public SentNotification Post([FromBody] CreateSentNotification value)
         {
-            value.created_date = DateTime.UtcNow;
-            value.created_by = "Application";
-            _companyContext.SentNotifications.Add(value);
+            var sentNotification = new SentNotification();
+            sentNotification.created_date = DateTime.UtcNow;
+            sentNotification.created_by = "Application";
+            sentNotification.is_active = true;
+            PropertyCopier<CreateSentNotification, SentNotification>.Copy(value, sentNotification);
+            _companyContext.SentNotifications.Add(sentNotification);
             _companyContext.SaveChanges();
             return _companyContext.SentNotifications.FirstOrDefault(s => s.sent_notification_name == value.sent_notification_name);
         }
 
         // PUT api/<SentNotificationController>/5
-        [HttpPut("{guid}")]
-        public SentNotification Put(string guid, [FromBody] SentNotification value)
+        [HttpPut]
+        public SentNotification Put([FromBody] UpdateSentNotification value)
         {
-            var notification = _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == new Guid(guid));
+            var notification = _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == value.notification_sent_identifier);
             if (notification != null)
             {
-                notification.modified_date = DateTime.UtcNow;
-                notification.modified_by = "Application";
-                _companyContext.Entry<SentNotification>(notification).CurrentValues.SetValues(value);
+                var notificationNew = new SentNotification();
+                notificationNew.id = notification.id;
+                notificationNew.created_by = notification.created_by;
+                notificationNew.created_date = notification.created_date;
+                notificationNew.modified_date = DateTime.UtcNow;
+                notificationNew.modified_by = "Application";
+                PropertyCopier<UpdateSentNotification, SentNotification>.Copy(value, notificationNew);
+                _companyContext.Entry<SentNotification>(notification).CurrentValues.SetValues(notificationNew);
                 _companyContext.SaveChanges();
-                return _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == new Guid(guid));
+                return _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == value.notification_sent_identifier);
             }
             else
             {
@@ -61,18 +70,18 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<SentNotificationController>/5
-        [HttpDelete("{guid}")]
-        public IEnumerable<SentNotification> Delete(string guid, string companyId)
+        [HttpDelete]
+        public IEnumerable<SentNotification> Delete([FromBody] DeleteSentNotification value)
         {
-            var notification = _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == new Guid(guid));
+            var notification = _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == value.notification_sent_identifier);
             if (notification != null)
             {
                 _companyContext.SentNotifications.Remove(notification);
                 _companyContext.SaveChanges();
-                return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId);
+                return _companyContext.SentNotifications.Where(x => x.company_identifier == value.company_identifier);
             }
             else {
-                return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId);
+                return _companyContext.SentNotifications.Where(x => x.company_identifier == value.company_identifier);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AccessMgmtBackend.Context;
+using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,27 +33,35 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<AssetController>
         [HttpPost]
-        public Asset Post([FromBody] Asset value)
+        public Asset Post([FromBody] CreateAsset value)
         {
-            value.created_date = DateTime.UtcNow;
-            value.created_by = "Application";
-            _companyContext.Assets.Add(value);
+            var asset = new Asset();
+            asset.created_date = DateTime.UtcNow;
+            asset.created_by = "Application";
+            asset.is_active = true;
+            PropertyCopier<CreateAsset, Asset>.Copy(value, asset);
+            _companyContext.Assets.Add(asset);
             _companyContext.SaveChanges();
             return _companyContext.Assets.FirstOrDefault(s => s.asset_id == value.asset_id);
         }
 
         // PUT api/<AssetController>/5
-        [HttpPut("{guid}")]
-        public Asset Put(string guid, [FromBody] Asset value)
+        [HttpPut]
+        public Asset Put([FromBody] UpdateAsset value)
         {
-            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
             if (asset != null)
             {
-                value.modified_date = DateTime.UtcNow;
-                value.modified_by = "Application";
-                _companyContext.Entry<Asset>(asset).CurrentValues.SetValues(value);
+                var assetNew = new Asset();
+                assetNew.id = asset.id;
+                assetNew.created_by = asset.created_by;
+                assetNew.created_date = asset.created_date;
+                assetNew.modified_date = DateTime.UtcNow;
+                assetNew.modified_by = "Application";
+                PropertyCopier<UpdateAsset, Asset>.Copy(value, assetNew);
+                _companyContext.Entry<Asset>(asset).CurrentValues.SetValues(assetNew);
                 _companyContext.SaveChanges();
-                return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
+                return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
             }
             else
             {
@@ -61,19 +70,19 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<AssetController>/5
-        [HttpDelete("{guid}")]
-        public IEnumerable<Asset> Delete(string guid, string companyId)
+        [HttpDelete]
+        public IEnumerable<Asset> Delete([FromBody] DeleteAsset value)
         {
-            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
             if (asset != null)
             {
                 _companyContext.Assets.Remove(asset);
                 _companyContext.SaveChanges();
-                return _companyContext.Assets.Where(x => x.company_identifier == companyId);
+                return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier);
             }
             else
             {
-                return _companyContext.Assets.Where(x => x.company_identifier == companyId);
+                return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier);
             }
         }
     }

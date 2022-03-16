@@ -1,4 +1,5 @@
 ﻿using AccessMgmtBackend.Context;
+using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,27 +40,34 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<JoinerChecklistController>
         [HttpPost]
-        public JoinerChecklist Post([FromBody] JoinerChecklist value)
+        public JoinerChecklist Post([FromBody] CreateJoinerChecklist value)
         {
-            value.created_date = DateTime.UtcNow;
-            value.created_by = "Application";
-            _companyContext.JoinerChecklists.Add(value);
+            var joinercheck = new JoinerChecklist();
+            joinercheck.created_date = DateTime.UtcNow;
+            joinercheck.created_by = "Application";
+            PropertyCopier<CreateJoinerChecklist, JoinerChecklist>.Copy(value, joinercheck);
+            _companyContext.JoinerChecklists.Add(joinercheck);
             _companyContext.SaveChanges();
             return _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_name == value.checklist_name);
         }
 
         // PUT api/<JoinerChecklistController>/5
-        [HttpPut("{guid}")]
-        public JoinerChecklist Put(string guid, [FromBody] string value)
+        [HttpPut]
+        public JoinerChecklist Put([FromBody] UpdateJoinerChecklist value)
         {
-            var employee = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == new Guid(guid));
-            if (employee != null)
+            var joinercheck = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == value.checklist_identifier);
+            if (joinercheck != null)
             {
-                employee.modified_date = DateTime.UtcNow;
-                employee.modified_by = "Application";
-                _companyContext.Entry<JoinerChecklist>(employee).CurrentValues.SetValues(value);
+                var joinercheckNew = new JoinerChecklist();
+                joinercheckNew.id = joinercheck.id;
+                joinercheckNew.created_by = joinercheck.created_by;
+                joinercheckNew.created_date = joinercheck.created_date;
+                joinercheckNew.modified_date = DateTime.UtcNow;
+                joinercheckNew.modified_by = "Application";
+                PropertyCopier<UpdateJoinerChecklist, JoinerChecklist>.Copy(value, joinercheckNew);
+                _companyContext.Entry<JoinerChecklist>(joinercheck).CurrentValues.SetValues(joinercheckNew);
                 _companyContext.SaveChanges();
-                return _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == new Guid(guid));
+                return _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == value.checklist_identifier);
             }
             else
             {
@@ -68,19 +76,19 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<JoinerChecklistController>/5
-        [HttpDelete("{guid}")]
-        public IEnumerable<JoinerChecklist> Delete(string guid, string companyId)
+        [HttpDelete]
+        public IEnumerable<JoinerChecklist> Delete([FromBody] DeleteJoinerChecklist value)
         {
-            var student = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == new Guid(guid));
-            if (student != null)
+            var joinercheck = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == value.checklist_identifier);
+            if (joinercheck != null)
             {
-                _companyContext.JoinerChecklists.Remove(student);
+                _companyContext.JoinerChecklists.Remove(joinercheck);
                 _companyContext.SaveChanges();
-                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == companyId);
+                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == value.company_identifier);
             }
             else
             {
-                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == companyId);
+                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == value.company_identifier);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AccessMgmtBackend.Context;
+using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,27 +34,35 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<CompanyController>
         [HttpPost]
-        public Company Post([FromBody] Company value)
+        public Company Post([FromBody] CreateCompany value)
         {
-            value.created_date = DateTime.UtcNow;
-            value.created_by = "Application";
-            _companyContext.Companies.Add(value);
+            var company = new Company();
+            company.created_date = DateTime.UtcNow;
+            company.created_by = "Application";
+            company.is_active = true;
+            PropertyCopier<CreateCompany, Company>.Copy(value, company);
+            _companyContext.Companies.Add(company);
             _companyContext.SaveChanges();
             return _companyContext.Companies.FirstOrDefault(s => s.company_email == value.company_email);
         }
 
         // PUT api/<CompanyController>/''
-        [HttpPut("{guid}")]
-        public Company Put(string guid, [FromBody] string value)
+        [HttpPut]
+        public Company Put([FromBody] UpdateCompany value)
         {
-            var employee = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
-            if (employee != null)
+            var company = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
+            if (company != null)
             {
-                employee.modified_date = DateTime.UtcNow;
-                employee.modified_by = "Application";
-                _companyContext.Entry<Company>(employee).CurrentValues.SetValues(value);
+                var companyNew = new Company();
+                companyNew.id = company.id;
+                companyNew.created_by = company.created_by;
+                companyNew.created_date = company.created_date;
+                companyNew.modified_date = DateTime.UtcNow;
+                companyNew.modified_by = "Application";
+                PropertyCopier<UpdateCompany, Company>.Copy(value, companyNew);
+                _companyContext.Entry<Company>(company).CurrentValues.SetValues(companyNew);
                 _companyContext.SaveChanges();
-                return _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
+                return _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
             }
             else
             {
@@ -62,19 +71,19 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // DELETE api/<CompanyController>/''
-        [HttpDelete("{guid}")]
-        public IEnumerable<Company> Delete(string guid)
+        [HttpDelete]
+        public IEnumerable<Company> Delete([FromBody] DeleteCompany value)
         {
-            var student = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
+            var student = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
             if (student != null)
             {
                 _companyContext.Companies.Remove(student);
                 _companyContext.SaveChanges();
-                return _companyContext.Companies.Where(x => x.company_identifier == new Guid(guid));
+                return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier);
             }
             else
             {
-                return _companyContext.Companies.Where(x => x.company_identifier == new Guid(guid));
+                return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier);
             }
         }
     }
