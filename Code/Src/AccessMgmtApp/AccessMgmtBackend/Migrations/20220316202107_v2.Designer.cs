@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220315090040_MigrationV1")]
-    partial class MigrationV1
+    [Migration("20220316202107_v2")]
+    partial class v2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,7 +97,7 @@ namespace AccessMgmtBackend.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("AccessMgmtBackend.Models.Approver", b =>
+            modelBuilder.Entity("AccessMgmtBackend.Models.ApproverModels.Approver", b =>
                 {
                     b.Property<Guid>("approver_identifier")
                         .ValueGeneratedOnAdd()
@@ -162,6 +162,9 @@ namespace AccessMgmtBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("associated_assets")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("company_identifier")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -187,7 +190,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_certification_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
@@ -273,7 +276,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_bc_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
@@ -285,6 +288,126 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("asset_identifier");
 
                     b.ToTable("ac_assets");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.AssetToEmployee", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("asset_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("employee_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_asset_employee");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.AssetToRole", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("asset_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("role_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_asset_role");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.AssetToUser", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("asset_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("user_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_asset_user");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.Company", b =>
@@ -361,6 +484,9 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<Guid>("employee_identifier")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("associated_assets")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("company_identifier")
                         .IsRequired()
@@ -519,7 +645,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_certification_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
@@ -531,6 +657,46 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("group_identifier");
 
                     b.ToTable("ac_group");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.GroupToRole", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("group_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("role_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_group_role");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.JoinerChecklist", b =>
@@ -656,6 +822,9 @@ namespace AccessMgmtBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("associated_assets")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("company_identifier")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -681,7 +850,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_certification_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")

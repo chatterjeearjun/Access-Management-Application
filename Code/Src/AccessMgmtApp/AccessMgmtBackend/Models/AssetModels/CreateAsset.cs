@@ -15,7 +15,7 @@ namespace AccessMgmtBackend.Models
         public string? asset_description { get; set; }
         public string? asset_description_attachment { get; set; }
         public bool is_active { get; set; }
-        public bool? is_mda_required { get; set; }
+        public bool? is_nda_required { get; set; }
         public bool? is_bc_required { get; set; }
         public bool? certification_required { get; set; }
         public DateTime? alocation_start_date { get; set; }

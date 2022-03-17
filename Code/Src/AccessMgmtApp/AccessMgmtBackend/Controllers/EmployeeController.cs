@@ -36,7 +36,7 @@ namespace AccessMgmtBackend.Controllers
             {
                 return null;
             }
-            
+
         }
 
         // GET api/<EmployeeController>/5
@@ -56,6 +56,30 @@ namespace AccessMgmtBackend.Controllers
             employee.is_active = true;
             PropertyCopier<CreateEmployee, Employee>.Copy(value, employee);
             _companyContext.Employees.Add(employee);
+            if (!string.IsNullOrEmpty(employee.emp_role))
+            {
+                var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == employee.emp_role && s.company_identifier==employee.company_identifier)
+                    .Select(x=>x.asset_identifier);
+                employee.associated_assets = (!string.IsNullOrEmpty(employee.associated_assets)) ?
+                    employee.associated_assets + "," + String.Join(",", associatedRolesAssets) : String.Join(",", associatedRolesAssets);
+            }
+            if (!string.IsNullOrEmpty(employee.associated_assets))
+            {
+                string[] assets = employee.associated_assets.Split(',');
+                foreach (var asset in assets.Distinct())
+                {
+                    _companyContext.AssetToEmployees.Add(new AssetToEmployee
+                    {
+                        id = 0,
+                        company_identifier = employee.company_identifier,
+                        asset_identifier = asset.ToString(),
+                        employee_identifier = employee.employee_identifier.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });
+                }
+            }            
             _companyContext.SaveChanges();
             return _companyContext.Employees.FirstOrDefault(s => s.emp_email == value.emp_email);
 
@@ -76,6 +100,27 @@ namespace AccessMgmtBackend.Controllers
                 employeeNew.modified_by = "Application";
                 PropertyCopier<UpdateEmployee, Employee>.Copy(value, employeeNew);
                 _companyContext.Entry<Employee>(employeeStore).CurrentValues.SetValues(employeeNew);
+                //Added logic for asset addition/updation
+                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where
+                    (x => x.company_identifier == employeeStore.company_identifier && x.employee_identifier == employeeStore.employee_identifier.ToString()));
+
+                if (!string.IsNullOrEmpty(employeeNew.associated_assets))
+                {
+                    string[] assets = employeeNew.associated_assets.Split(',');
+                    foreach (var asset in assets)
+                    {
+                        _companyContext.AssetToEmployees.Add(new AssetToEmployee
+                        {
+                            id = 0,
+                            company_identifier = employeeNew.company_identifier,
+                            asset_identifier = asset.ToString(),
+                            employee_identifier = employeeNew.employee_identifier.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
                 _companyContext.SaveChanges();
                 return _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == value.employee_identifier);
             }
