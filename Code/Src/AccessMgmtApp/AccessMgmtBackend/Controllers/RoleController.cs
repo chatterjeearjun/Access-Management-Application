@@ -66,6 +66,23 @@ namespace AccessMgmtBackend.Controllers
                     });
                 }
             }
+            if (!string.IsNullOrEmpty(role.associated_groups))
+            {
+                string[] groups = role.associated_groups.Split(',');
+                foreach (var group in groups)
+                {
+                    _companyContext.GroupToRoles.Add(new GroupToRole
+                    {
+                        id = 0,
+                        company_identifier = role.company_identifier,
+                        group_identifier = group.ToString(),
+                        role_identifier = role.role_identifier.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });
+                }
+            }
             _companyContext.SaveChanges();
             return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
         }
@@ -88,6 +105,8 @@ namespace AccessMgmtBackend.Controllers
                 //Added logic for asset addition/updation
                 _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where
                     (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
 
                 if (!string.IsNullOrEmpty(roleNew.associated_assets))
                 {
@@ -99,6 +118,23 @@ namespace AccessMgmtBackend.Controllers
                             id = 0,
                             company_identifier = roleNew.company_identifier,
                             asset_identifier = asset.ToString(),
+                            role_identifier = roleNew.role_identifier.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
+                if (!string.IsNullOrEmpty(roleNew.associated_groups))
+                {
+                    string[] groups = roleNew.associated_groups.Split(',');
+                    foreach (var group in groups)
+                    {
+                        _companyContext.GroupToRoles.Add(new GroupToRole
+                        {
+                            id = 0,
+                            company_identifier = roleNew.company_identifier,
+                            group_identifier = group.ToString(),
                             role_identifier = roleNew.role_identifier.ToString(),
                             is_active = true,
                             created_date = DateTime.UtcNow,
@@ -123,6 +159,10 @@ namespace AccessMgmtBackend.Controllers
             if (role != null)
             {
                 _companyContext.CompanyRoles.Remove(role);
+                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where
+                   (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
                 _companyContext.SaveChanges();
                 return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier);
             }

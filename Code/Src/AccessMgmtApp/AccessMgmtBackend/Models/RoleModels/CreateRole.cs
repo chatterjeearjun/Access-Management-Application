@@ -13,5 +13,6 @@
         public bool? is_bc_required { get; set; }
         public bool? is_certification_required { get; set; }
         public string? associated_assets { get; set; }
+        public string? associated_groups { get; set; }
     }
 }
