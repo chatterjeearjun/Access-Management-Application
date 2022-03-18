@@ -55,6 +55,7 @@ export async function post(url, data) {
   }
 }
 export async function postforlogin(url, data, config = {}) {
+  debugger;
   return axiosApi
     .post(url, { ...data }, { ...config })
     .then((response) => response.data);
@@ -62,7 +63,7 @@ export async function postforlogin(url, data, config = {}) {
 
 export async function put(url, formdata) {
   try {
-    const response = await fetch(`${API_URL}${url}${formdata.id}`, {
+    const response = await fetch(`${API_URL}${url}`, {
       method: "PUT",
       body: JSON.stringify(formdata),
       headers: {
@@ -80,8 +81,39 @@ export async function put(url, formdata) {
 
 export async function del(url, user) {
   try {
-    const response = await fetch(`${API_URL}${url}${user}`, {
+    const response = await fetch(`${API_URL}${url}`, {
       method: "DELETE",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error, "post error");
+  }
+}
+export async function delApprover(url, approver) {
+  try {
+    const response = await fetch(`${API_URL}${url}`, {
+      method: "DELETE",
+      body: JSON.stringify(approver),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error, "post error");
+  }
+}
+export async function delGroup(url, group) {
+  try {
+    const response = await fetch(`${API_URL}${url}`, {
+      method: "DELETE",
+      body: JSON.stringify(group),
       headers: {
         "Content-Type": "application/json",
       },

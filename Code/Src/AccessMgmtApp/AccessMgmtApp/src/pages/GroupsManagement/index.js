@@ -27,29 +27,25 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import {
-  getApprovers as onGetApprovers,
-  addNewApprover as onAddNewApprover,
-  updateApprover as onUpdateApprover,
-  deleteApprover as onDeleteApprover,
-  getRoles as onGetRoles,
+  getCompGroups as onGetGroups,
+  addNewCompGroup as onAddNewGroup,
+  updateCompGroup as onUpdateGroup,
+  deleteCompGroup as onDeleteGroup,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-const AdminTeam = (props) => {
+
+const GroupsManagement = (props) => {
   const dispatch = useDispatch();
 
-  const { approvers } = useSelector((state) => ({
-    approvers: state.contacts.approvers,
-  }));
-  const { roles } = useSelector((state) => ({
-    roles: state.contacts.roles,
+  const { groups } = useSelector((state) => ({
+    groups: state.compGroups.groups,
   }));
 
-  const [approverList, setApproverList] = useState([]);
-  const [rolesList, setRolesList] = useState([]);
+  const [groupList, setGroupList] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -57,7 +53,7 @@ const AdminTeam = (props) => {
 
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: approvers?.length, // replace later with size(approvers),
+    totalSize: groups?.length, // replace later with size(groups),
     custom: true,
   };
 
@@ -78,58 +74,43 @@ const AdminTeam = (props) => {
       dataField: "id",
       sort: true,
       hidden: true,
-      formatter: (cellContent, approver) => <>{approver.id}</>,
+      formatter: (cellContent, group) => <>{group.id}</>,
     },
     {
-      text: "Name",
-      dataField: "approver_first_name",
+      text: "Group Name",
+      dataField: "group_name",
       sort: true,
-      formatter: (cellContent, approver) => (
+      formatter: (cellContent, group) => (
         <>
-          <h5 className="font-size-14 mb-1 text-dark">
-            {approver.approver_first_name} {approver.approver_last_name}
-          </h5>
-          {/* <p className="text-muted mb-0">{approver.designation}</p> */}
+          <h5 className="font-size-14 mb-1 text-dark">{group.group_name}</h5>
+          {/* <p className="text-muted mb-0">{group.designation}</p> */}
         </>
       ),
     },
     {
-      dataField: "approver_role",
-      text: "Approver Role",
+      dataField: "group_description",
+      text: "Group Description",
       sort: true,
-    },
-    {
-      dataField: "approver_email",
-      text: "Approver Email",
-      sort: true,
-    },
-    {
-      dataField: "created_date",
-      text: "Start Date",
-      sort: true,
-      formatter: (cellContent, approver) => (
-        <>{approver.created_date.split("T")[0]}</>
-      ),
     },
     {
       dataField: "menu",
       isDummyField: true,
       editable: false,
       text: "Action",
-      formatter: (cellContent, approver) => (
+      formatter: (cellContent, group) => (
         <div className="d-flex gap-3">
           <Link className="text-success" to="#">
             <i
               className="mdi mdi-pencil font-size-18"
               id="edittooltip"
-              onClick={() => handleApproverClick(approver)}
+              onClick={() => handleGroupClick(group)}
             ></i>
           </Link>
           <Link className="text-danger" to="#">
             <i
               className="mdi mdi-delete font-size-18"
               id="deletetooltip"
-              onClick={() => handleDeleteApprover(approver)}
+              onClick={() => handleDeleteGroup(group)}
             ></i>
           </Link>
         </div>
@@ -138,71 +119,56 @@ const AdminTeam = (props) => {
   ];
 
   useEffect(() => {
-    if (approvers && !approvers.length) {
-      dispatch(onGetApprovers());
+    if (groups && !groups.length) {
+      dispatch(onGetGroups());
       setIsEdit(false);
     }
-  }, [dispatch, approvers]);
+  }, [dispatch, groups]);
 
   useEffect(() => {
-    setApproverList(approvers);
+    setGroupList(groups);
     setIsEdit(false);
-  }, [approvers]);
+  }, [groups]);
 
-  useEffect(() => {
-    if (roles && !roles.length) {
-      dispatch(onGetRoles());
-      setIsEdit(false);
-    }
-  }, [dispatch, roles]);
-
-  useEffect(() => {
-    setRolesList(roles);
-    //setIsEdit(false);
-  }, [roles]);
-  console.log(setRolesList, rolesList, "jaghsjhgasjhg");
   const toggle = () => {
     setModal(!modal);
-    if (!modal && !isEmpty(approvers) && !!isEdit) {
+    if (!modal && !isEmpty(groups) && !!isEdit) {
       setTimeout(() => {
-        setApproverList(approvers);
+        setGroupList(groups);
         setIsEdit(false);
       }, 500);
     }
   };
 
-  const handleApproverClick = (arg) => {
-    const approver = arg;
-    setApproverList({
-      approveridentifier: approver.approver_identifier,
-      companyidentifier: approver.company_identifier,
-      fname: approver.approver_first_name,
-      lname: approver.approver_last_name,
-      designation: approver.approver_role,
-      email: approver.approver_email,
-      officephone: approver.approver_office_phone,
-      mobile: approver.approver_mobile_number,
-      startdate: approver.created_date.split("T")[0],
-      status: approver.is_active,
+  const handleGroupClick = (arg) => {
+    const group = arg;
+    setGroupList({
+      groupid: group.group_identifier,
+      groupname: group.group_name,
+      companyid: group.company_identifier,
+      groupdesc: group.group_description,
+      groupdescattachment: group.group_description_attachment,
+      isactive: group.is_active,
+      nda: group.is_mda_required === true ? "Required" : "Not Required",
+      bc: group.is_bc_required === true ? "Required" : "Not Required",
+      certificates:
+        group.is_certification_required === true ? "Required" : "Not Required",
+      expiry: group.group_end_date?.split("T")[0],
     });
     setIsEdit(true);
 
     toggle();
   };
 
-  const handleDeleteApprover = (approver) => {
-    const deletingapprover = {
-      approver_identifier: approver.approveridentifier,
-      company_identifier: approver.companyidentifier,
-    };
+  const handleDeleteGroup = (group) => {
     confirmAlert({
-      title: "Deleting Approver",
-      message: "Are you sure you want to delete this Approver?",
+      title: "Deleting Group",
+      message: "Are you sure you want to delete this Group?",
       buttons: [
         {
           label: "Delete",
           onClick: () => {
-            dispatch(onDeleteApprover(approver));
+            dispatch(dispatch(onDeleteGroup(group)));
           },
         },
         {
@@ -216,43 +182,56 @@ const AdminTeam = (props) => {
   };
 
   /**
-   * Handling submit approver on approver form
+   * Handling submit group on group form
    */
-  const handleValidApproverSubmit = (e, values) => {
+
+  const handleValidGroupSubmit = (e, values) => {
     if (isEdit) {
-      const updateApprover = {
-        approver_identifier: approverList.approveridentifier,
-        company_identifier: approverList.companyidentifier,
-        approver_first_name: values["fname"],
-        approver_last_name: values["lname"],
-        approver_email: values["email"],
-        approver_mobile_number: values["mobile"],
-        approver_office_phone: values["mobile"],
-        approver_role: values["designation"],
-        is_active: approverList.status,
+      const updateGroup = {
+        group_identifier: groupList.groupid,
+        company_identifier: groupList.companyid,
+        group_name: values["name"],
+        group_description: values["description"],
+        group_description_attachment: "",
+        is_active: groupList.isactive,
+        is_mda_required: values["nda"] === "Required" ? true : false,
+        is_bc_required: values["bc"] === "Required" ? true : false,
+        is_certification_required:
+          values["certificates"] === "Required" ? true : false,
+        group_end_date: moment(values["enddate"])
+          .add(1, "day")
+          .startOf("day")
+          .toISOString()
+          .replace(/T.*/gi, "T00:00:00.000Z"),
       };
-      console.log(moment(values["startdate"]).format().slice(0, 19));
-      // update approver
-      dispatch(onUpdateApprover(updateApprover));
+      // update group
+      dispatch(onUpdateGroup(updateGroup));
       setIsEdit(false);
     } else {
-      const newApprover = {
+      const newGroup = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
           .companyID,
-        approver_first_name: values["fname"],
-        approver_last_name: values["lname"],
-        approver_email: values["email"],
-        approver_mobile_number: values["mobile"],
-        approver_office_phone: values["mobile"],
-        approver_role: values["designation"],
+        group_name: values["name"],
+        group_description: values["description"],
+        group_description_attachment: "",
+        is_active: true,
+        is_mda_required: values["nda"] === "Required" ? true : false,
+        is_bc_required: values["bc"] === "Required" ? true : false,
+        is_certification_required:
+          values["certificates"] === "Required" ? true : false,
+        group_end_date: moment(values["enddate"])
+          .add(1, "day")
+          .startOf("day")
+          .toISOString()
+          .replace(/T.*/gi, "T00:00:00.000Z"),
       };
-      // save new approver
-      dispatch(onAddNewApprover(newApprover));
+      // save new group
+      dispatch(onAddNewGroup(newGroup));
     }
     toggle();
   };
-  const handleApproverClicks = () => {
-    setApproverList("");
+  const handleGroupClicks = () => {
+    setGroupList("");
     setIsEdit(false);
     toggle();
   };
@@ -261,11 +240,11 @@ const AdminTeam = (props) => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Approvers | Crossleaf - Access Management</title>
+          <title>Groups | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Approvers" breadcrumbItem="Approver List" />
+          <Breadcrumbs title="Groups" breadcrumbItem="Group List" />
           <Row>
             <Col lg="12">
               <Card>
@@ -274,12 +253,12 @@ const AdminTeam = (props) => {
                     pagination={paginationFactory(pageOptions)}
                     keyField="id"
                     columns={contactListColumns}
-                    data={approvers}
+                    data={groups}
                   >
                     {({ paginationProps, paginationTableProps }) => (
                       <ToolkitProvider
                         keyField="id"
-                        data={approvers}
+                        data={groups}
                         columns={contactListColumns}
                         search
                       >
@@ -290,9 +269,9 @@ const AdminTeam = (props) => {
                                 <div className="col-md-6">
                                   <div className="mb-3">
                                     <h5 className="card-title">
-                                      Current Approvers{" "}
+                                      Current Groups{" "}
                                       <span className="text-muted fw-normal ms-2">
-                                        ({approvers.length})
+                                        ({groups.length})
                                       </span>
                                     </h5>
                                   </div>
@@ -304,10 +283,10 @@ const AdminTeam = (props) => {
                                       <Link
                                         to="#"
                                         className="btn btn-light"
-                                        onClick={handleApproverClicks}
+                                        onClick={handleGroupClicks}
                                       >
                                         <i className="bx bx-plus me-1"></i> Add
-                                        Approver
+                                        Group
                                       </Link>
                                     </div>
                                   </div>
@@ -345,15 +324,11 @@ const AdminTeam = (props) => {
                                     scrollable={true}
                                   >
                                     <ModalHeader toggle={toggle} tag="h4">
-                                      {!!isEdit
-                                        ? "Edit Approver"
-                                        : "Add Approver"}
+                                      {!!isEdit ? "Edit Group" : "Add Group"}
                                     </ModalHeader>
                                     <ModalBody>
                                       <AvForm
-                                        onValidSubmit={
-                                          handleValidApproverSubmit
-                                        }
+                                        onValidSubmit={handleValidGroupSubmit}
                                       >
                                         <Row form>
                                           <Col xs={12}>
@@ -361,16 +336,16 @@ const AdminTeam = (props) => {
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
-                                                    name="fname"
-                                                    label="First Name"
-                                                    placeholder="approver first name"
+                                                    name="name"
+                                                    label="Group Name"
+                                                    placeholder="group name"
                                                     type="text"
-                                                    errorMessage="please provide valid first name"
+                                                    errorMessage="please provide valid name"
                                                     validate={{
                                                       required: { value: true },
                                                     }}
                                                     value={
-                                                      approverList.fname || ""
+                                                      groupList.groupname || ""
                                                     }
                                                   />
                                                 </div>
@@ -378,16 +353,16 @@ const AdminTeam = (props) => {
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
-                                                    name="lname"
-                                                    label="Last Name"
-                                                    placeholder="approver last name"
-                                                    type="text"
-                                                    errorMessage="please provide valid last name"
+                                                    name="description"
+                                                    label="Group Description"
+                                                    placeholder="group description..."
+                                                    type="textarea"
+                                                    errorMessage="please provide valid Description"
                                                     validate={{
                                                       required: { value: true },
                                                     }}
                                                     value={
-                                                      approverList.lname || ""
+                                                      groupList.groupdesc || ""
                                                     }
                                                   />
                                                 </div>
@@ -397,39 +372,39 @@ const AdminTeam = (props) => {
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
-                                                    name="email"
-                                                    label="Approver Email"
-                                                    placeholder="acs@crossleaf.ca"
-                                                    type="email"
-                                                    errorMessage="please provide valid Email"
-                                                    validate={{
-                                                      required: { value: true },
-                                                    }}
-                                                    value={
-                                                      approverList.email || ""
-                                                    }
+                                                    name="groupdescattchment"
+                                                    label="Job Description Attachment"
+                                                    inputClass="form-control"
+                                                    type="file"
+                                                    //placeholder="choose employee photo"
+                                                    errorMessage="please provide valid file"
+                                                    // validate={{
+                                                    //   required: { value: true },
+                                                    // }}
+                                                    value={""}
                                                   />
                                                 </div>
                                               </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
-                                                    name="mobile"
-                                                    label="Approver Phone"
-                                                    type="tel"
-                                                    placeholder="(999)999-9999"
-                                                    errorMessage="please provide valid Phone Number"
-                                                    maxlength="10"
-                                                    validate={{
-                                                      required: {
-                                                        value: true,
-                                                        tel: true,
-                                                      },
-                                                    }}
-                                                    value={
-                                                      approverList.mobile || ""
-                                                    }
-                                                  />
+                                                    type="select"
+                                                    name="nda"
+                                                    className="form-select"
+                                                    label="Is NDA Required?"
+                                                    errorMessage="please select NDA required or not"
+                                                    multiple={false}
+                                                    required
+                                                    value={groupList.nda || ""}
+                                                  >
+                                                    <option>
+                                                      select Is NDA Required?
+                                                    </option>
+                                                    <option>Required</option>
+                                                    <option>
+                                                      Not Required
+                                                    </option>
+                                                  </AvField>
                                                 </div>
                                               </Col>
                                             </Row>
@@ -438,32 +413,77 @@ const AdminTeam = (props) => {
                                                 <div className="mb-3">
                                                   <AvField
                                                     type="select"
-                                                    name="designation"
+                                                    name="bc"
                                                     className="form-select"
-                                                    label="Designation"
-                                                    errorMessage="please select role/designation"
+                                                    label="Is Background Check Required?"
+                                                    errorMessage="please select Background Check required or not"
                                                     multiple={false}
                                                     required
-                                                    value={
-                                                      approverList.designation ||
-                                                      ""
-                                                    }
+                                                    value={groupList.bc || ""}
                                                   >
-                                                    <option value="">
-                                                      select role/designation
+                                                    <option>
+                                                      select Is Background Check
+                                                      Required?
                                                     </option>
-                                                    {rolesList.map((role) => (
-                                                      <option
-                                                        key={role.id}
-                                                        value={role.role_name}
-                                                      >
-                                                        {role.role_name}
-                                                      </option>
-                                                    ))}
+                                                    <option>Required</option>
+                                                    <option>
+                                                      Not Required
+                                                    </option>
                                                   </AvField>
                                                 </div>
                                               </Col>
-                                              <Col xs={6}></Col>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    type="select"
+                                                    name="certificates"
+                                                    className="form-select"
+                                                    label="Is Certificates Required?"
+                                                    errorMessage="please select Certificates required or not"
+                                                    multiple={false}
+                                                    required
+                                                    value={
+                                                      groupList.certificates ||
+                                                      ""
+                                                    }
+                                                  >
+                                                    <option>
+                                                      select Is Certificates
+                                                      Required?
+                                                    </option>
+                                                    <option>Required</option>
+                                                    <option>
+                                                      Not Required
+                                                    </option>
+                                                  </AvField>
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            <Row>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="enddate"
+                                                    label="Group Expiration Date"
+                                                    type="date"
+                                                    placeholder="99/99/9999"
+                                                    // disabled={true}
+                                                    //mask="99/99/9999"
+                                                    errorMessage="please provide valid group expiry Date"
+                                                    validate={{
+                                                      required: { value: true },
+                                                    }}
+                                                    min={
+                                                      new Date()
+                                                        .toJSON()
+                                                        .split("T")[0]
+                                                    }
+                                                    value={
+                                                      groupList.expiry || ""
+                                                    }
+                                                  />
+                                                </div>
+                                              </Col>
                                             </Row>
                                           </Col>
                                         </Row>
@@ -472,7 +492,7 @@ const AdminTeam = (props) => {
                                             <div className="text-end">
                                               <button
                                                 type="submit"
-                                                className="btn btn-success save-approver"
+                                                className="btn btn-success save-group"
                                               >
                                                 Save
                                               </button>
@@ -507,4 +527,4 @@ const AdminTeam = (props) => {
   );
 };
 
-export default withRouter(AdminTeam);
+export default withRouter(GroupsManagement);

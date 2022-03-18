@@ -3,7 +3,6 @@ import { call, put, takeEvery } from "redux-saga/effects";
 // Crypto Redux States
 import {
   GET_USERS,
-  GET_GROUPS,
   GET_USER_PROFILE,
   ADD_NEW_USER,
   DELETE_USER,
@@ -13,16 +12,14 @@ import {
   ADD_NEW_APPROVER,
   DELETE_APPROVER,
   UPDATE_APPROVER,
-  GET_ASSETS,
-  ADD_NEW_ASSET,
-  DELETE_ASSET,
-  UPDATE_ASSET,
+  GET_ROLES,
+  ADD_NEW_ROLE,
+  DELETE_ROLE,
+  UPDATE_ROLE,
 } from "./actionTypes";
 
 import {
   getUsersSuccess,
-  getGroupsSuccess,
-  getGroupsFail,
   getUsersFail,
   getUserProfileSuccess,
   getUserProfileFail,
@@ -42,21 +39,19 @@ import {
   updateApproverFail,
   deleteApproverSuccess,
   deleteApproverFail,
-  getAssetsSuccess,
-  getAssetsFail,
-  getAssetProfileFail,
-  addAssetFail,
-  addAssetSuccess,
-  updateAssetSuccess,
-  updateAssetFail,
-  deleteAssetSuccess,
-  deleteAssetFail,
+  getRolesSuccess,
+  getRolesFail,
+  addRoleFail,
+  addRoleSuccess,
+  updateRoleSuccess,
+  updateRoleFail,
+  deleteRoleSuccess,
+  deleteRoleFail,
 } from "./actions";
 
 //Include Both Helper File with needed methods
 import {
   getUsers,
-  getEmployeeGroups,
   getUserProfile,
   addNewUser,
   updateUser,
@@ -66,10 +61,10 @@ import {
   addNewApprover,
   updateApprover,
   deleteApprover,
-  getAssets,
-  addNewAsset,
-  updateAsset,
-  deleteAsset,
+  getRoles,
+  addNewRole,
+  updateRole,
+  deleteRole,
 } from "../../helpers/fakebackend_helper";
 
 function* fetchUsers() {
@@ -78,14 +73,6 @@ function* fetchUsers() {
     yield put(getUsersSuccess(response));
   } catch (error) {
     yield put(getUsersFail(error));
-  }
-}
-function* fetchGroups() {
-  try {
-    const response = yield call(getEmployeeGroups);
-    yield put(getGroupsSuccess(response));
-  } catch (error) {
-    yield put(getGroupsFail(error));
   }
 }
 
@@ -110,7 +97,7 @@ function* onUpdateUser({ payload: user }) {
 
 function* onDeleteUser({ payload: user }) {
   try {
-    yield call(deleteUser, user.id);
+    yield call(deleteUser, user);
     yield put(deleteUserSuccess(user));
   } catch (error) {
     yield put(deleteUserFail(error));
@@ -158,9 +145,8 @@ function* onUpdateApprover({ payload: approver }) {
 
 function* onDeleteApprover({ payload: user }) {
   try {
-    yield call(deleteApprover, user.id);
-    const res = yield put(deleteApproverSuccess(user));
-    console.log(res, "result........");
+    yield call(deleteApprover, user);
+    yield put(deleteApproverSuccess(user));
   } catch (error) {
     yield put(deleteApproverFail(error));
   }
@@ -175,49 +161,48 @@ function* onAddNewApprover({ payload: user }) {
   }
 }
 
-//AssetsManagement
+//RolesManagement
 
-function* fetchAssets() {
+function* fetchRoles() {
   try {
-    const response = yield call(getAssets);
-    yield put(getAssetsSuccess(response));
+    const response = yield call(getRoles);
+    yield put(getRolesSuccess(response));
   } catch (error) {
-    yield put(getAssetsFail(error));
+    yield put(getRolesFail(error));
   }
 }
 
-function* onUpdateAsset({ payload: asset }) {
+function* onUpdateRole({ payload: asset }) {
   try {
-    const response = yield call(updateAsset, asset);
+    const response = yield call(updateRole, asset);
     debugger;
-    yield put(updateAssetSuccess(response));
+    yield put(updateRoleSuccess(response));
   } catch (error) {
-    yield put(updateAssetFail(error));
+    yield put(updateRoleFail(error));
   }
 }
 
-function* onDeleteAsset({ payload: user }) {
+function* onDeleteRole({ payload: user }) {
   try {
-    yield call(deleteAsset, user.id);
-    const res = yield put(deleteAssetSuccess(user));
+    yield call(deleteRole, user);
+    const res = yield put(deleteRoleSuccess(user));
     console.log(res, "result........");
   } catch (error) {
-    yield put(deleteAssetFail(error));
+    yield put(deleteRoleFail(error));
   }
 }
 
-function* onAddNewAsset({ payload: user }) {
+function* onAddNewRole({ payload: user }) {
   try {
-    const response = yield call(addNewAsset, user);
-    yield put(addAssetSuccess(response));
+    const response = yield call(addNewRole, user);
+    yield put(addRoleSuccess(response));
   } catch (error) {
-    yield put(addAssetFail(error));
+    yield put(addRoleFail(error));
   }
 }
 
 function* contactsSaga() {
   yield takeEvery(GET_USERS, fetchUsers);
-  yield takeEvery(GET_GROUPS, fetchGroups);
   yield takeEvery(GET_USER_PROFILE, fetchUserProfile);
   yield takeEvery(ADD_NEW_USER, onAddNewUser);
   yield takeEvery(UPDATE_USER, onUpdateUser);
@@ -227,10 +212,10 @@ function* contactsSaga() {
   yield takeEvery(ADD_NEW_APPROVER, onAddNewApprover);
   yield takeEvery(UPDATE_APPROVER, onUpdateApprover);
   yield takeEvery(DELETE_APPROVER, onDeleteApprover);
-  yield takeEvery(GET_ASSETS, fetchAssets);
-  yield takeEvery(ADD_NEW_ASSET, onAddNewAsset);
-  yield takeEvery(UPDATE_ASSET, onUpdateAsset);
-  yield takeEvery(DELETE_ASSET, onDeleteAsset);
+  yield takeEvery(GET_ROLES, fetchRoles);
+  yield takeEvery(ADD_NEW_ROLE, onAddNewRole);
+  yield takeEvery(UPDATE_ROLE, onUpdateRole);
+  yield takeEvery(DELETE_ROLE, onDeleteRole);
 }
 
 export default contactsSaga;

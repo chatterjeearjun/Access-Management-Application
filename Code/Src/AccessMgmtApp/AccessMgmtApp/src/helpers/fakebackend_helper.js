@@ -1,5 +1,13 @@
 import axios from "axios";
-import { del, get, post, put, postforlogin } from "./api_helper";
+import {
+  del,
+  get,
+  post,
+  put,
+  postforlogin,
+  delApprover,
+  delGroup,
+} from "./api_helper";
 import * as url from "./url_helper";
 
 // Gets the logged in user data from local session
@@ -126,7 +134,7 @@ export const getCategories = () => get(url.GET_CATEGORIES);
 export const getChats = () => get(url.GET_CHATS);
 
 // get groups
-export const getGroups = () => get(url.GET_EMPLOYEE_GROUPS, 1);
+export const getGroups = () => get(url.GET_GROUPS);
 
 // get Contacts
 export const getContacts = () => get(url.GET_CONTACTS);
@@ -194,10 +202,9 @@ export const getProjectsDetails = (id) =>
 // get tasks
 export const getTasks = () => get(url.GET_TASKS);
 
-// get contacts
-export const getUsers = () => get(url.GET_USERS, 1);
-
-export const getEmployeeGroups = () => get(url.GET_EMPLOYEE_GROUPS, 1);
+// get users
+export const getUsers = () =>
+  get(url.GET_USERS, "6C0276EC-FEA1-4FA8-BB1F-5D428A850222");
 
 // add user
 export const addNewUser = (user) => post(url.ADD_NEW_USER, user);
@@ -211,7 +218,8 @@ export const deleteUser = (user) => {
   del(url.DELETE_USER, user);
 };
 // get approvers
-export const getApprovers = () => get(url.GET_APPROVERS);
+export const getApprovers = () =>
+  get(url.GET_APPROVERS, "6C0276EC-FEA1-4FA8-BB1F-5D428A850222");
 
 // add user
 export const addNewApprover = (approver) =>
@@ -219,7 +227,7 @@ export const addNewApprover = (approver) =>
 
 // delete user
 export const deleteApprover = (approver) => {
-  del(url.DELETE_APPROVER, approver);
+  delApprover(url.DELETE_APPROVER, approver);
 };
 //{ headers: { user } }
 
@@ -301,8 +309,10 @@ const onAddComment = (productId, commentText) => {
 };
 
 //AssetsManagement
+
 //add asset
-export const getAssets = () => get(url.GET_ASSETS, 1);
+export const getAssets = () =>
+  get(url.GET_ASSETS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
 
 // add asset
 export const addNewAsset = (asset) => post(url.ADD_NEW_ASSET, asset);
@@ -312,6 +322,36 @@ export const updateAsset = (asset) => put(url.UPDATE_ASSET, asset);
 
 // delete asset
 export const deleteAsset = (asset) => del(url.DELETE_ASSET, asset);
+
+//RolesManagement
+
+//add role
+export const getRoles = () =>
+  get(url.GET_ROLES, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+
+// add role
+export const addNewRole = (role) => post(url.ADD_NEW_ROLE, role);
+
+// update role
+export const updateRole = (role) => put(url.UPDATE_ROLE, role);
+
+// delete role
+export const deleteRole = (role) => del(url.DELETE_ROLE, role);
+
+//GroupsManagement
+
+//add group
+export const getCompGroups = () =>
+  get(url.GET_COMPGROUPS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+
+// add group
+export const addNewCompGroup = (group) => post(url.ADD_NEW_COMPGROUP, group);
+
+// update group
+export const updateCompGroup = (group) => put(url.UPDATE_COMPGROUP, group);
+
+// delete group
+export const deleteCompGroup = (group) => delGroup(url.DELETE_COMPGROUP, group);
 
 export {
   getLoggedInUser,
