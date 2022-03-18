@@ -46,8 +46,25 @@ namespace AccessMgmtBackend.Controllers
             appUser.created_date = DateTime.UtcNow;
             appUser.created_by = "Application";
             appUser.is_active = true;
-            PropertyCopier<CreateAppUser,AppUser>.Copy(value, appUser);
+            PropertyCopier<CreateAppUser, AppUser>.Copy(value, appUser);
             _companyContext.AppUsers.Add(appUser);
+            if (!string.IsNullOrEmpty(appUser.associated_assets))
+            {
+                string[] assets = appUser.associated_assets.Split(',');
+                foreach (var asset in assets)
+                {
+                    _companyContext.AssetToUsers.Add(new AssetToUser
+                    {
+                        id = 0,
+                        company_identifier = appUser.company_identifier,
+                        asset_identifier = asset.ToString(),
+                        user_identifier = appUser.user_identifier.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });
+                }
+            }
             _companyContext.SaveChanges();
             return _companyContext.AppUsers.FirstOrDefault(s => s.user_name == value.user_name);
         }
@@ -67,6 +84,27 @@ namespace AccessMgmtBackend.Controllers
                 appUser.modified_by = "Application";
                 PropertyCopier<UpdateAppUser, AppUser>.Copy(value, appUser);
                 _companyContext.Entry<AppUser>(appusers).CurrentValues.SetValues(appUser);
+                //Added logic for asset addition/updation
+                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where
+                    (x => x.company_identifier == appusers.company_identifier && x.user_identifier == appusers.user_identifier.ToString()));
+
+                if (!string.IsNullOrEmpty(appUser.associated_assets))
+                {
+                    string[] assets = appUser.associated_assets.Split(',');
+                    foreach (var asset in assets)
+                    {
+                        _companyContext.AssetToUsers.Add(new AssetToUser
+                        {
+                            id = 0,
+                            company_identifier = appUser.company_identifier,
+                            asset_identifier = asset.ToString(),
+                            user_identifier = appUser.user_identifier.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
                 _companyContext.SaveChanges();
                 return _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == value.user_identifier);
             }

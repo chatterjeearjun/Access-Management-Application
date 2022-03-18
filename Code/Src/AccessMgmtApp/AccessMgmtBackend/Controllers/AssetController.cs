@@ -31,6 +31,21 @@ namespace AccessMgmtBackend.Controllers
             return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
         }
 
+        [Route("[action]/{companyid}/{assetid}")]
+        [HttpGet]
+        public List<string> GetAssetAssociation( string companyid, string assetid)
+        {
+            List<string> association = new List<string>();
+            association.Add(string.Join(',', _companyContext.AssetToEmployees.Where
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x=>x.employee_identifier)));
+            association.Add(string.Join(',', _companyContext.AssetToRoles.Where
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x => x.role_identifier)));
+            association.Add(string.Join(',', _companyContext.AssetToUsers.Where
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x => x.user_identifier)));
+            association.RemoveAll(s => s == "");
+            return association;
+        }
+
         // POST api/<AssetController>
         [HttpPost]
         public Asset Post([FromBody] CreateAsset value)
@@ -76,6 +91,9 @@ namespace AccessMgmtBackend.Controllers
             var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
             if (asset != null)
             {
+                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where(x => x.asset_identifier == value.asset_identifier.ToString()));
+                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where(x => x.asset_identifier == value.asset_identifier.ToString()));
+                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x => x.asset_identifier == value.asset_identifier.ToString()));
                 _companyContext.Assets.Remove(asset);
                 _companyContext.SaveChanges();
                 return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier);

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220315094955_MigrationV2")]
-    partial class MigrationV2
+    [Migration("20220316192811_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,7 +97,7 @@ namespace AccessMgmtBackend.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("AccessMgmtBackend.Models.Approver", b =>
+            modelBuilder.Entity("AccessMgmtBackend.Models.ApproverModels.Approver", b =>
                 {
                     b.Property<Guid>("approver_identifier")
                         .ValueGeneratedOnAdd()
@@ -187,7 +187,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_certification_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
@@ -273,7 +273,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_bc_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
@@ -519,7 +519,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_certification_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")
@@ -681,7 +681,7 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<bool?>("is_certification_required")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("is_mda_required")
+                    b.Property<bool?>("is_nda_required")
                         .HasColumnType("bit");
 
                     b.Property<string>("modified_by")

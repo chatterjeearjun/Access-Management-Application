@@ -26,7 +26,11 @@
         public DbSet<SentNotification> SentNotifications { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Approver> Approvers { get; set; }
-
+        public DbSet<AssetToEmployee> AssetToEmployees { get; set; }
+        public DbSet<AssetToRole> AssetToRoles { get; set; }
+        public DbSet<AssetToUser> AssetToUsers { get; set; }
+        public DbSet<GroupToRole> GroupToRoles { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add your own configuration here

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AccessMgmtBackend.Migrations
 {
-    public partial class MigrationV1 : Migration
+    public partial class v1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,7 +51,7 @@ namespace AccessMgmtBackend.Migrations
                     asset_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     asset_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
-                    is_mda_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     certification_required = table.Column<bool>(type: "bit", nullable: true),
                     alocation_start_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -150,7 +150,7 @@ namespace AccessMgmtBackend.Migrations
                     group_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     group_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
-                    is_mda_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
                     group_start_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -251,7 +251,7 @@ namespace AccessMgmtBackend.Migrations
                     role_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     role_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
-                    is_mda_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -276,7 +276,7 @@ namespace AccessMgmtBackend.Migrations
                     user_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     user_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
-                    is_mda_required = table.Column<bool>(type: "bit", nullable: true),
+                    is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),

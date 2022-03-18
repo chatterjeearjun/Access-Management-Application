@@ -48,6 +48,24 @@ namespace AccessMgmtBackend.Controllers
             role.is_active = true;
             PropertyCopier<CreateRole, Role>.Copy(value, role);
             _companyContext.CompanyRoles.Add(role);
+            //Added logic for asset addition
+            if (!string.IsNullOrEmpty(role.associated_assets))
+            {
+                string[] assets = role.associated_assets.Split(',');
+                foreach (var asset in assets)
+                {
+                    _companyContext.AssetToRoles.Add(new AssetToRole
+                    {
+                        id = 0,
+                        company_identifier = role.company_identifier,
+                        asset_identifier = asset.ToString(),
+                        role_identifier = role.role_identifier.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });
+                }
+            }
             _companyContext.SaveChanges();
             return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
         }
@@ -67,6 +85,27 @@ namespace AccessMgmtBackend.Controllers
                 roleNew.modified_by = "Application";
                 PropertyCopier<UpdateRole, Role>.Copy(value, roleNew);
                 _companyContext.Entry<Role>(role).CurrentValues.SetValues(roleNew);
+                //Added logic for asset addition/updation
+                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+
+                if (!string.IsNullOrEmpty(roleNew.associated_assets))
+                {
+                    string[] assets = roleNew.associated_assets.Split(',');
+                    foreach (var asset in assets)
+                    {
+                        _companyContext.AssetToRoles.Add(new AssetToRole
+                        {
+                            id = 0,
+                            company_identifier = roleNew.company_identifier,
+                            asset_identifier = asset.ToString(),
+                            role_identifier = roleNew.role_identifier.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
                 _companyContext.SaveChanges();
                 return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == value.role_identifier);
             }

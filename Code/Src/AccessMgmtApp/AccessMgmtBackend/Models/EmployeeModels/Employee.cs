@@ -36,6 +36,7 @@
         public string? emp_cert_document2 { get; set; }
         public string? emp_cert_document3 { get; set; }
         public string? emp_cert_document4 { get; set; }
+        public string? associated_assets { get; set; }
         public DateTime? emp_cert_review_date { get; set; }
         public bool is_active { get; set; }
         public DateTime? created_date { get; set; }
