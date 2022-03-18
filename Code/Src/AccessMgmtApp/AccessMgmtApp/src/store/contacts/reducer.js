@@ -19,26 +19,24 @@ import {
   DELETE_APPROVER_FAIL,
   GET_APPROVER_PROFILE_SUCCESS,
   GET_APPROVER_PROFILE_FAIL,
-  GET_GROUPS_SUCCESS,
-  GET_GROUPS_FAIL,
-  GET_ASSETS_SUCCESS,
-  GET_ASSETS_FAIL,
-  ADD_ASSET_SUCCESS,
-  ADD_ASSET_FAIL,
-  UPDATE_ASSET_SUCCESS,
-  UPDATE_ASSET_FAIL,
-  DELETE_ASSET_SUCCESS,
-  DELETE_ASSET_FAIL,
+  GET_ROLES_SUCCESS,
+  GET_ROLES_FAIL,
+  ADD_ROLE_SUCCESS,
+  ADD_ROLE_FAIL,
+  UPDATE_ROLE_SUCCESS,
+  UPDATE_ROLE_FAIL,
+  DELETE_ROLE_SUCCESS,
+  DELETE_ROLE_FAIL,
 } from "./actionTypes";
 
 const INIT_STATE = {
   users: [],
   approvers: [],
   assets: [],
-  groups: [],
   userProfile: {},
   error: {},
-  result: {},
+  result: "",
+  roles: [],
 };
 
 const contacts = (state = INIT_STATE, action) => {
@@ -54,22 +52,11 @@ const contacts = (state = INIT_STATE, action) => {
         error: action.payload,
       };
 
-    case GET_GROUPS_SUCCESS:
-      return {
-        ...state,
-        groups: action.payload,
-      };
-
-    case GET_GROUPS_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-      };
-
     case ADD_USER_SUCCESS:
       return {
         ...state,
         users: [...state.users, action.payload],
+        result: "add user success",
       };
 
     case ADD_USER_FAIL:
@@ -89,10 +76,12 @@ const contacts = (state = INIT_STATE, action) => {
       return {
         ...state,
         users: state.users.map((user) =>
-          user.id.toString() === action.payload.id.toString()
+          user.employee_identifier.toString() ===
+          action.payload.employee_identifier.toString()
             ? { user, ...action.payload }
             : user
         ),
+        result: "edit user success",
       };
 
     case UPDATE_USER_FAIL:
@@ -159,7 +148,8 @@ const contacts = (state = INIT_STATE, action) => {
       return {
         ...state,
         approvers: state.approvers.map((approver) =>
-          approver.id.toString() === action.payload.id.toString()
+          approver.approver_identifier.toString() ===
+          action.payload.approver_identifier.toString()
             ? { approver, ...action.payload }
             : approver
         ),
@@ -194,59 +184,60 @@ const contacts = (state = INIT_STATE, action) => {
         error: action.payload,
       };
 
-    //AssetsManagement
+    //RolesManagement
 
-    case GET_ASSETS_SUCCESS:
+    case GET_ROLES_SUCCESS:
       return {
         ...state,
-        assets: action.payload,
+        roles: action.payload,
       };
 
-    case GET_ASSETS_FAIL:
-      return {
-        ...state,
-        error: action.payload,
-      };
-
-    case ADD_ASSET_SUCCESS:
-      return {
-        ...state,
-        assets: [...state.assets, action.payload],
-      };
-
-    case ADD_ASSET_FAIL:
+    case GET_ROLES_FAIL:
       return {
         ...state,
         error: action.payload,
       };
-    case UPDATE_ASSET_SUCCESS:
+
+    case ADD_ROLE_SUCCESS:
+      return {
+        ...state,
+        roles: [...state.roles, action.payload],
+      };
+
+    case ADD_ROLE_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case UPDATE_ROLE_SUCCESS:
       debugger;
       return {
         ...state,
-        assets: state.assets.map((asset) =>
-          asset.id.toString() === action.payload.id.toString()
-            ? { asset, ...action.payload }
-            : asset
+        roles: state.roles.map((role) =>
+          role.role_identifier.toString() ===
+          action.payload.role_identifier.toString()
+            ? { role, ...action.payload }
+            : role
         ),
       };
 
-    case UPDATE_ASSET_FAIL:
+    case UPDATE_ROLE_FAIL:
       return {
         ...state,
         error: action.payload,
       };
 
-    case DELETE_ASSET_SUCCESS:
+    case DELETE_ROLE_SUCCESS:
       debugger;
       return {
         ...state,
-        assets: state.assets.filter(
-          (asset) => asset.id.toString() !== action.payload.id.toString()
+        roles: state.roles.filter(
+          (role) => role.id.toString() !== action.payload.id.toString()
         ),
         result: "success",
       };
 
-    case DELETE_ASSET_FAIL:
+    case DELETE_ROLE_FAIL:
       return {
         ...state,
         error: action.payload,

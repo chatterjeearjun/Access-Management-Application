@@ -3,7 +3,6 @@ import {
   GET_USER_PROFILE_FAIL,
   GET_USER_PROFILE_SUCCESS,
   GET_USERS,
-  GET_GROUPS,
   GET_USERS_FAIL,
   GET_USERS_SUCCESS,
   ADD_NEW_USER,
@@ -30,35 +29,27 @@ import {
   DELETE_APPROVER,
   DELETE_APPROVER_SUCCESS,
   DELETE_APPROVER_FAIL,
-  GET_GROUPS_FAIL,
-  GET_ASSETS,
-  GET_ASSETS_FAIL,
-  GET_ASSETS_SUCCESS,
-  ADD_NEW_ASSET,
-  ADD_ASSET_SUCCESS,
-  ADD_ASSET_FAIL,
-  UPDATE_ASSET,
-  UPDATE_ASSET_SUCCESS,
-  UPDATE_ASSET_FAIL,
-  DELETE_ASSET,
-  DELETE_ASSET_SUCCESS,
-  DELETE_ASSET_FAIL,
+  GET_ROLES,
+  GET_ROLES_FAIL,
+  GET_ROLES_SUCCESS,
+  ADD_NEW_ROLE,
+  ADD_ROLE_SUCCESS,
+  ADD_ROLE_FAIL,
+  UPDATE_ROLE,
+  UPDATE_ROLE_SUCCESS,
+  UPDATE_ROLE_FAIL,
+  DELETE_ROLE,
+  DELETE_ROLE_SUCCESS,
+  DELETE_ROLE_FAIL,
 } from "./actionTypes";
 
 export const getUsers = () => ({
   type: GET_USERS,
 });
-export const getEmpGroups = () => ({
-  type: GET_GROUPS,
-});
 
 export const getUsersSuccess = (users) => ({
   type: GET_USERS_SUCCESS,
   payload: users,
-});
-export const getGroupsSuccess = (groups) => ({
-  type: GET_USERS_SUCCESS,
-  payload: groups,
 });
 
 export const addNewUser = (user) => ({
@@ -78,10 +69,6 @@ export const addUserFail = (error) => ({
 
 export const getUsersFail = (error) => ({
   type: GET_USERS_FAIL,
-  payload: error,
-});
-export const getGroupsFail = (error) => ({
-  type: GET_GROUPS_FAIL,
   payload: error,
 });
 
@@ -204,63 +191,63 @@ export const deleteApproverFail = (error) => ({
   payload: error,
 });
 
-//AssetsManagement
+//RolesManagement
 
-export const getAssets = () => ({
-  type: GET_ASSETS,
+export const getRoles = () => ({
+  type: GET_ROLES,
 });
 
-export const getAssetsSuccess = (users) => ({
-  type: GET_ASSETS_SUCCESS,
+export const getRolesSuccess = (users) => ({
+  type: GET_ROLES_SUCCESS,
   payload: users,
 });
 
-export const addNewAsset = (user) => ({
-  type: ADD_NEW_ASSET,
+export const addNewRole = (user) => ({
+  type: ADD_NEW_ROLE,
   payload: user,
 });
 
-export const addAssetSuccess = (user) => ({
-  type: ADD_ASSET_SUCCESS,
+export const addRoleSuccess = (user) => ({
+  type: ADD_ROLE_SUCCESS,
   payload: user,
 });
 
-export const addAssetFail = (error) => ({
-  type: ADD_ASSET_FAIL,
+export const addRoleFail = (error) => ({
+  type: ADD_ROLE_FAIL,
   payload: error,
 });
 
-export const getAssetsFail = (error) => ({
-  type: GET_ASSETS_FAIL,
+export const getRolesFail = (error) => ({
+  type: GET_ROLES_FAIL,
   payload: error,
 });
 
-export const updateAsset = (asset) => ({
-  type: UPDATE_ASSET,
+export const updateRole = (asset) => ({
+  type: UPDATE_ROLE,
   payload: asset,
 });
 
-export const updateAssetSuccess = (user) => ({
-  type: UPDATE_ASSET_SUCCESS,
+export const updateRoleSuccess = (user) => ({
+  type: UPDATE_ROLE_SUCCESS,
   payload: user,
 });
 
-export const updateAssetFail = (error) => ({
-  type: UPDATE_ASSET_FAIL,
+export const updateRoleFail = (error) => ({
+  type: UPDATE_ROLE_FAIL,
   payload: error,
 });
 
-export const deleteAsset = (user) => ({
-  type: DELETE_ASSET,
+export const deleteRole = (user) => ({
+  type: DELETE_ROLE,
   payload: user,
 });
 
-export const deleteAssetSuccess = (user) => ({
-  type: DELETE_ASSET_SUCCESS,
+export const deleteRoleSuccess = (user) => ({
+  type: DELETE_ROLE_SUCCESS,
   payload: user,
 });
 
-export const deleteAssetFail = (error) => ({
-  type: DELETE_ASSET_FAIL,
+export const deleteRoleFail = (error) => ({
+  type: DELETE_ROLE_FAIL,
   payload: error,
 });

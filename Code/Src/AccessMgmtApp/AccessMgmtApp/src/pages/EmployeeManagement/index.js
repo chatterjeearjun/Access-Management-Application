@@ -11,7 +11,6 @@ import {
   ModalHeader,
   ModalBody,
 } from "reactstrap";
-import Dropzone from "react-dropzone";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -29,28 +28,40 @@ import {
   addNewUser as onAddNewUser,
   updateUser as onUpdateUser,
   deleteUser as onDeleteUser,
-  getGroups as onGetGroups,
+  getCompGroups as onGetGroups,
+  getRoles as onGetRoles,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
-import filterFactory, { selectFilter } from "react-bootstrap-table2-filter";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
 import InputMask from "react-input-mask";
 
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+
 const EmployeeManagement = (props) => {
   const dispatch = useDispatch();
 
   const { users } = useSelector((state) => ({
     users: state.contacts.users,
+    result: state.contacts.result,
   }));
   const { groups } = useSelector((state) => ({
-    groups: state.contacts.groups,
+    groups: state.compGroups.groups,
+  }));
+  const { roles } = useSelector((state) => ({
+    roles: state.contacts.roles,
+  }));
+  const { result } = useSelector((state) => ({
+    result: state.contacts.result,
   }));
 
   const [userList, setUserList] = useState([]);
   const [groupList, setGroupsList] = useState([]);
+  const [rolesList, setRolesList] = useState([]);
+  const [results, setResult] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -71,21 +82,6 @@ const EmployeeManagement = (props) => {
 
   const selectRow = {
     mode: "checkbox",
-  };
-
-  const selectOptions = {
-    0: "SE",
-    1: "SSE",
-    2: "Developer",
-    3: "Designer",
-    4: "BA",
-    5: "Tech Architect",
-    6: "Tech Analyst",
-    7: "Tech Lead",
-    8: "Project Manager",
-    9: "Sr Project Manager",
-    10: "Group Manager",
-    11: "HR",
   };
 
   const userListColumns = [
@@ -163,7 +159,6 @@ const EmployeeManagement = (props) => {
   useEffect(() => {
     if (users && !users.length) {
       dispatch(onGetUsers());
-      //dispatch(onGetGroups());
       setIsEdit(false);
     }
   }, [dispatch, users]);
@@ -173,19 +168,27 @@ const EmployeeManagement = (props) => {
     setIsEdit(false);
   }, [users]);
 
-  // useEffect(() => {
-  //   if (groups && !groups.length) {
-  //     dispatch(onGetGroups());
-  //     setIsEdit(false);
-  //   }
-  // }, [dispatch, groups]);
+  //Roles
+  useEffect(() => {
+    if (roles && !roles.length) {
+      dispatch(onGetRoles());
+    }
+  }, [dispatch, roles]);
 
-  // useEffect(() => {
-  //   setGroupsList(groups);
-  //   setIsEdit(false);
-  // }, [groups]);
+  useEffect(() => {
+    setRolesList(roles);
+  }, [roles]);
 
-  // console.log(groups, groupList, setGroupsList, "jfbjkhjhkshkjhk");
+  //Groups
+  useEffect(() => {
+    if (groups && !groups.length) {
+      dispatch(onGetGroups());
+    }
+  }, [dispatch, groups]);
+
+  useEffect(() => {
+    setGroupsList(groups);
+  }, [groups]);
 
   const toggle = () => {
     setModal(!modal);
@@ -203,9 +206,8 @@ const EmployeeManagement = (props) => {
     const user = arg;
     console.log(arg, "ksdgksgdkg");
     setUserList({
-      id: user.id,
-      guid: user.emp_guid,
-      companyid: user.company_id,
+      employeeid: user.employee_identifier,
+      companyid: user.company_identifier,
       name: user.emp_first_name + " " + user.emp_last_name,
       fname: user.emp_first_name,
       lname: user.emp_last_name,
@@ -226,19 +228,36 @@ const EmployeeManagement = (props) => {
   };
 
   const handleDeleteUser = (user) => {
-    debugger;
-    dispatch(onDeleteUser(user));
+    confirmAlert({
+      title: "Deleting Employee",
+      message: "Are you sure you want to delete this Employee?",
+      buttons: [
+        {
+          label: "Delete",
+          onClick: () => {
+            dispatch(onDeleteUser(user));
+            setResult(result);
+          },
+        },
+        {
+          label: "Cancel",
+          onClick: () => {
+            return false;
+          },
+        },
+      ],
+    });
   };
 
   /**
    * Handling submit user on user form
    */
   const handleValidUserSubmit = (e, values) => {
+    debugger;
     if (isEdit) {
       const updateUser = {
-        id: userList.id,
-        emp_guid: userList.guid,
-        company_id: userList.companyid,
+        employee_identifier: userList.employeeid,
+        company_identifier: userList.companyid,
         emp_designation: values["designation"],
         emp_role: values["employeetype"],
         emp_first_name: values["fname"],
@@ -262,14 +281,16 @@ const EmployeeManagement = (props) => {
       // update user
       dispatch(onUpdateUser(updateUser));
       setIsEdit(false);
+      setResult(result);
+      console.log(results, "jksdfgiuwenbkjwpowqpo");
     } else {
       // let photo = document.getElementById("image-file").files[0];
       // let formData = new FormData();
       // formData.append("photo", photo);
       // fetch("../../images", { method: "POST", body: formData });
       const newUser = {
-        id: 0,
-        company_id: 1,
+        company_identifier: JSON.parse(localStorage.getItem("authUser"))
+          .companyID,
         emp_designation: values["designation"],
         emp_role: values["employeetype"],
         emp_first_name: values["fname"],
@@ -412,33 +433,6 @@ const EmployeeManagement = (props) => {
                                         Employee
                                       </Link>
                                     </div>
-
-                                    {/* <UncontrolledDropdown>
-                                      <DropdownToggle
-                                        className="btn btn-link text-muted py-1 font-size-16 shadow-none"
-                                        tag="a"
-                                      >
-                                        <i className="bx bx-dots-horizontal-rounded"></i>
-                                      </DropdownToggle>
-
-                                      <ul className="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                          <DropdownItem to="#">
-                                            Action
-                                          </DropdownItem>
-                                        </li>
-                                        <li>
-                                          <DropdownItem to="#">
-                                            Another action
-                                          </DropdownItem>
-                                        </li>
-                                        <li>
-                                          <DropdownItem to="#">
-                                            Something else here
-                                          </DropdownItem>
-                                        </li>
-                                      </ul>
-                                    </UncontrolledDropdown> */}
                                   </div>
                                 </div>
                               </div>
@@ -518,79 +512,98 @@ const EmployeeManagement = (props) => {
                                                 </div>
                                               </Col>
                                             </Row>
-                                            <div className="mb-3">
-                                              <AvField
-                                                name="email"
-                                                label="Email"
-                                                type="email"
-                                                placeholder="acs@crossleaf.ca"
-                                                errorMessage="please provide valid Email"
-                                                maxLength="75"
-                                                validate={{
-                                                  required: { value: true },
-                                                }}
-                                                value={userList.email || ""}
-                                              />
-                                            </div>
-                                            <div className="mb-3">
-                                              <AvField
-                                                name="mobile"
-                                                label="Phone"
-                                                type="tel"
-                                                placeholder="(999)999-9999"
-                                                errorMessage="please provide valid Phone Number"
-                                                maxlength="10"
-                                                validate={{
-                                                  required: {
-                                                    value: true,
-                                                    tel: true,
-                                                  },
-                                                }}
-                                                value={userList.mobile || ""}
-                                              />
-                                            </div>
-                                            <div className="mb-3">
-                                              <AvField
-                                                type="select"
-                                                name="employeetype"
-                                                className="form-select"
-                                                label="Employee Type"
-                                                multiple={false}
-                                                required
-                                                errorMessage="please select employee type"
-                                                value={userList.role || ""}
-                                              >
-                                                <option>
-                                                  Select Employee Type
-                                                </option>
-                                                <option>Contractor</option>
-                                                <option>Full Time</option>
-                                                <option>Part Time</option>
-                                                <option>Guest</option>
-                                                <option>External</option>
-                                              </AvField>
-                                            </div>
-                                            <div className="mb-3">
-                                              <AvField
-                                                type="select"
-                                                name="employeegroup"
-                                                className="form-select"
-                                                label="Employee Group"
-                                                multiple={false}
-                                                required
-                                                errorMessage="please select employee group"
-                                                value={groupList || ""}
-                                              >
-                                                <option>
-                                                  Select Employee Group
-                                                </option>
-                                                <option>Group1</option>
-                                                <option>Group1</option>
-                                                <option>Group1</option>
-                                                <option>Group1</option>
-                                                <option>Group1</option>
-                                              </AvField>
-                                            </div>
+                                            <Row>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="email"
+                                                    label="Email"
+                                                    type="email"
+                                                    placeholder="acs@crossleaf.ca"
+                                                    errorMessage="please provide valid Email"
+                                                    maxLength="75"
+                                                    validate={{
+                                                      required: { value: true },
+                                                    }}
+                                                    value={userList.email || ""}
+                                                  />
+                                                </div>
+                                              </Col>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="mobile"
+                                                    label="Phone"
+                                                    type="tel"
+                                                    placeholder="(999)999-9999"
+                                                    errorMessage="please provide valid Phone Number"
+                                                    maxLength="10"
+                                                    validate={{
+                                                      required: {
+                                                        value: true,
+                                                        tel: true,
+                                                      },
+                                                    }}
+                                                    value={
+                                                      userList.mobile || ""
+                                                    }
+                                                  />
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            <Row>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    type="select"
+                                                    name="employeetype"
+                                                    className="form-select"
+                                                    label="Employee Type"
+                                                    multiple={false}
+                                                    required
+                                                    errorMessage="please select employee type"
+                                                    value={userList.role || ""}
+                                                  >
+                                                    <option>
+                                                      Select Employee Type
+                                                    </option>
+                                                    <option>Contractor</option>
+                                                    <option>Full Time</option>
+                                                    <option>Part Time</option>
+                                                    <option>Guest</option>
+                                                    <option>External</option>
+                                                  </AvField>
+                                                </div>
+                                              </Col>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    type="select"
+                                                    name="employeegroup"
+                                                    className="form-select"
+                                                    label="Employee Group"
+                                                    multiple={false}
+                                                    required
+                                                    errorMessage="please select employee group"
+                                                    value={
+                                                      groupList.group_name || ""
+                                                    }
+                                                  >
+                                                    <option value="">
+                                                      Select Employee Group
+                                                    </option>
+                                                    {groupList.map((group) => (
+                                                      <option
+                                                        key={group.id}
+                                                        value={group.group_name}
+                                                      >
+                                                        {group.group_name}
+                                                      </option>
+                                                    ))}
+                                                  </AvField>
+                                                </div>
+                                              </Col>
+                                            </Row>
                                             {/* <div className="mb-3">
                                               <label>Phone</label>
                                               <Phone
@@ -602,132 +615,70 @@ const EmployeeManagement = (props) => {
                                                 }}
                                               />
                                             </div> */}
-                                            <div className="mb-3">
-                                              <AvField
-                                                type="select"
-                                                name="designation"
-                                                className="form-select"
-                                                label="Designation"
-                                                errorMessage="please select role/designation"
-                                                multiple={false}
-                                                required
-                                                value={
-                                                  userList.designation || ""
-                                                }
-                                              >
-                                                <option>
-                                                  Select Role/Designation
-                                                </option>
-                                                <option>SE</option>
-                                                <option>SSE</option>
-                                                <option>Developer</option>
-                                                <option>Designer</option>
-                                                <option>BA</option>
-                                                <option>Tech Architect</option>
-                                                <option>Tech Analyst</option>
-                                                <option>Tech Lead</option>
-                                                <option>Project Manager</option>
-                                                <option>
-                                                  Sr Project Manager
-                                                </option>
-                                                <option>Group Manager</option>
-                                                <option>HR</option>
-                                              </AvField>
-                                            </div>
-                                            <div className="mb-3">
-                                              <AvField
-                                                name="startdate"
-                                                label="Start Date"
-                                                type="date"
-                                                placeholder="99/99/9999"
-                                                // disabled={true}
-                                                //mask="99/99/9999"
-                                                errorMessage="please provide valid Date"
-                                                validate={{
-                                                  required: { value: true },
-                                                }}
-                                                value={userList.startdate || ""}
-                                              />
-                                            </div>
-
                                             <Row>
-                                              <Col md={3}>
+                                              <Col xs={6}>
                                                 <div className="mb-3">
-                                                  <label>Employee Photo</label>
-                                                  <Dropzone
-                                                    onDrop={(acceptedFiles) => {
-                                                      handleAcceptedFiles(
-                                                        acceptedFiles
-                                                      );
-                                                    }}
+                                                  <AvField
+                                                    type="select"
+                                                    name="designation"
+                                                    className="form-select"
+                                                    label="Designation"
+                                                    errorMessage="please select role/designation"
+                                                    multiple={false}
+                                                    required
+                                                    value={
+                                                      userList.designation || ""
+                                                    }
                                                   >
-                                                    {({
-                                                      getRootProps,
-                                                      getInputProps,
-                                                    }) => (
-                                                      <div className="dropzone">
-                                                        <div
-                                                          className="dz-message needsclick mt-2"
-                                                          {...getRootProps()}
-                                                        >
-                                                          <input
-                                                            {...getInputProps()}
-                                                            id="image-file"
-                                                          />
-                                                          <div className="mb-3">
-                                                            <i className="display-4 text-muted bx bxs-cloud-upload" />
-                                                          </div>
-                                                          <h4>
-                                                            click to upload.
-                                                          </h4>
-                                                        </div>
-                                                      </div>
-                                                    )}
-                                                  </Dropzone>
+                                                    <option value="">
+                                                      Select Role/Designation
+                                                    </option>
+                                                    {rolesList.map((role) => (
+                                                      <option
+                                                        key={role.id}
+                                                        value={role.role_name}
+                                                      >
+                                                        {role.role_name}
+                                                      </option>
+                                                    ))}
+                                                  </AvField>
                                                 </div>
                                               </Col>
-                                              <Col md={3}>
-                                                <div
-                                                  className="dropzone-previews mt-3"
-                                                  id="file-previews"
-                                                >
-                                                  {selectedFiles.map((f, i) => {
-                                                    return (
-                                                      <Card
-                                                        className="mt-1 mb-0 shadow-none border dz-processing dz-image-preview dz-success dz-complete"
-                                                        key={i + "-file"}
-                                                      >
-                                                        <div className="p-2">
-                                                          <Row className="align-items-center">
-                                                            <Col className="col-auto">
-                                                              <img
-                                                                data-dz-thumbnail=""
-                                                                height="80"
-                                                                className="avatar-sm rounded bg-light"
-                                                                alt={f.name}
-                                                                src={f.preview}
-                                                              />
-                                                            </Col>
-                                                            <Col>
-                                                              <Link
-                                                                to="#"
-                                                                className="text-muted font-weight-bold"
-                                                              >
-                                                                {f.name}
-                                                              </Link>
-                                                              <p className="mb-0">
-                                                                <strong>
-                                                                  {
-                                                                    f.formattedSize
-                                                                  }
-                                                                </strong>
-                                                              </p>
-                                                            </Col>
-                                                          </Row>
-                                                        </div>
-                                                      </Card>
-                                                    );
-                                                  })}
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="startdate"
+                                                    label="Start Date"
+                                                    type="date"
+                                                    placeholder="99/99/9999"
+                                                    // disabled={true}
+                                                    //mask="99/99/9999"
+                                                    errorMessage="please provide valid Date"
+                                                    validate={{
+                                                      required: { value: true },
+                                                    }}
+                                                    value={
+                                                      userList.startdate || ""
+                                                    }
+                                                  />
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            <Row>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="empphoto"
+                                                    label="Employee Photo"
+                                                    inputClass="form-control"
+                                                    type="file"
+                                                    placeholder="choose employee photo"
+                                                    errorMessage="please provide valid file"
+                                                    validate={{
+                                                      required: { value: true },
+                                                    }}
+                                                    value={""}
+                                                  />
                                                 </div>
                                               </Col>
                                             </Row>

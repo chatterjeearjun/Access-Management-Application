@@ -10,8 +10,14 @@ import AdminTeam from "../pages/AdminTeam/index";
 //Users
 import EmployeeManagement from "../pages/EmployeeManagement/index";
 
-//Users
+//Assets
 import AssetsManagement from "../pages/AssetsManagement/assets";
+
+//Roles
+import RolesManagement from "../pages/RolesManagement/index";
+
+//Groups
+import GroupsManagement from "../pages/GroupsManagement/index";
 
 // Calendar
 import Calendar from "../pages/Calendar/index";
@@ -128,6 +134,12 @@ const userRoutes = [
 
   //assets
   { path: "/assetsmanagement", component: AssetsManagement },
+
+  //roles
+  { path: "/rolesmanagement", component: RolesManagement },
+
+  //roles
+  { path: "/groupsmanagement", component: GroupsManagement },
 
   //profile
   { path: "/profile", component: userProfile },

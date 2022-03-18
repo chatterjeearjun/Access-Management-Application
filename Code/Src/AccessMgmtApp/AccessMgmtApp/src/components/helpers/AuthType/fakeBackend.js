@@ -38,6 +38,7 @@ let users = [
     role: "admin",
     password: "123456",
     email: "admin@crossleaf.com",
+    companyID: "6C0276EC-FEA1-4FA8-BB1F-5D428A850222",
   },
 ];
 

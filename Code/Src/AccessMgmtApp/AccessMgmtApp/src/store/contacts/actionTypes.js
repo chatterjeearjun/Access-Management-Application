@@ -1,13 +1,10 @@
 /* USERS */
 export const GET_USERS = "GET_USERS";
-export const GET_GROUPS = "GET_GROUPS";
 export const GET_APPROVERS = "GET_APPROVERS";
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS";
 export const GET_USERS_FAIL = "GET_USERS_FAIL";
 export const GET_APPROVERS_SUCCESS = "GET_APPROVERS_SUCCESS";
-export const GET_GROUPS_SUCCESS = "GET_GROUPS_SUCCESS";
 export const GET_APPROVERS_FAIL = "GET_APPROVERS_FAIL";
-export const GET_GROUPS_FAIL = "GET_GROUPS_FAIL";
 
 /* USERS PROFILE */
 export const GET_USER_PROFILE = "GET_USER_PROFILE";
@@ -47,27 +44,27 @@ export const DELETE_APPROVER_SUCCESS = "DELETE_APPROVER_SUCCESS";
 export const DELETE_USER_FAIL = "DELETE_USER_FAIL";
 export const DELETE_APPROVER_FAIL = "DELETE_APPROVER_FAIL";
 
-//AssetsManagement
+//RolesManagement
 
-//Get Assets
-export const GET_ASSETS = "GET_ASSETS";
-export const GET_ASSETS_SUCCESS = "GET_ASSETS_SUCCESS";
-export const GET_ASSETS_FAIL = "GET_ASSETS_FAIL";
+//Get Roles
+export const GET_ROLES = "GET_ROLES";
+export const GET_ROLES_SUCCESS = "GET_ROLES_SUCCESS";
+export const GET_ROLES_FAIL = "GET_ROLES_FAIL";
 
-//Add Assets
+//Add Roles
 
-export const ADD_NEW_ASSET = "ADD_NEW_ASSET";
-export const ADD_ASSET_SUCCESS = "ADD_ASSET_SUCCESS";
-export const ADD_ASSET_FAIL = "ADD_ASSET_FAIL";
+export const ADD_NEW_ROLE = "ADD_NEW_ROLE";
+export const ADD_ROLE_SUCCESS = "ADD_ROLE_SUCCESS";
+export const ADD_ROLE_FAIL = "ADD_ROLE_FAIL";
 
-//Edit or Update Assets
+//Edit or Update Roles
 
-export const UPDATE_ASSET = "UPDATE_ASSET";
-export const UPDATE_ASSET_SUCCESS = "UPDATE_ASSET_SUCCESS";
-export const UPDATE_ASSET_FAIL = "UPDATE_ASSET_FAIL";
+export const UPDATE_ROLE = "UPDATE_ROLE";
+export const UPDATE_ROLE_SUCCESS = "UPDATE_ROLE_SUCCESS";
+export const UPDATE_ROLE_FAIL = "UPDATE_ROLE_FAIL";
 
-// Delete Assets
+// Delete Roles
 
-export const DELETE_ASSET = "DELETE_ASSET";
-export const DELETE_ASSET_SUCCESS = "DELETE_ASSET_SUCCESS";
-export const DELETE_ASSET_FAIL = "DELETE_ASSET_FAIL";
+export const DELETE_ROLE = "DELETE_ROLE";
+export const DELETE_ROLE_SUCCESS = "DELETE_ROLE_SUCCESS";
+export const DELETE_ROLE_FAIL = "DELETE_ROLE_FAIL";

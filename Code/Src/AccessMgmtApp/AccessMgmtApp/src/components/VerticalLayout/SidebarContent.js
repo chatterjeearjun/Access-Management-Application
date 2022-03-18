@@ -123,6 +123,18 @@ const SidebarContent = (props) => {
                 <span>{props.t("Assets Management")}</span>
               </Link>
             </li>
+            <li>
+              <Link to="/RolesManagement" className="">
+                <FeatherIcon icon="briefcase" />
+                <span>{props.t("Roles Management")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/GroupsManagement" className="">
+                <FeatherIcon icon="package" />
+                <span>{props.t("Groups Management")}</span>
+              </Link>
+            </li>
 
             {/* <li>
               <Link to="/#" className="has-arrow">
