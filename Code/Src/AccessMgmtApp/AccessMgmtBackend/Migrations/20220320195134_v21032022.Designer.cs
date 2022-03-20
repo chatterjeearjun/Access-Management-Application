@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220316202107_v2")]
-    partial class v2
+    [Migration("20220320195134_v21032022")]
+    partial class v21032022
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -205,8 +205,14 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<string>("user_description_attachment")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("user_group")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("user_name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user_role")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("user_identifier");
@@ -823,6 +829,9 @@ namespace AccessMgmtBackend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("associated_assets")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("associated_groups")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("company_identifier")

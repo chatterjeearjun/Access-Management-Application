@@ -121,6 +121,8 @@ namespace AccessMgmtBackend.Controllers
             var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier);
             if (appuser != null)
             {
+                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x => 
+                x.company_identifier==deleteAppuser.company_identifier && x.user_identifier == deleteAppuser.user_identifier.ToString()));
                 _companyContext.AppUsers.Remove(appuser);
                 _companyContext.SaveChanges();
                 return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier);

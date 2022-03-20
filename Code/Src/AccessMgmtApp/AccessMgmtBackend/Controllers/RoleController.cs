@@ -1,6 +1,7 @@
 ﻿using AccessMgmtBackend.Context;
 using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,9 +13,11 @@ namespace AccessMgmtBackend.Controllers
     public class RoleController : ControllerBase
     {
         private CompanyContext _companyContext;
-        public RoleController(CompanyContext companyContext)
+        private RoleManager<IdentityRole> _roleManager;
+        public RoleController(CompanyContext companyContext, RoleManager<IdentityRole> roleManager)
         {
             _companyContext = companyContext;
+            _roleManager= roleManager;
         }
 
         // GET: api/<RoleController>
@@ -84,6 +87,13 @@ namespace AccessMgmtBackend.Controllers
                 }
             }
             _companyContext.SaveChanges();
+            if (!_roleManager.RoleExistsAsync(role.role_identifier.ToString()).Result)
+            {
+                IdentityRole identityRole = new IdentityRole();
+                identityRole.Name = role.role_identifier.ToString();
+                IdentityResult roleResult = _roleManager.
+                CreateAsync(identityRole).Result;
+            }
             return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
         }
 

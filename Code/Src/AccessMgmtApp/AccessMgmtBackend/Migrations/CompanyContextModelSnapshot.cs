@@ -203,8 +203,14 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<string>("user_description_attachment")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("user_group")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("user_name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user_role")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("user_identifier");
@@ -821,6 +827,9 @@ namespace AccessMgmtBackend.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("associated_assets")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("associated_groups")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("company_identifier")

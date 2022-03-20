@@ -91,9 +91,12 @@ namespace AccessMgmtBackend.Controllers
             var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
             if (asset != null)
             {
-                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where(x => x.asset_identifier == value.asset_identifier.ToString()));
-                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where(x => x.asset_identifier == value.asset_identifier.ToString()));
-                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x => x.asset_identifier == value.asset_identifier.ToString()));
+                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where(x => 
+                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));
+                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where(x =>
+                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));
+                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x =>
+                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));
                 _companyContext.Assets.Remove(asset);
                 _companyContext.SaveChanges();
                 return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier);

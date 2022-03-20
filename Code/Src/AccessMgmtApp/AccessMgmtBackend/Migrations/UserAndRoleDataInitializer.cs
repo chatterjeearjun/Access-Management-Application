@@ -25,7 +25,7 @@ namespace AccessMgmtBackend.Migrations
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "Approver").Wait();
+                    userManager.AddToRoleAsync(user, "6c0276ec-fea1-4fa8-bb1f-5d428a820209").Wait();
                 }
             }
 
@@ -42,31 +42,31 @@ namespace AccessMgmtBackend.Migrations
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, "Administrator").Wait();
+                    userManager.AddToRoleAsync(user, "6c0276ec-fea1-4fa8-bb1f-5d428a820209").Wait();
                 }
             }
         }
 
         private static void SeedRoles(RoleManager<IdentityRole> roleManager)
         {
-            if (!roleManager.RoleExistsAsync("Approver").Result)
+            if (!roleManager.RoleExistsAsync("6c0276ec-fea1-4fa8-bb1f-9d228a850201").Result)
             {
                 IdentityRole role = new IdentityRole();
-                role.Name = "Approver";
+                role.Name = "6c0276ec-fea1-4fa8-bb1f-9d228a850201";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }
-            if (!roleManager.RoleExistsAsync("HR Manager").Result)
+            if (!roleManager.RoleExistsAsync("6c0276ec-fea1-4fa8-bb1f-5d988a850200").Result)
             {
                 IdentityRole role = new IdentityRole();
-                role.Name = "HR Manager";
+                role.Name = "6c0276ec-fea1-4fa8-bb1f-5d988a850200";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }
-            if (!roleManager.RoleExistsAsync("Administrator").Result)
+            if (!roleManager.RoleExistsAsync("6c0276ec-fea1-4fa8-bb1f-5d428a820209").Result)
             {
                 IdentityRole role = new IdentityRole();
-                role.Name = "Administrator";
+                role.Name = "6c0276ec-fea1-4fa8-bb1f-5d428a820209";
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }
