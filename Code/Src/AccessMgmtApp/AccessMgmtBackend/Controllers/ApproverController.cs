@@ -21,14 +21,28 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<Approver> GetByCompany(string companyId)
         {
-            return _companyContext.Approvers.Where(x => x.company_identifier == companyId);
+            var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == companyId);
+            foreach (var i in listOfApprovers)
+            {
+                i.approver_role = String.Join(",",
+                _companyContext.ApproverToRoles.Where(x => x.company_identifier == companyId && x.approver_identifier == i.approver_identifier.ToString()).
+                Select(x => x.role_identifier));
+            }
+            return listOfApprovers;
         }
 
         // GET api/<ApproverController>/5
         [HttpGet("{guid}")]
         public Approver Get(string guid)
         {
-            return _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            if (approver != null)
+            {
+                approver.approver_role = String.Join(",",
+                _companyContext.ApproverToRoles.Where(x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()).
+                Select(x => x.role_identifier));
+            }
+            return approver;
         }
 
         // POST api/<ApproverController>
@@ -38,7 +52,7 @@ namespace AccessMgmtBackend.Controllers
             var approver = new Approver();
             approver.created_date = DateTime.UtcNow;
             approver.created_by = "Application";
-            approver.is_active = true;            
+            approver.is_active = true;
             PropertyCopier<CreateApprover, Approver>.Copy(value, approver);
             _companyContext.Approvers.Add(approver);
             _companyContext.SaveChanges();
@@ -57,7 +71,7 @@ namespace AccessMgmtBackend.Controllers
                 approverNew.created_by = approver.created_by;
                 approverNew.created_date = approver.created_date;
                 approverNew.modified_date = DateTime.UtcNow;
-                approverNew.modified_by = "Application";                
+                approverNew.modified_by = "Application";
                 PropertyCopier<UpdateApprover, Approver>.Copy(value, approverNew);
                 _companyContext.Entry<Approver>(approver).CurrentValues.SetValues(approverNew);
                 _companyContext.SaveChanges();
@@ -77,6 +91,8 @@ namespace AccessMgmtBackend.Controllers
             if (approver != null)
             {
                 _companyContext.Approvers.Remove(approver);
+                _companyContext.ApproverToRoles.RemoveRange(_companyContext.ApproverToRoles.Where
+                    (x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()));
                 _companyContext.SaveChanges();
                 return _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier);
             }

@@ -30,7 +30,19 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.Employees.Where(x => x.company_identifier == companyId);
+                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId);
+                foreach (var employee in listEmployees)
+                {
+                    employee.emp_role = String.Join(",",
+                        _companyContext.EmployeeToRoles.Where
+                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
+                        Select(x => x.role_identifier));
+                    employee.associated_assets = String.Join(",",
+                        _companyContext.AssetToEmployees.Where
+                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
+                        Select(x => x.asset_identifier));
+                }
+                return listEmployees;
             }
             else
             {
@@ -43,7 +55,18 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public Employee Get(string guid)
         {
-            return _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == new Guid(guid));
+            var employee = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == new Guid(guid));
+            if (employee != null)
+            {
+                employee.emp_role = String.Join(",",
+                 _companyContext.EmployeeToRoles.Where(x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
+                 Select(x => x.role_identifier));
+                employee.associated_assets = String.Join(",",
+                        _companyContext.AssetToEmployees.Where
+                        (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
+                        Select(x => x.asset_identifier));
+            }
+            return employee;
         }
 
         // POST api/<EmployeeController>
@@ -58,10 +81,25 @@ namespace AccessMgmtBackend.Controllers
             _companyContext.Employees.Add(employee);
             if (!string.IsNullOrEmpty(employee.emp_role))
             {
-                var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == employee.emp_role && s.company_identifier==employee.company_identifier)
-                    .Select(x=>x.asset_identifier);
-                employee.associated_assets = (!string.IsNullOrEmpty(employee.associated_assets)) ?
-                    employee.associated_assets + "," + String.Join(",", associatedRolesAssets) : String.Join(",", associatedRolesAssets);
+                string[] roles = employee.emp_role.Split(',');
+                foreach (var role in roles)
+                {
+                    _companyContext.EmployeeToRoles.Add(new EmployeeToRole
+                    {
+                        id = 0,
+                        company_identifier = employee.company_identifier,
+                        employee_identifier = employee.employee_identifier.ToString(),
+                        role_identifier = role.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });
+                    var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == role && s.company_identifier == employee.company_identifier)
+                    .Select(x => x.asset_identifier);
+                    employee.associated_assets = (!string.IsNullOrEmpty(employee.associated_assets)) ?
+                        employee.associated_assets + "," + String.Join(",", associatedRolesAssets) : String.Join(",", associatedRolesAssets);
+                }
+
             }
             if (!string.IsNullOrEmpty(employee.associated_assets))
             {
@@ -79,7 +117,7 @@ namespace AccessMgmtBackend.Controllers
                         created_by = "Application"
                     });
                 }
-            }            
+            }
             _companyContext.SaveChanges();
             return _companyContext.Employees.FirstOrDefault(s => s.emp_email == value.emp_email);
 
@@ -103,7 +141,8 @@ namespace AccessMgmtBackend.Controllers
                 //Added logic for asset addition/updation
                 _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where
                     (x => x.company_identifier == employeeStore.company_identifier && x.employee_identifier == employeeStore.employee_identifier.ToString()));
-
+                _companyContext.EmployeeToRoles.RemoveRange(_companyContext.EmployeeToRoles.Where
+                    (x => x.company_identifier == employeeStore.company_identifier && x.employee_identifier == employeeStore.employee_identifier.ToString()));
                 if (!string.IsNullOrEmpty(employeeNew.associated_assets))
                 {
                     string[] assets = employeeNew.associated_assets.Split(',');
@@ -114,6 +153,23 @@ namespace AccessMgmtBackend.Controllers
                             id = 0,
                             company_identifier = employeeNew.company_identifier,
                             asset_identifier = asset.ToString(),
+                            employee_identifier = employeeNew.employee_identifier.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
+                if (!string.IsNullOrEmpty(employeeNew.emp_role))
+                {
+                    string[] roles = employeeNew.emp_role.Split(',');
+                    foreach (var role in roles)
+                    {
+                        _companyContext.EmployeeToRoles.Add(new EmployeeToRole
+                        {
+                            id = 0,
+                            company_identifier = employeeNew.company_identifier,
+                            role_identifier = role.ToString(),
                             employee_identifier = employeeNew.employee_identifier.ToString(),
                             is_active = true,
                             created_date = DateTime.UtcNow,
@@ -138,6 +194,8 @@ namespace AccessMgmtBackend.Controllers
             if (employeeStore != null)
             {
                 _companyContext.Employees.Remove(employeeStore);
+                _companyContext.EmployeeToRoles.RemoveRange(_companyContext.EmployeeToRoles.Where
+                   (x => x.company_identifier == value.company_identifier && x.employee_identifier == value.employee_identifier.ToString()));
                 _companyContext.SaveChanges();
                 return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier);
 

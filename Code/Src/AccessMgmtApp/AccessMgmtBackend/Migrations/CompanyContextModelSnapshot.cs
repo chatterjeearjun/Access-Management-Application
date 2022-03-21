@@ -154,6 +154,46 @@ namespace AccessMgmtBackend.Migrations
                     b.ToTable("ac_approvers");
                 });
 
+            modelBuilder.Entity("AccessMgmtBackend.Models.ApproverToRole", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("approver_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("role_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_approver_role");
+                });
+
             modelBuilder.Entity("AccessMgmtBackend.Models.AppUser", b =>
                 {
                     b.Property<Guid>("user_identifier")
@@ -602,6 +642,46 @@ namespace AccessMgmtBackend.Migrations
                     b.ToTable("ac_employees");
                 });
 
+            modelBuilder.Entity("AccessMgmtBackend.Models.EmployeeToRole", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("employee_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("role_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_employee_role");
+                });
+
             modelBuilder.Entity("AccessMgmtBackend.Models.Group", b =>
                 {
                     b.Property<Guid>("group_identifier")
@@ -701,6 +781,46 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("id");
 
                     b.ToTable("ac_group_role");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.GroupToUser", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("group_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("user_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_group_user");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.JoinerChecklist", b =>
@@ -879,6 +999,46 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("role_identifier");
 
                     b.ToTable("ac_role");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.RoleToUser", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("role_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_role_user");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.SentNotification", b =>
