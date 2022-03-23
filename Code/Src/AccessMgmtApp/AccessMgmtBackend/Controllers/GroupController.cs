@@ -40,23 +40,46 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<GroupController>
         [HttpPost]
-        public Group Post([FromBody] CreateGroup value)
+        public async Task<Group> Post([FromForm] CreateGroup value)
         {
             var group = new Group();
             group.created_date = DateTime.UtcNow;
             group.created_by = "Application";
             group.is_active = true;
+
+            if (value.group_description_attachment != null)
+            {
+                // Add user to AppUser table
+                GenericAPICalls request = new GenericAPICalls();
+                var file = new FileModel
+                {
+                    File = value.group_description_attachment,
+                    upload_category = "Group",
+                    company_identifier = value.company_identifier,
+                    user_identifier = ""
+                };
+                var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    UploadedFile userResponse = await response.Result.Content.ReadAsAsync<UploadedFile>();
+                    group.group_description_attachment = userResponse?.file_identifier.ToString();
+                }
+            }
+
             PropertyCopier<CreateGroup, Group>.Copy(value, group);
             _companyContext.Groups.Add(group);
             _companyContext.SaveChanges();
-            return _companyContext.Groups.FirstOrDefault(s => s.group_name == value.group_name);
+            var newGroup = _companyContext.Groups.FirstOrDefault(s => s.id == group.id);
+            newGroup.group_description_attachment = !string.IsNullOrEmpty(newGroup.group_description_attachment) ?
+                _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == group.group_description_attachment)?.blob_file_name : string.Empty;
+            return newGroup;
         }
 
         // PUT api/<GroupController>/5
         [HttpPut]
         public Group Put([FromBody] UpdateGroup value)
         {
-            var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier == value.group_identifier);
+            var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier.ToString() == value.group_identifier);
             if (group != null)
             {
                 var groupNew = new Group();
@@ -65,10 +88,11 @@ namespace AccessMgmtBackend.Controllers
                 groupNew.created_date = group.created_date;
                 groupNew.modified_date = DateTime.UtcNow;
                 groupNew.modified_by = "Application";
+                groupNew.group_identifier = group.group_identifier;
                 PropertyCopier<UpdateGroup, Group>.Copy(value, groupNew);
                 _companyContext.Entry<Group>(group).CurrentValues.SetValues(groupNew);
                 _companyContext.SaveChanges();
-                return _companyContext.Groups.FirstOrDefault(s => s.group_identifier == value.group_identifier);
+                return _companyContext.Groups.FirstOrDefault(s => s.group_identifier.ToString() == value.group_identifier);
             }
             else
             {

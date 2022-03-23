@@ -40,12 +40,32 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<AppUserController>
         [HttpPost]
-        public AppUser Post([FromBody] CreateAppUser value)
+        public async Task<AppUser> Post([FromForm] CreateAppUser value)
         {
             var appUser = new AppUser();
             appUser.created_date = DateTime.UtcNow;
             appUser.created_by = "Application";
             appUser.is_active = true;
+
+            if (value.user_description_attachment != null)
+            {
+                // Add user to AppUser table
+                GenericAPICalls request = new GenericAPICalls();
+                var file = new FileModel
+                {
+                    File = value.user_description_attachment,
+                    upload_category = "User",
+                    company_identifier = value.company_identifier,
+                    user_identifier = ""
+                };
+                var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    UploadedFile userResponse = await response.Result.Content.ReadAsAsync<UploadedFile>();
+                    appUser.user_description_attachment = userResponse?.file_identifier.ToString();
+                }
+            }
+
             PropertyCopier<CreateAppUser, AppUser>.Copy(value, appUser);
             _companyContext.AppUsers.Add(appUser);
             if (!string.IsNullOrEmpty(appUser.associated_assets))
@@ -66,14 +86,19 @@ namespace AccessMgmtBackend.Controllers
                 }
             }
             _companyContext.SaveChanges();
-            return _companyContext.AppUsers.FirstOrDefault(s => s.user_name == value.user_name);
+
+            var newUser = _companyContext.AppUsers.FirstOrDefault(s => s.user_name == value.user_name);
+            newUser.user_description_attachment = !string.IsNullOrEmpty(newUser.user_description_attachment) ?
+                _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == appUser.user_description_attachment)?.blob_file_name : string.Empty;
+            return newUser;
+
         }
 
         // PUT api/<AppUserController>/5
         [HttpPut]
         public AppUser Put([FromBody] UpdateAppUser value)
         {
-            var appusers = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == value.user_identifier);
+            var appusers = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier.ToString() == value.user_identifier);
             if (appusers != null)
             {
                 var appUser = new AppUser();
@@ -82,6 +107,7 @@ namespace AccessMgmtBackend.Controllers
                 appUser.created_date = appusers.created_date;
                 appUser.modified_date = DateTime.UtcNow;
                 appUser.modified_by = "Application";
+                appUser.user_identifier = appusers.user_identifier;
                 PropertyCopier<UpdateAppUser, AppUser>.Copy(value, appUser);
                 _companyContext.Entry<AppUser>(appusers).CurrentValues.SetValues(appUser);
                 //Added logic for asset addition/updation
@@ -106,7 +132,7 @@ namespace AccessMgmtBackend.Controllers
                     }
                 }
                 _companyContext.SaveChanges();
-                return _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == value.user_identifier);
+                return _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier.ToString() == value.user_identifier);
             }
             else
             {

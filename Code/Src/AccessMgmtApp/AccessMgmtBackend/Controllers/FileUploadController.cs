@@ -20,7 +20,7 @@ namespace AccessMgmtBackend.Controllers
         [Route("UploadDocument")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> UploadDocument([FromForm] FileModel file)
+        public async Task<UploadedFile> UploadDocument([FromForm] FileModel file)
         {
             try
             {
@@ -30,6 +30,7 @@ namespace AccessMgmtBackend.Controllers
                 "accessmanagement");
                 try
                 {
+                    var uploadedFile = new UploadedFile();
                     BlobClient blob = container.GetBlobClient(filename);
                     using (Stream stream = file.File.OpenReadStream())
                     {
@@ -38,7 +39,7 @@ namespace AccessMgmtBackend.Controllers
                     fileUrl = blob.Uri.AbsoluteUri;
                     if (!string.IsNullOrEmpty(fileUrl))
                     {
-                        var uploadedFile = new UploadedFile();
+                        
                         uploadedFile.company_identifier = file.company_identifier;
                         uploadedFile.user_identifier = file.user_identifier;
                         uploadedFile.friendly_file_name = file.File.FileName;
@@ -50,16 +51,16 @@ namespace AccessMgmtBackend.Controllers
                         _companyContext.UploadedFiles.Add(uploadedFile);
                         _companyContext.SaveChanges();
                     }
-                    return Ok(_companyContext.UploadedFiles.FirstOrDefault
-                        (s => s.company_identifier == file.company_identifier && s.friendly_file_name == file.File.FileName));
+                    return _companyContext.UploadedFiles.FirstOrDefault
+                        (s => s.file_identifier== uploadedFile.file_identifier);
                 }
-                catch (Exception ex) { return Ok(); }
+                catch (Exception ex) { return null; }
                 //var result = fileUrl;
                 //return Ok(result);
             }
             catch (Exception ex)
             {
-                return Ok();
+                return null;
             }
         }
         private string GenerateFileName(string fileName, string CompanyIdentifier, string UserIdentifier, string UploadCategory)

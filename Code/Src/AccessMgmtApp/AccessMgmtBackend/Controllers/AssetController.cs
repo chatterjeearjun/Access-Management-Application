@@ -50,7 +50,7 @@ namespace AccessMgmtBackend.Controllers
         // POST api/<AssetController>
         [HttpPost]
         [AllowAnonymous]
-        public Asset Post([FromForm] CreateAsset value)
+        public async Task<Asset> Post([FromForm] CreateAsset value)
         {
             var asset = new Asset();
             asset.created_date = DateTime.UtcNow;
@@ -71,30 +71,25 @@ namespace AccessMgmtBackend.Controllers
                 var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
                 if (response.Result.IsSuccessStatusCode)
                 {
-                    var uploadedfile = Task.Run(async () =>
-                         {
-                             await response.Result.Content.ReadAsAsync<UploadedFile>();
-                         });
-
-                    Console.WriteLine("Id:{0}\tName:{1}", uploadedfile.Id, uploadedfile.Status);
-                }
-                else
-                {
-                    Console.WriteLine("Internal server Error");
+                    UploadedFile userResponse = await response.Result.Content.ReadAsAsync<UploadedFile>();
+                    asset.asset_description_attachment = userResponse?.file_identifier.ToString();
                 }
             }
-            asset.asset_description_attachment = "";
+            
             PropertyCopier<CreateAsset, Asset>.Copy(value, asset);
             _companyContext.Assets.Add(asset);
             _companyContext.SaveChanges();
-            return _companyContext.Assets.FirstOrDefault(s => s.asset_id == value.asset_id);
+            var newAsset = _companyContext.Assets.FirstOrDefault(s => s.asset_id == value.asset_id);
+            newAsset.asset_description_attachment = !string.IsNullOrEmpty(newAsset.asset_description_attachment) ?
+                _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == asset.asset_description_attachment)?.blob_file_name : string.Empty;
+            return newAsset;
         }
 
         // PUT api/<AssetController>/5
         [HttpPut]
         public Asset Put([FromBody] UpdateAsset value)
         {
-            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier.ToString() == value.asset_identifier);
             if (asset != null)
             {
                 var assetNew = new Asset();
@@ -103,10 +98,11 @@ namespace AccessMgmtBackend.Controllers
                 assetNew.created_date = asset.created_date;
                 assetNew.modified_date = DateTime.UtcNow;
                 assetNew.modified_by = "Application";
+                assetNew.asset_identifier = asset.asset_identifier;
                 PropertyCopier<UpdateAsset, Asset>.Copy(value, assetNew);
                 _companyContext.Entry<Asset>(asset).CurrentValues.SetValues(assetNew);
                 _companyContext.SaveChanges();
-                return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
+                return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier.ToString() == value.asset_identifier);
             }
             else
             {

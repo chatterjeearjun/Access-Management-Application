@@ -63,12 +63,32 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<RoleController>
         [HttpPost]
-        public Role Post([FromBody] CreateRole value)
+        public async Task<Role> Post([FromForm] CreateRole value)
         {
             var role = new Role();
             role.created_date = DateTime.UtcNow;
             role.created_by = "Application";
             role.is_active = true;
+
+            if (value.role_description_attachment != null)
+            {
+                // Add user to AppUser table
+                GenericAPICalls request = new GenericAPICalls();
+                var file = new FileModel
+                {
+                    File = value.role_description_attachment,
+                    upload_category = "Role",
+                    company_identifier = value.company_identifier,
+                    user_identifier = ""
+                };
+                var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    UploadedFile userResponse = await response.Result.Content.ReadAsAsync<UploadedFile>();
+                    role.role_description_attachment = userResponse?.file_identifier.ToString();
+                }
+            }
+
             PropertyCopier<CreateRole, Role>.Copy(value, role);
             _companyContext.CompanyRoles.Add(role);
             //Added logic for asset addition
@@ -114,14 +134,18 @@ namespace AccessMgmtBackend.Controllers
                 IdentityResult roleResult = _roleManager.
                 CreateAsync(identityRole).Result;
             }
-            return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
+
+            var newrole = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
+            newrole.role_description_attachment = !string.IsNullOrEmpty(newrole.role_description_attachment) ?
+                _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : string.Empty;
+            return newrole;
         }
 
         // PUT api/<RoleController>/5
         [HttpPut]
         public Role Put([FromBody] UpdateRole value)
         {
-            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == value.role_identifier);
+            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier.ToString() == value.role_identifier);
             if (role != null)
             {
                 var roleNew = new Role();
@@ -130,6 +154,7 @@ namespace AccessMgmtBackend.Controllers
                 roleNew.created_date = role.created_date;
                 roleNew.modified_date = DateTime.UtcNow;
                 roleNew.modified_by = "Application";
+                roleNew.role_identifier = role.role_identifier;
                 PropertyCopier<UpdateRole, Role>.Copy(value, roleNew);
                 _companyContext.Entry<Role>(role).CurrentValues.SetValues(roleNew);
                 //Added logic for asset addition/updation
@@ -173,7 +198,7 @@ namespace AccessMgmtBackend.Controllers
                     }
                 }
                 _companyContext.SaveChanges();
-                return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == value.role_identifier);
+                return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier.ToString() == value.role_identifier);
             }
             else
             {
