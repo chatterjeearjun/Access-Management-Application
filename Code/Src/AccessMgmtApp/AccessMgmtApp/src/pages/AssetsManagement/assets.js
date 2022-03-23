@@ -32,6 +32,7 @@ import {
   updateAsset as onUpdateAsset,
   deleteAsset as onDeleteAsset,
   getUsers as onGetUsers,
+  getAssetsAssociation as onGetAssociations,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
 
@@ -41,6 +42,8 @@ import moment from "moment";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+
+import { getAssetsAssociation } from "../../helpers/fakebackend_helper";
 const AssetsManagement = (props) => {
   const dispatch = useDispatch();
 
@@ -53,6 +56,7 @@ const AssetsManagement = (props) => {
 
   const [assetList, setAssetList] = useState([]);
   const [ownersList, setOwnersList] = useState([]);
+  const [selectedOwner, setSelectedOwner] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -220,13 +224,18 @@ const AssetsManagement = (props) => {
     toggle();
   };
 
-  const handleDeleteAsset = (asset) => {
+  const handleDeleteAsset = async (asset) => {
+    const associationCount = await getAssetsAssociation(asset);
     confirmAlert({
-      title: "Deleting Asset",
-      message: "Are you sure you want to delete this Asset?",
+      title: `Deleting Asset`,
+      message: `Are you sure you want to delete this Asset which is mapped to ${
+        associationCount.length === 0
+          ? "no"
+          : associationCount[0]?.split(",").length
+      } users?`,
       buttons: [
         {
-          label: "Delete",
+          label: `${associationCount.length === 0 ? "Delete" : "Force Delete"}`,
           onClick: () => {
             dispatch(onDeleteAsset(asset));
           },
@@ -251,7 +260,7 @@ const AssetsManagement = (props) => {
         company_identifier: assetList.companyid,
         asset_name: values["name"],
         asset_type: values["type"],
-        asset_owner: values["owner"],
+        asset_owner: selectedOwner,
         asset_description: values["description"],
         asset_location: values["location"],
         asset_risk_ranking: values["riskranking"],
@@ -281,7 +290,7 @@ const AssetsManagement = (props) => {
           .companyID,
         asset_name: values["name"],
         asset_type: values["type"],
-        asset_owner: values["owner"],
+        asset_owner: selectedOwner,
         asset_description: values["description"],
         asset_location: values["location"],
         created_date: moment().format().slice(0, 19),
@@ -311,6 +320,11 @@ const AssetsManagement = (props) => {
     setAssetList("");
     setIsEdit(false);
     toggle();
+  };
+
+  const ownerchange = (e) => {
+    debugger;
+    setSelectedOwner(e.target.value);
   };
 
   return (
@@ -534,16 +548,19 @@ const AssetsManagement = (props) => {
                                                     list="ownersDatalist"
                                                     id="owners"
                                                     placeholder="Type to search owner..."
-                                                    autocomplete="new-password"
+                                                    autoComplete="new-password"
+                                                    onChange={ownerchange}
+                                                    value={assetList.owner}
                                                   />
                                                   <datalist
                                                     id="ownersDatalist"
-                                                    autocomplete="off"
+                                                    autoComplete="off"
                                                   >
                                                     {ownersList.map((owner) => (
                                                       <option
                                                         value={owner.emp_email}
                                                         key={owner.id}
+                                                        name="owner"
                                                       />
                                                     ))}
                                                   </datalist>

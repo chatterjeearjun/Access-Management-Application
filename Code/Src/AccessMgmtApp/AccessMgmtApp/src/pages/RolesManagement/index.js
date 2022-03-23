@@ -12,7 +12,6 @@ import {
   ModalBody,
 } from "reactstrap";
 
-import Select from "react-select";
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -40,7 +39,7 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
+
 const RolesManagement = (props) => {
   const dispatch = useDispatch();
 
@@ -56,7 +55,7 @@ const RolesManagement = (props) => {
 
   const [roleList, setRoleList] = useState([]);
   const [assetList, setAssetList] = useState([]);
-  const [assetSelected, setAssetSelected] = useState([]);
+  const [assetsSelected, setAssetSelected] = useState([]);
   const [groupSelected, setGroupsSelected] = useState([]);
   const [groupList, setGroupList] = useState([]);
   const [modal, setModal] = useState(false);
@@ -64,7 +63,6 @@ const RolesManagement = (props) => {
 
   const { SearchBar } = Search;
 
-  // const animatedComponents = makeAnimated();
   const pageOptions = {
     sizePerPage: 10,
     totalSize: roles?.length, // replace later with size(roles),
@@ -189,6 +187,7 @@ const RolesManagement = (props) => {
       bc: role.is_bc_required === true ? "Required" : "Not Required",
       certificates:
         role.is_certification_required === true ? "Required" : "Not Required",
+      associatedassets: role.associated_assets.split(","),
     });
     setIsEdit(true);
     toggle();
@@ -231,6 +230,7 @@ const RolesManagement = (props) => {
         is_bc_required: values["bc"] === "Required" ? true : false,
         is_certification_required:
           values["certificates"] === "Required" ? true : false,
+        associated_assets: assetsSelected.toString(),
       };
       // update role
       dispatch(onUpdateRole(updateRole));
@@ -247,17 +247,28 @@ const RolesManagement = (props) => {
         is_bc_required: values["bc"] === "Required" ? true : false,
         is_certification_required:
           values["certificates"] === "Required" ? true : false,
+        associated_assets: assetsSelected.toString(),
       };
       // save new role
       dispatch(onAddNewRole(newRole));
     }
     toggle();
   };
+
   const handleRoleClicks = () => {
     setRoleList("");
     setIsEdit(false);
     toggle();
   };
+
+  let assetlist = [];
+  for (var i = 0; i < assetList.length; i++) {
+    debugger;
+    assetlist[i] = {
+      label: assetList[i].asset_name,
+      key: assetList[i].asset_identifier,
+    };
+  }
 
   return (
     <React.Fragment>
@@ -489,15 +500,10 @@ const RolesManagement = (props) => {
                                                   <DropdownMultiselect
                                                     placeholder="select asset/assets"
                                                     buttonClass="btn-light"
-                                                    selectDeselectLabel=""
-                                                    required
-                                                    value={
-                                                      roleList.certificates
-                                                    }
-                                                    options={assetList.map(
-                                                      (asset) =>
-                                                        asset.asset_name
-                                                    )}
+                                                    selectDeselectLabel="Select/Deselect All"
+                                                    required={true}
+                                                    value={""}
+                                                    options={assetlist}
                                                     name="assets"
                                                     handleOnChange={(
                                                       selected
@@ -508,30 +514,6 @@ const RolesManagement = (props) => {
                                                     }}
                                                   />
                                                 </div>
-                                                {/* <div className="mb-3">
-                                                  <label className="control-label">
-                                                    Link Assets
-                                                  </label>
-                                                  <Select
-                                                    isMulti={true}
-                                                    options={assetList.map(
-                                                      (asset) => {
-                                                        {
-                                                          label:
-                                                            asset.asset_name,
-                                                          value:
-                                                            asset.asset_name,
-                                                        },
-                                                    }
-                                                    )}
-                                                    className="basic-multi-select"
-                                                    classNamePrefix="select2-selection"
-                                                    closeMenuOnSelect={false}
-                                                    components={
-                                                      animatedComponents
-                                                    }
-                                                  />
-                                                </div> */}
                                               </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">
@@ -539,7 +521,7 @@ const RolesManagement = (props) => {
                                                   <DropdownMultiselect
                                                     placeholder="select Group/Groups"
                                                     buttonClass="btn-light"
-                                                    selectDeselectLabel=""
+                                                    selectDeselectLabel="Select/Deselect All"
                                                     required
                                                     value={groupList.group_name}
                                                     options={groupList.map(

@@ -7,6 +7,8 @@ import {
   postforlogin,
   delApprover,
   delGroup,
+  getAAssociation,
+  isEmpDuplicate,
 } from "./api_helper";
 import * as url from "./url_helper";
 
@@ -314,6 +316,9 @@ const onAddComment = (productId, commentText) => {
 export const getAssets = () =>
   get(url.GET_ASSETS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
 
+export const getAssetsAssociation = (association) =>
+  getAAssociation(url.GET_ASSETS_ASSOCIATION, association);
+
 // add asset
 export const addNewAsset = (asset) => post(url.ADD_NEW_ASSET, asset);
 
@@ -352,6 +357,11 @@ export const updateCompGroup = (group) => put(url.UPDATE_COMPGROUP, group);
 
 // delete group
 export const deleteCompGroup = (group) => delGroup(url.DELETE_COMPGROUP, group);
+
+export const empDuplicateCheck = (empEmail) =>
+  isEmpDuplicate(
+    url.EMP_DUPLICATE_CHECK(empEmail, "6c0276ec-fea1-4fa8-bb1f-5d428a850222")
+  );
 
 export {
   getLoggedInUser,
