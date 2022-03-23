@@ -37,6 +37,25 @@ export async function get(url, id) {
   }
 }
 
+export async function getAAssociation(url, asset) {
+  try {
+    debugger;
+    const response = await fetch(
+      `${API_URL}${url}${asset.company_identifier}/${asset.asset_identifier}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error, "get error");
+  }
+}
+
 export async function post(url, data) {
   try {
     const response = await fetch(`${API_URL}${url}`, {
@@ -114,6 +133,20 @@ export async function delGroup(url, group) {
     const response = await fetch(`${API_URL}${url}`, {
       method: "DELETE",
       body: JSON.stringify(group),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error, "post error");
+  }
+}
+export async function isEmpDuplicate(url) {
+  try {
+    const response = await fetch(`${API_URL}${url}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },

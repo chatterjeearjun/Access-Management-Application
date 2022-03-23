@@ -95,12 +95,12 @@ const AdminTeam = (props) => {
     },
     {
       dataField: "approver_role",
-      text: "Approver Role",
+      text: "User Role",
       sort: true,
     },
     {
       dataField: "approver_email",
-      text: "Approver Email",
+      text: "User Email",
       sort: true,
     },
     {
@@ -160,7 +160,7 @@ const AdminTeam = (props) => {
     setRolesList(roles);
     //setIsEdit(false);
   }, [roles]);
-  console.log(setRolesList, rolesList, "jaghsjhgasjhg");
+
   const toggle = () => {
     setModal(!modal);
     if (!modal && !isEmpty(approvers) && !!isEdit) {
@@ -191,13 +191,9 @@ const AdminTeam = (props) => {
   };
 
   const handleDeleteApprover = (approver) => {
-    const deletingapprover = {
-      approver_identifier: approver.approveridentifier,
-      company_identifier: approver.companyidentifier,
-    };
     confirmAlert({
-      title: "Deleting Approver",
-      message: "Are you sure you want to delete this Approver?",
+      title: "Deleting User",
+      message: "Are you sure you want to delete this User?",
       buttons: [
         {
           label: "Delete",
@@ -261,11 +257,11 @@ const AdminTeam = (props) => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Approvers | Crossleaf - Access Management</title>
+          <title>Users | Crossleaf - Access Management</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Approvers" breadcrumbItem="Approver List" />
+          <Breadcrumbs title="Users" breadcrumbItem="Users List" />
           <Row>
             <Col lg="12">
               <Card>
@@ -290,7 +286,7 @@ const AdminTeam = (props) => {
                                 <div className="col-md-6">
                                   <div className="mb-3">
                                     <h5 className="card-title">
-                                      Current Approvers{" "}
+                                      Current Users{" "}
                                       <span className="text-muted fw-normal ms-2">
                                         ({approvers.length})
                                       </span>
@@ -307,7 +303,7 @@ const AdminTeam = (props) => {
                                         onClick={handleApproverClicks}
                                       >
                                         <i className="bx bx-plus me-1"></i> Add
-                                        Approver
+                                        User
                                       </Link>
                                     </div>
                                   </div>
@@ -345,9 +341,7 @@ const AdminTeam = (props) => {
                                     scrollable={true}
                                   >
                                     <ModalHeader toggle={toggle} tag="h4">
-                                      {!!isEdit
-                                        ? "Edit Approver"
-                                        : "Add Approver"}
+                                      {!!isEdit ? "Edit User" : "Add User"}
                                     </ModalHeader>
                                     <ModalBody>
                                       <AvForm
@@ -363,7 +357,7 @@ const AdminTeam = (props) => {
                                                   <AvField
                                                     name="fname"
                                                     label="First Name"
-                                                    placeholder="approver first name"
+                                                    placeholder="user first name"
                                                     type="text"
                                                     errorMessage="please provide valid first name"
                                                     validate={{
@@ -380,7 +374,7 @@ const AdminTeam = (props) => {
                                                   <AvField
                                                     name="lname"
                                                     label="Last Name"
-                                                    placeholder="approver last name"
+                                                    placeholder="user last name"
                                                     type="text"
                                                     errorMessage="please provide valid last name"
                                                     validate={{
@@ -398,7 +392,7 @@ const AdminTeam = (props) => {
                                                 <div className="mb-3">
                                                   <AvField
                                                     name="email"
-                                                    label="Approver Email"
+                                                    label="User Email"
                                                     placeholder="acs@crossleaf.ca"
                                                     type="email"
                                                     errorMessage="please provide valid Email"
@@ -415,7 +409,7 @@ const AdminTeam = (props) => {
                                                 <div className="mb-3">
                                                   <AvField
                                                     name="mobile"
-                                                    label="Approver Phone"
+                                                    label="User Phone"
                                                     type="tel"
                                                     placeholder="(999)999-9999"
                                                     errorMessage="please provide valid Phone Number"
@@ -440,8 +434,8 @@ const AdminTeam = (props) => {
                                                     type="select"
                                                     name="designation"
                                                     className="form-select"
-                                                    label="Designation"
-                                                    errorMessage="please select role/designation"
+                                                    label="Role"
+                                                    errorMessage="please select role"
                                                     multiple={false}
                                                     required
                                                     value={
@@ -450,7 +444,7 @@ const AdminTeam = (props) => {
                                                     }
                                                   >
                                                     <option value="">
-                                                      select role/designation
+                                                      select role
                                                     </option>
                                                     {rolesList.map((role) => (
                                                       <option

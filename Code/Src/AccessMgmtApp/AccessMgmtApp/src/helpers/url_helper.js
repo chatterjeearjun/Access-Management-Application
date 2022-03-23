@@ -122,6 +122,7 @@ export const GET_ASSETS = "/api/Asset?companyId=";
 export const ADD_NEW_ASSET = "/api/Asset";
 export const UPDATE_ASSET = "/api/Asset";
 export const DELETE_ASSET = "/api/Asset";
+export const GET_ASSETS_ASSOCIATION = "/api/Asset/GetAssetAssociation/";
 
 //RolesManagement
 export const GET_ROLES = "/api/Role?companyId=";
@@ -134,3 +135,6 @@ export const GET_COMPGROUPS = "/api/Group?companyId=";
 export const ADD_NEW_COMPGROUP = "/api/Group";
 export const UPDATE_COMPGROUP = "/api/Group";
 export const DELETE_COMPGROUP = "/api/Group";
+
+export const EMP_DUPLICATE_CHECK = (empEmail, compid) =>
+  `/DuplicateCheck?EmployeeEmail=${empEmail}&CompanyIdentifier=${compid}`;

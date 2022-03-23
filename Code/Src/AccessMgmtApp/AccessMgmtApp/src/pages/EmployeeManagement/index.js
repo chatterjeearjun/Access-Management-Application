@@ -22,7 +22,7 @@ import BootstrapTable from "react-bootstrap-table-next";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
-
+import { empDuplicateCheck } from "../../helpers/fakebackend_helper";
 import {
   getUsers as onGetUsers,
   addNewUser as onAddNewUser,
@@ -64,6 +64,7 @@ const EmployeeManagement = (props) => {
   const [results, setResult] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isEmpDuplicate, setIsEmpDuplicate] = useState(false);
 
   const { SearchBar } = Search;
 
@@ -108,14 +109,9 @@ const EmployeeManagement = (props) => {
       ),
     },
     {
-      dataField: "emp_designation",
-      text: "Designation",
+      dataField: "emp_role",
+      text: "Role",
       sort: true,
-      //formatter: (cell) => selectOptions[cell],
-      // filter: selectFilter({
-      //   options: selectOptions,
-      //   column: "Designation",
-      // }),
     },
     {
       dataField: "emp_email",
@@ -200,11 +196,9 @@ const EmployeeManagement = (props) => {
       }, 500);
     }
   };
-  // const [phone, setPhone] = React.useState("");
-  // const handleInput = ({ target: { value } }) => setPhone(value);
+
   const handleUserClick = (arg) => {
     const user = arg;
-    console.log(arg, "ksdgksgdkg");
     setUserList({
       employeeid: user.employee_identifier,
       companyid: user.company_identifier,
@@ -223,7 +217,6 @@ const EmployeeManagement = (props) => {
       modifieddate: user.modified_date,
     });
     setIsEdit(true);
-
     toggle();
   };
 
@@ -254,12 +247,13 @@ const EmployeeManagement = (props) => {
    */
   const handleValidUserSubmit = (e, values) => {
     debugger;
+    // if (isEmpDuplicate) {
     if (isEdit) {
       const updateUser = {
         employee_identifier: userList.employeeid,
         company_identifier: userList.companyid,
-        emp_designation: values["designation"],
-        emp_role: values["employeetype"],
+        emp_designation: values["employeetype"],
+        emp_role: values["role"],
         emp_first_name: values["fname"],
         emp_last_name: values["lname"],
         emp_email: values["email"],
@@ -291,8 +285,8 @@ const EmployeeManagement = (props) => {
       const newUser = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
           .companyID,
-        emp_designation: values["designation"],
-        emp_role: values["employeetype"],
+        emp_designation: values["employeetype"],
+        emp_role: values["role"],
         emp_first_name: values["fname"],
         emp_last_name: values["lname"],
         emp_email: values["email"],
@@ -314,7 +308,9 @@ const EmployeeManagement = (props) => {
       dispatch(onAddNewUser(newUser));
     }
     toggle();
+    // }
   };
+
   const handleUserClicks = () => {
     setUserList("");
     setIsEdit(false);
@@ -357,7 +353,15 @@ const EmployeeManagement = (props) => {
   //   setSelectedFile(event.target.files[0]);
   //   setIsFilePicked(true);
   // };
-
+  const empEmailChange = async (e) => {
+    if (
+      e.target.value != "" &&
+      e.target.value != undefined &&
+      e.target.value != null
+    )
+      setIsEmpDuplicate(await empDuplicateCheck(e.target.value));
+  };
+  console.log(isEmpDuplicate, "iwueyiuweyiuywiuye");
   return (
     <React.Fragment>
       <div className="page-content">
@@ -520,13 +524,28 @@ const EmployeeManagement = (props) => {
                                                     label="Email"
                                                     type="email"
                                                     placeholder="acs@crossleaf.ca"
-                                                    errorMessage="please provide valid Email"
+                                                    errorMessage={
+                                                      "please provide valid Email"
+                                                    }
+                                                    //   isEmpDuplicate !== "" &&
+                                                    //   isEmpDuplicate === true
+                                                    //     ? "User Already Exists"
+                                                    //     : "please provide valid Email"
+                                                    // }
                                                     maxLength="75"
                                                     validate={{
-                                                      required: { value: true },
+                                                      required: {
+                                                        value: true,
+                                                      },
                                                     }}
                                                     value={userList.email || ""}
+                                                    // onChange={empEmailChange}
                                                   />
+                                                  {isEmpDuplicate && (
+                                                    <p className="error">
+                                                      {"User Already Exists"}
+                                                    </p>
+                                                  )}
                                                 </div>
                                               </Col>
                                               <Col xs={6}>
@@ -562,7 +581,9 @@ const EmployeeManagement = (props) => {
                                                     multiple={false}
                                                     required
                                                     errorMessage="please select employee type"
-                                                    value={userList.role || ""}
+                                                    value={
+                                                      userList.designation || ""
+                                                    }
                                                   >
                                                     <option>
                                                       Select Employee Type
@@ -620,18 +641,16 @@ const EmployeeManagement = (props) => {
                                                 <div className="mb-3">
                                                   <AvField
                                                     type="select"
-                                                    name="designation"
+                                                    name="role"
                                                     className="form-select"
-                                                    label="Designation"
-                                                    errorMessage="please select role/designation"
+                                                    label="Role"
+                                                    errorMessage="please select employee role"
                                                     multiple={false}
                                                     required
-                                                    value={
-                                                      userList.designation || ""
-                                                    }
+                                                    value={userList.role || ""}
                                                   >
                                                     <option value="">
-                                                      Select Role/Designation
+                                                      Select Employee Role
                                                     </option>
                                                     {rolesList.map((role) => (
                                                       <option

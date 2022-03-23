@@ -6,6 +6,7 @@ import {
   ADD_NEW_ASSET,
   DELETE_ASSET,
   UPDATE_ASSET,
+  GET_ASSETS_ASSOCIATION,
 } from "./actionTypes";
 
 import {

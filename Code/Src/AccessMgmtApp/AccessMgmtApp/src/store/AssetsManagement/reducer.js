@@ -30,7 +30,6 @@ const assetsManagement = (state = INIT_STATE, action) => {
         ...state,
         error: action.payload,
       };
-
     case ADD_ASSET_SUCCESS:
       return {
         ...state,
