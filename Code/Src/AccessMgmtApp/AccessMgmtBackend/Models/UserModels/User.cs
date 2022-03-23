@@ -20,6 +20,8 @@
         public bool? is_bc_required { get; set; }
         public bool? is_certification_required { get; set; }
         public string? associated_assets { get; set; }
+        public string? user_role { get; set; }
+        public string? user_group { get; set; }
         public DateTime? created_date { get; set; }
         public string? created_by { get; set; }
         public DateTime? modified_date { get; set; }

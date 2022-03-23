@@ -1,6 +1,7 @@
 ﻿using AccessMgmtBackend.Context;
 using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,9 +13,11 @@ namespace AccessMgmtBackend.Controllers
     public class RoleController : ControllerBase
     {
         private CompanyContext _companyContext;
-        public RoleController(CompanyContext companyContext)
+        private RoleManager<IdentityRole> _roleManager;
+        public RoleController(CompanyContext companyContext, RoleManager<IdentityRole> roleManager)
         {
             _companyContext = companyContext;
+            _roleManager = roleManager;
         }
 
         // GET: api/<RoleController>
@@ -23,7 +26,17 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId);
+                var listOfRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId);
+                foreach (var i in listOfRoles)
+                {
+                    i.associated_groups = String.Join(",",
+                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    Select(x => x.group_identifier));
+                    i.associated_assets = String.Join(",",
+                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    Select(x => x.asset_identifier));
+                }
+                return listOfRoles;
             }
             else
             {
@@ -35,7 +48,17 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public Role Get(string guid)
         {
-            return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
+            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
+            if (role != null)
+            {
+                role.associated_groups = String.Join(",",
+                 _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).
+                 Select(x => x.group_identifier));
+                role.associated_assets = String.Join(",",
+                _companyContext.AssetToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).
+                Select(x => x.asset_identifier));
+            }
+            return role;
         }
 
         // POST api/<RoleController>
@@ -66,7 +89,31 @@ namespace AccessMgmtBackend.Controllers
                     });
                 }
             }
+            if (!string.IsNullOrEmpty(role.associated_groups))
+            {
+                string[] groups = role.associated_groups.Split(',');
+                foreach (var group in groups)
+                {
+                    _companyContext.GroupToRoles.Add(new GroupToRole
+                    {
+                        id = 0,
+                        company_identifier = role.company_identifier,
+                        group_identifier = group.ToString(),
+                        role_identifier = role.role_identifier.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });
+                }
+            }
             _companyContext.SaveChanges();
+            if (!_roleManager.RoleExistsAsync(role.role_identifier.ToString()).Result)
+            {
+                IdentityRole identityRole = new IdentityRole();
+                identityRole.Name = role.role_identifier.ToString();
+                IdentityResult roleResult = _roleManager.
+                CreateAsync(identityRole).Result;
+            }
             return _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
         }
 
@@ -88,6 +135,8 @@ namespace AccessMgmtBackend.Controllers
                 //Added logic for asset addition/updation
                 _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where
                     (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
 
                 if (!string.IsNullOrEmpty(roleNew.associated_assets))
                 {
@@ -99,6 +148,23 @@ namespace AccessMgmtBackend.Controllers
                             id = 0,
                             company_identifier = roleNew.company_identifier,
                             asset_identifier = asset.ToString(),
+                            role_identifier = roleNew.role_identifier.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
+                if (!string.IsNullOrEmpty(roleNew.associated_groups))
+                {
+                    string[] groups = roleNew.associated_groups.Split(',');
+                    foreach (var group in groups)
+                    {
+                        _companyContext.GroupToRoles.Add(new GroupToRole
+                        {
+                            id = 0,
+                            company_identifier = roleNew.company_identifier,
+                            group_identifier = group.ToString(),
                             role_identifier = roleNew.role_identifier.ToString(),
                             is_active = true,
                             created_date = DateTime.UtcNow,
@@ -123,6 +189,22 @@ namespace AccessMgmtBackend.Controllers
             if (role != null)
             {
                 _companyContext.CompanyRoles.Remove(role);
+                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where
+                   (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                _companyContext.EmployeeToRoles.RemoveRange(_companyContext.EmployeeToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                _companyContext.RoleToUsers.RemoveRange(_companyContext.RoleToUsers.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                if (_roleManager.RoleExistsAsync(role.role_identifier.ToString()).Result)
+                {
+                    var result = Task.Run(async () =>
+                    {
+                        await _roleManager.DeleteAsync(await _roleManager.FindByNameAsync(role.role_identifier.ToString()));
+                    });
+                }
+
                 _companyContext.SaveChanges();
                 return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier);
             }

@@ -1,9 +1,12 @@
 ﻿using AccessMgmtBackend.Data.Entities;
 using AccessMgmtBackend.Dto;
+using AccessMgmtBackend.Generic;
+using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -43,13 +46,40 @@ namespace AccessMgmtBackend.Controllers
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
 
-                    IdentityResult result = userManager.CreateAsync(user, model.Password).Result;
+                    IdentityResult result = userManager.CreateAsync(user, model.Password).Result;                    
 
-                    if (result.Succeeded && !string.IsNullOrEmpty(model.UserRole))
+                    if (result.Succeeded && !string.IsNullOrEmpty(model.user_role))
                     {
-                        await userManager.AddToRoleAsync(user, model.UserRole);
-                        return Created("", model);
+                        // Add user to AppUser table
+                        GenericAPICalls request = new GenericAPICalls();
+                        var appuser = new CreateAppUser
+                        {
+                            company_identifier = model.CompanyIdentifier,
+                            user_name = model.Email,
+                            user_description = model.user_description,
+                            user_description_attachment = model.user_description_attachment,
+                            is_nda_required = model.is_nda_required,
+                            is_bc_required = model.is_bc_required,
+                            is_certification_required = model.is_certification_required,
+                            associated_assets = model.associated_assets,
+                            user_role = model.user_role,
+                            user_group = model.user_group,
+                            is_active = model.is_active
+                        };
+                        var response = request.PostEndpoint("api/appuser", appuser);
+                        if (response.Result.IsSuccessStatusCode)
+                        {
+                            AppUser userResponse = await response.Result.Content.ReadAsAsync<AppUser>();
+                            Console.WriteLine("Id:{0}\tName:{1}", userResponse.id, userResponse.is_active);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Internal server Error");
+                        }
+                       
                     }
+                    await userManager.AddToRoleAsync(user, model.user_role);
+                    return Created("", model);
                 }
 
             }

@@ -121,7 +121,20 @@ namespace AccessMgmtBackend.Controllers
             var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier);
             if (appuser != null)
             {
+                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x =>
+                x.company_identifier == deleteAppuser.company_identifier && x.user_identifier == deleteAppuser.user_identifier.ToString()));
+                _companyContext.RoleToUsers.RemoveRange(_companyContext.RoleToUsers.Where
+                    (x => x.company_identifier == appuser.company_identifier && x.user_identifier == appuser.user_identifier.ToString()));
                 _companyContext.AppUsers.Remove(appuser);
+                var identityUser = _companyContext.Users.FirstOrDefault(s => s.UserName == appuser.user_name);
+                if (identityUser != null)
+                {
+                    _companyContext.UserLogins.RemoveRange(_companyContext.UserLogins.Where(ul => ul.UserId == identityUser.Id));
+                    _companyContext.UserRoles.RemoveRange(_companyContext.UserRoles.Where(ur => ur.UserId == identityUser.Id));
+                    _companyContext.UserTokens.RemoveRange(_companyContext.UserTokens.Where(us => us.UserId == identityUser.UserName));
+                    _companyContext.UserClaims.RemoveRange(_companyContext.UserClaims.Where(um => um.UserId == identityUser.Id));
+                    _companyContext.Users.Remove(_companyContext.Users.Where(usr => usr.Id == identityUser.Id).Single());
+                }
                 _companyContext.SaveChanges();
                 return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier);
             }

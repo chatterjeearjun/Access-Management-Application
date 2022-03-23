@@ -30,7 +30,10 @@
         public DbSet<AssetToRole> AssetToRoles { get; set; }
         public DbSet<AssetToUser> AssetToUsers { get; set; }
         public DbSet<GroupToRole> GroupToRoles { get; set; }
-        
+        public DbSet<EmployeeToRole> EmployeeToRoles { get; set; }
+        public DbSet<ApproverToRole> ApproverToRoles { get; set; }
+        public DbSet<GroupToUser> GroupToUsers { get; set; }
+        public DbSet<RoleToUser> RoleToUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add your own configuration here

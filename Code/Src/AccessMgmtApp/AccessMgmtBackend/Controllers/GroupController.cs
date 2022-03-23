@@ -83,7 +83,9 @@ namespace AccessMgmtBackend.Controllers
             var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier == value.group_identifier);
             if (group != null)
             {
-                _companyContext.Groups.Remove(group);
+                _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
+                    (x => x.company_identifier == value.company_identifier && x.group_identifier == value.group_identifier.ToString()));
+                _companyContext.Groups.Remove(group);                
                 _companyContext.SaveChanges();
                 return _companyContext.Groups.Where(x => x.company_identifier == value.company_identifier);
             }

@@ -5,10 +5,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AccessMgmtBackend.Migrations
 {
-    public partial class v1 : Migration
+    public partial class v21032022 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ac_approver_role",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    approver_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_approver_role", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ac_approvers",
                 columns: table => new
@@ -32,6 +52,66 @@ namespace AccessMgmtBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ac_approvers", x => x.approver_identifier);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_asset_employee",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    asset_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    employee_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_asset_employee", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_asset_role",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    asset_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_asset_role", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_asset_user",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    asset_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    user_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_asset_user", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,6 +175,26 @@ namespace AccessMgmtBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ac_employee_role",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    employee_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_employee_role", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ac_employees",
                 columns: table => new
                 {
@@ -126,6 +226,7 @@ namespace AccessMgmtBackend.Migrations
                     emp_cert_document2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_cert_document3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_cert_document4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    associated_assets = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_cert_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -163,6 +264,46 @@ namespace AccessMgmtBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ac_group", x => x.group_identifier);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_group_role",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    group_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_group_role", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_group_user",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    group_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    user_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_group_user", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -254,6 +395,8 @@ namespace AccessMgmtBackend.Migrations
                     is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
+                    associated_assets = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    associated_groups = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -262,6 +405,26 @@ namespace AccessMgmtBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ac_role", x => x.role_identifier);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_role_user",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    user_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_role_user", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -279,6 +442,9 @@ namespace AccessMgmtBackend.Migrations
                     is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
+                    associated_assets = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    user_role = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    user_group = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -479,7 +645,19 @@ namespace AccessMgmtBackend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ac_approver_role");
+
+            migrationBuilder.DropTable(
                 name: "ac_approvers");
+
+            migrationBuilder.DropTable(
+                name: "ac_asset_employee");
+
+            migrationBuilder.DropTable(
+                name: "ac_asset_role");
+
+            migrationBuilder.DropTable(
+                name: "ac_asset_user");
 
             migrationBuilder.DropTable(
                 name: "ac_assets");
@@ -488,10 +666,19 @@ namespace AccessMgmtBackend.Migrations
                 name: "ac_companies");
 
             migrationBuilder.DropTable(
+                name: "ac_employee_role");
+
+            migrationBuilder.DropTable(
                 name: "ac_employees");
 
             migrationBuilder.DropTable(
                 name: "ac_group");
+
+            migrationBuilder.DropTable(
+                name: "ac_group_role");
+
+            migrationBuilder.DropTable(
+                name: "ac_group_user");
 
             migrationBuilder.DropTable(
                 name: "ac_new_joiner_checklist");
@@ -504,6 +691,9 @@ namespace AccessMgmtBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "ac_role");
+
+            migrationBuilder.DropTable(
+                name: "ac_role_user");
 
             migrationBuilder.DropTable(
                 name: "ac_user");
