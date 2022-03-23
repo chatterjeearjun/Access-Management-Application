@@ -10,7 +10,7 @@
         public string company_identifier { get; set; }
         public string group_name { get; set; }
         public string? group_description { get; set; }
-        public string? group_description_attachment { get; set; }
+        public IFormFile? group_description_attachment { get; set; }
         public bool is_active { get; set; }
         public bool? is_nda_required { get; set; }
         public bool? is_bc_required { get; set; }

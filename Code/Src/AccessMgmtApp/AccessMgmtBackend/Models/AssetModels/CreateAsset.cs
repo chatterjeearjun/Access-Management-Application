@@ -13,7 +13,7 @@ namespace AccessMgmtBackend.Models
         public string? asset_risk_ranking { get; set; }
         public string? asset_type { get; set; }
         public string? asset_description { get; set; }
-        public string? asset_description_attachment { get; set; }
+        public IFormFile? asset_description_attachment { get; set; }
         public bool is_active { get; set; }
         public bool? is_nda_required { get; set; }
         public bool? is_bc_required { get; set; }

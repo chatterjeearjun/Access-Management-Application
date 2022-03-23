@@ -66,7 +66,7 @@ namespace AccessMgmtBackend.Controllers
                             user_group = model.user_group,
                             is_active = model.is_active
                         };
-                        var response = request.PostEndpoint("api/appuser", appuser);
+                        var response = request.AppUserPostEndpoint("api/appuser", appuser);
                         if (response.Result.IsSuccessStatusCode)
                         {
                             AppUser userResponse = await response.Result.Content.ReadAsAsync<AppUser>();

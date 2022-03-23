@@ -4,6 +4,7 @@ using AccessMgmtBackend.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    partial class CompanyContextModelSnapshot : ModelSnapshot
+    [Migration("20220322142748_latest22012022")]
+    partial class latest22012022
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1135,6 +1137,7 @@ namespace AccessMgmtBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("user_identifier")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("file_identifier");

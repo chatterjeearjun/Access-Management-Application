@@ -8,7 +8,7 @@
         public string company_identifier { get; set; }
         public string role_name { get; set; }
         public string? role_description { get; set; }
-        public string? role_description_attachment { get; set; }
+        public IFormFile? role_description_attachment { get; set; }
         public bool is_active { get; set; }
         public bool? is_nda_required { get; set; }
         public bool? is_bc_required { get; set; }

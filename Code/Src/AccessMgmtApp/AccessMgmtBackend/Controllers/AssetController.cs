@@ -1,6 +1,7 @@
 ﻿using AccessMgmtBackend.Context;
 using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,11 +34,11 @@ namespace AccessMgmtBackend.Controllers
 
         [Route("[action]/{companyid}/{assetid}")]
         [HttpGet]
-        public List<string> GetAssetAssociation( string companyid, string assetid)
+        public List<string> GetAssetAssociation(string companyid, string assetid)
         {
             List<string> association = new List<string>();
             association.Add(string.Join(',', _companyContext.AssetToEmployees.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x=>x.employee_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x => x.employee_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToRoles.Where
                 (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x => x.role_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToUsers.Where
@@ -48,12 +49,41 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<AssetController>
         [HttpPost]
-        public Asset Post([FromBody] CreateAsset value)
+        [AllowAnonymous]
+        public Asset Post([FromForm] CreateAsset value)
         {
             var asset = new Asset();
             asset.created_date = DateTime.UtcNow;
             asset.created_by = "Application";
             asset.is_active = true;
+
+            if (value.asset_description_attachment != null)
+            {
+                // Add user to AppUser table
+                GenericAPICalls request = new GenericAPICalls();
+                var file = new FileModel
+                {
+                    File=value.asset_description_attachment,
+                    upload_category= "Asset",
+                    company_identifier = value.company_identifier,
+                    user_identifier =""
+                };
+                var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    var uploadedfile = Task.Run(async () =>
+                         {
+                             await response.Result.Content.ReadAsAsync<UploadedFile>();
+                         });
+
+                    Console.WriteLine("Id:{0}\tName:{1}", uploadedfile.Id, uploadedfile.Status);
+                }
+                else
+                {
+                    Console.WriteLine("Internal server Error");
+                }
+            }
+            asset.asset_description_attachment = "";
             PropertyCopier<CreateAsset, Asset>.Copy(value, asset);
             _companyContext.Assets.Add(asset);
             _companyContext.SaveChanges();
@@ -91,7 +121,7 @@ namespace AccessMgmtBackend.Controllers
             var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
             if (asset != null)
             {
-                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where(x => 
+                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where(x =>
                 x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));
                 _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where(x =>
                 x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));

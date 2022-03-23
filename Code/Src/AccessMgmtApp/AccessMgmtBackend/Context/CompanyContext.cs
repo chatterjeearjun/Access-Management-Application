@@ -26,6 +26,7 @@
         public DbSet<SentNotification> SentNotifications { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Approver> Approvers { get; set; }
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
         public DbSet<AssetToEmployee> AssetToEmployees { get; set; }
         public DbSet<AssetToRole> AssetToRoles { get; set; }
         public DbSet<AssetToUser> AssetToUsers { get; set; }
@@ -47,6 +48,7 @@
             modelBuilder.Entity<NotificationType>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<Role>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<SentNotification>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            modelBuilder.Entity<UploadedFile>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<AppUser>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         }
     }
