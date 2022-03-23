@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AccessMgmtBackend.Migrations
 {
-    public partial class v21032022 : Migration
+    public partial class v1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -428,6 +428,29 @@ namespace AccessMgmtBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ac_uploaded_file",
+                columns: table => new
+                {
+                    file_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    user_identifier = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    upload_category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    friendly_file_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    blob_file_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_uploaded_file", x => x.file_identifier);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ac_user",
                 columns: table => new
                 {
@@ -694,6 +717,9 @@ namespace AccessMgmtBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "ac_role_user");
+
+            migrationBuilder.DropTable(
+                name: "ac_uploaded_file");
 
             migrationBuilder.DropTable(
                 name: "ac_user");

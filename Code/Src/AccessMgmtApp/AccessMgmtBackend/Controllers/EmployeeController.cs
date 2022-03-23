@@ -30,7 +30,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId);
+                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId).ToList();
                 foreach (var employee in listEmployees)
                 {
                     employee.emp_role = String.Join(",",
@@ -94,7 +94,7 @@ namespace AccessMgmtBackend.Controllers
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
-                    var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == role && s.company_identifier == employee.company_identifier)
+                    var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == role && s.company_identifier == employee.company_identifier).ToList()
                     .Select(x => x.asset_identifier);
                     employee.associated_assets = (!string.IsNullOrEmpty(employee.associated_assets)) ?
                         employee.associated_assets + "," + String.Join(",", associatedRolesAssets) : String.Join(",", associatedRolesAssets);
@@ -197,12 +197,12 @@ namespace AccessMgmtBackend.Controllers
                 _companyContext.EmployeeToRoles.RemoveRange(_companyContext.EmployeeToRoles.Where
                    (x => x.company_identifier == value.company_identifier && x.employee_identifier == value.employee_identifier.ToString()));
                 _companyContext.SaveChanges();
-                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier).ToList();
 
             }
             else
             {
-                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier).ToList();
             }
         }
     }

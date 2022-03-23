@@ -21,7 +21,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<Approver> GetByCompany(string companyId)
         {
-            var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == companyId);
+            var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == companyId).ToList();
             foreach (var i in listOfApprovers)
             {
                 i.approver_role = String.Join(",",

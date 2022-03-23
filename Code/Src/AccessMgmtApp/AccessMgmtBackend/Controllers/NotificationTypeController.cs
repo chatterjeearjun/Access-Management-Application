@@ -28,7 +28,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<NotificationType> GetByCompany(string companyId)
         {
-            return _companyContext.NotificationTypes.Where(s => s.company_identifier == companyId);
+            return _companyContext.NotificationTypes.Where(s => s.company_identifier == companyId).ToList();
         }
 
         // POST api/<NotificationTypeController>

@@ -23,7 +23,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.Groups.Where(x => x.company_identifier == companyId);
+                return _companyContext.Groups.Where(x => x.company_identifier == companyId).ToList();
             }
             else
             {

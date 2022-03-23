@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220321102707_v21032022")]
-    partial class v21032022
+    [Migration("20220323181922_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1091,6 +1091,57 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("notification_sent_identifier");
 
                     b.ToTable("ac_notifications_sent");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.UploadedFile", b =>
+                {
+                    b.Property<Guid>("file_identifier")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("blob_file_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("friendly_file_name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("upload_category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user_identifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("file_identifier");
+
+                    b.ToTable("ac_uploaded_file");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -22,7 +22,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<Asset> GetByCompany(string companyId)
         {
-            return _companyContext.Assets.Where(x => x.company_identifier == companyId);
+            return _companyContext.Assets.Where(x => x.company_identifier == companyId).ToList();
         }
 
         // GET api/<AssetController>/{guid}

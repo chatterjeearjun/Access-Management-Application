@@ -21,7 +21,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<SentNotification> GetByCompany(string companyId)
         {
-            return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId);
+            return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId).ToList();
         }
 
         // GET api/<SentNotificationController>/5

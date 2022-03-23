@@ -26,7 +26,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                var listOfRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId);
+                var listOfRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId).ToList();
                 foreach (var i in listOfRoles)
                 {
                     i.associated_groups = String.Join(",",
@@ -231,11 +231,11 @@ namespace AccessMgmtBackend.Controllers
                 }
 
                 _companyContext.SaveChanges();
-                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier).ToList();
             }
             else
             {
-                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier).ToList();
             }
         }
     }
