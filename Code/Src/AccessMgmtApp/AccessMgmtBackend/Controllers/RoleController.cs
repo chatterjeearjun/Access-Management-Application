@@ -51,6 +51,8 @@ namespace AccessMgmtBackend.Controllers
             var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
             if (role != null)
             {
+                role.role_description_attachment = !string.IsNullOrEmpty(role.role_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                        (s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : String.Empty;
                 role.associated_groups = String.Join(",",
                  _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).
                  Select(x => x.group_identifier));

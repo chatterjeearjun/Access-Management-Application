@@ -35,7 +35,14 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public AppUser Get(string guid)
         {
-            return _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));
+            var appUser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));
+            if (appUser != null)
+            {
+                appUser.user_description_attachment = !string.IsNullOrEmpty(appUser.user_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == appUser.user_description_attachment)?.blob_file_name : String.Empty;
+            }
+           
+            return appUser;
         }
 
         // POST api/<AppUserController>

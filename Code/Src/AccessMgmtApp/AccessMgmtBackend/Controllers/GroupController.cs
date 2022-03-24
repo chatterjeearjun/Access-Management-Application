@@ -35,7 +35,13 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public Group Get(string guid)
         {
-            return _companyContext.Groups.FirstOrDefault(s => s.group_identifier == new Guid(guid));
+            var group= _companyContext.Groups.FirstOrDefault(s => s.group_identifier == new Guid(guid));
+            if(group != null)
+            {
+                group.group_description_attachment = !string.IsNullOrEmpty(group.group_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                            (s => s.file_identifier.ToString() == group.group_description_attachment)?.blob_file_name : String.Empty;
+            }
+            return group;
         }
 
         // POST api/<GroupController>

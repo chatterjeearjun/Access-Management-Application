@@ -29,7 +29,13 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public Asset Get(string guid)
         {
-            return _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
+            if (asset != null)
+            {
+                asset.asset_description_attachment = !string.IsNullOrEmpty(asset.asset_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                        (s => s.file_identifier.ToString() == asset.asset_description_attachment)?.blob_file_name : String.Empty;
+            }
+            return asset;
         }
 
         [Route("[action]/{companyid}/{assetid}")]
@@ -63,10 +69,10 @@ namespace AccessMgmtBackend.Controllers
                 GenericAPICalls request = new GenericAPICalls();
                 var file = new FileModel
                 {
-                    File=value.asset_description_attachment,
-                    upload_category= "Asset",
+                    File = value.asset_description_attachment,
+                    upload_category = "Asset",
                     company_identifier = value.company_identifier,
-                    user_identifier =""
+                    user_identifier = ""
                 };
                 var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
                 if (response.Result.IsSuccessStatusCode)
@@ -75,7 +81,7 @@ namespace AccessMgmtBackend.Controllers
                     asset.asset_description_attachment = userResponse?.file_identifier.ToString();
                 }
             }
-            
+
             PropertyCopier<CreateAsset, Asset>.Copy(value, asset);
             _companyContext.Assets.Add(asset);
             _companyContext.SaveChanges();
