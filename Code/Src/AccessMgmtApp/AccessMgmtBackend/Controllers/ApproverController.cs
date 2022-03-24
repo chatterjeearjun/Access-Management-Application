@@ -1,5 +1,6 @@
 ﻿using AccessMgmtBackend.Context;
 using AccessMgmtBackend.Generic;
+using AccessMgmtBackend.Models;
 using AccessMgmtBackend.Models.ApproverModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -55,6 +56,23 @@ namespace AccessMgmtBackend.Controllers
             approver.is_active = true;
             PropertyCopier<CreateApprover, Approver>.Copy(value, approver);
             _companyContext.Approvers.Add(approver);
+            if (!string.IsNullOrEmpty(approver.approver_role))
+            {
+                string[] roles = approver.approver_role.Split(',');
+                foreach (var role in roles)
+                {
+                    _companyContext.ApproverToRoles.Add(new ApproverToRole
+                    {
+                        id = 0,
+                        company_identifier = approver.company_identifier,
+                        approver_identifier = approver.approver_identifier.ToString(),
+                        role_identifier = role.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });
+                }
+            }
             _companyContext.SaveChanges();
             return _companyContext.Approvers.FirstOrDefault(s => s.approver_email == value.approver_email);
         }
@@ -74,6 +92,25 @@ namespace AccessMgmtBackend.Controllers
                 approverNew.modified_by = "Application";
                 PropertyCopier<UpdateApprover, Approver>.Copy(value, approverNew);
                 _companyContext.Entry<Approver>(approver).CurrentValues.SetValues(approverNew);
+                _companyContext.ApproverToRoles.RemoveRange(_companyContext.ApproverToRoles.Where
+                   (x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()));
+                if (!string.IsNullOrEmpty(approver.approver_role))
+                {
+                    string[] roles = approver.approver_role.Split(',');
+                    foreach (var role in roles)
+                    {
+                        _companyContext.ApproverToRoles.Add(new ApproverToRole
+                        {
+                            id = 0,
+                            company_identifier = approver.company_identifier,
+                            approver_identifier = approver.approver_identifier.ToString(),
+                            role_identifier = role.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
                 _companyContext.SaveChanges();
                 return _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == value.approver_identifier);
             }
