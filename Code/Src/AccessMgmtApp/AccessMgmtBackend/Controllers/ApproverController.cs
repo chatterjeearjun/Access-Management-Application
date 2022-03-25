@@ -20,36 +20,63 @@ namespace AccessMgmtBackend.Controllers
 
         // GET: api/<ApproverController>
         [HttpGet]
-        public IEnumerable<Approver> GetByCompany(string companyId)
+        public IEnumerable<ViewApprover> GetByCompany(string companyId)
         {
+            List<ViewApprover> viewApprovers = new List<ViewApprover>();
             var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == companyId).ToList();
             foreach (var i in listOfApprovers)
             {
+                ViewApprover viewApprover = new ViewApprover();
                 i.approver_role = String.Join(",",
                 _companyContext.ApproverToRoles.Where(x => x.company_identifier == companyId && x.approver_identifier == i.approver_identifier.ToString()).
                 Select(x => x.role_identifier));
+                PropertyCopier<Approver, ViewApprover>.Copy(i, viewApprover);
+                if (!string.IsNullOrEmpty(i.approver_role))
+                {
+                    string[] roles = i.approver_role.Split(',');
+                    foreach (var role in roles)
+                    {
+                        viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
+                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role).role_name);
+                    }
+                    viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
+                }
+                viewApprovers.Add(viewApprover);
             }
-            return listOfApprovers;
+            return viewApprovers;
         }
 
         // GET api/<ApproverController>/5
         [HttpGet("{guid}")]
-        public Approver Get(string guid)
+        public ViewApprover Get(string guid)
         {
+            ViewApprover viewApprover = new ViewApprover();
             var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
             if (approver != null)
             {
                 approver.approver_role = String.Join(",",
                 _companyContext.ApproverToRoles.Where(x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()).
-                Select(x => x.role_identifier));
+                Select(x => x.role_identifier));                
+                PropertyCopier<Approver, ViewApprover>.Copy(approver, viewApprover);
+                if (!string.IsNullOrEmpty(approver.approver_role))
+                {
+                    string[] roles = approver.approver_role.Split(',');
+                    foreach (var role in roles)
+                    {
+                        viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
+                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == approver.company_identifier && x.role_identifier.ToString() == role).role_name);
+                    }
+                    viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
+                }
             }
-            return approver;
+            return viewApprover;
         }
 
         // POST api/<ApproverController>
         [HttpPost]
-        public Approver Post([FromBody] CreateApprover value)
+        public ViewApprover Post([FromBody] CreateApprover value)
         {
+            ViewApprover viewApprover = new ViewApprover();
             var approver = new Approver();
             approver.created_date = DateTime.UtcNow;
             approver.created_by = "Application";
@@ -74,16 +101,29 @@ namespace AccessMgmtBackend.Controllers
                 }
             }
             _companyContext.SaveChanges();
-            return _companyContext.Approvers.FirstOrDefault(s => s.approver_email == value.approver_email);
+            var newapprover = _companyContext.Approvers.FirstOrDefault(s => s.approver_email == value.approver_email);
+            PropertyCopier<Approver, ViewApprover>.Copy(newapprover, viewApprover);
+            if (!string.IsNullOrEmpty(newapprover.approver_role))
+            {
+                string[] roles = newapprover.approver_role.Split(',');
+                foreach (var role in roles)
+                {
+                    viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
+            _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newapprover.company_identifier && x.role_identifier.ToString() == role).role_name);
+                }
+                viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
+            }
+            return viewApprover;
         }
 
         // PUT api/<ApproverController>/5
         [HttpPut]
-        public Approver Put([FromBody] UpdateApprover value)
+        public ViewApprover Put([FromBody] UpdateApprover value)
         {
             var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == value.approver_identifier);
             if (approver != null)
             {
+                ViewApprover viewApprover = new ViewApprover();
                 var approverNew = new Approver();
                 approverNew.id = approver.id;
                 approverNew.created_by = approver.created_by;
@@ -112,7 +152,19 @@ namespace AccessMgmtBackend.Controllers
                     }
                 }
                 _companyContext.SaveChanges();
-                return _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == value.approver_identifier);
+                var newapprover = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == value.approver_identifier);
+                PropertyCopier<Approver, ViewApprover>.Copy(newapprover, viewApprover);
+                if (!string.IsNullOrEmpty(newapprover.approver_role))
+                {
+                    string[] roles = newapprover.approver_role.Split(',');
+                    foreach (var role in roles)
+                    {
+                        viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
+                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newapprover.company_identifier && x.role_identifier.ToString() == role).role_name);
+                    }
+                    viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
+                }
+                return viewApprover;
             }
             else
             {
@@ -122,8 +174,9 @@ namespace AccessMgmtBackend.Controllers
 
         // DELETE api/<ApproverController>/5
         [HttpDelete]
-        public IEnumerable<Approver> Delete([FromBody] DeleteApprover deleteApprover)
+        public IEnumerable<ViewApprover> Delete([FromBody] DeleteApprover deleteApprover)
         {
+            List<ViewApprover> viewApprovers = new List<ViewApprover>();
             var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == deleteApprover.approver_identifier);
             if (approver != null)
             {
@@ -131,11 +184,53 @@ namespace AccessMgmtBackend.Controllers
                 _companyContext.ApproverToRoles.RemoveRange(_companyContext.ApproverToRoles.Where
                     (x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()));
                 _companyContext.SaveChanges();
-                return _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier);
+                var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier).ToList();
+
+                foreach (var i in listOfApprovers)
+                {
+                    ViewApprover viewApprover = new ViewApprover();
+                    i.approver_role = String.Join(",",
+                    _companyContext.ApproverToRoles.Where(x => x.company_identifier == i.company_identifier && x.approver_identifier == i.approver_identifier.ToString()).
+                    Select(x => x.role_identifier));
+                    PropertyCopier<Approver, ViewApprover>.Copy(i, viewApprover);
+                    if (!string.IsNullOrEmpty(i.approver_role))
+                    {
+                        string[] roles = i.approver_role.Split(',');
+                        foreach (var role in roles)
+                        {
+                            viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
+                    _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role).role_name);
+                        }
+                        viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
+                    }
+                    viewApprovers.Add(viewApprover);
+                }
+                return viewApprovers;
             }
             else
             {
-                return _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier);
+                var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier).ToList();
+
+                foreach (var i in listOfApprovers)
+                {
+                    ViewApprover viewApprover = new ViewApprover();
+                    i.approver_role = String.Join(",",
+                    _companyContext.ApproverToRoles.Where(x => x.company_identifier == i.company_identifier && x.approver_identifier == i.approver_identifier.ToString()).
+                    Select(x => x.role_identifier));
+                    PropertyCopier<Approver, ViewApprover>.Copy(i, viewApprover);
+                    if (!string.IsNullOrEmpty(i.approver_role))
+                    {
+                        string[] roles = i.approver_role.Split(',');
+                        foreach (var role in roles)
+                        {
+                            viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
+                    _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role).role_name);
+                        }
+                        viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
+                    }
+                    viewApprovers.Add(viewApprover);
+                }
+                return viewApprovers;
             }
         }
     }
