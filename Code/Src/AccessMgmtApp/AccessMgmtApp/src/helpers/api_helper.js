@@ -17,10 +17,9 @@ axiosApi.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject(error)
 );
-const compid = 1;
+
 export async function get(url, id) {
   try {
-    debugger;
     const response = await fetch(
       `${API_URL}${url}${id !== null && id !== undefined ? id : ""}`,
       {
@@ -65,6 +64,38 @@ export async function post(url, data) {
         "Content-Type": "application/json; charset=UTF-8",
         "Access-Control-Allow-Origin": "*",
       },
+    });
+    debugger;
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error, "post error");
+  }
+}
+export async function postAsset(url, data) {
+  try {
+    const formData = new FormData();
+    formData.append("company_identifier", data.company_identifier);
+    formData.append("asset_name", data.asset_name);
+    formData.append("asset_id", data.asset_id);
+    formData.append("asset_type", data.asset_type);
+    formData.append("asset_owner", data.asset_owner);
+    formData.append("asset_description", data.asset_description);
+    formData.append("asset_location", data.asset_location);
+    formData.append("asset_risk_ranking", data.asset_risk_ranking);
+    formData.append("is_active", data.is_active);
+    formData.append("alocation_start_date", data.alocation_start_date);
+    formData.append("alocation_end_date", data.alocation_end_date);
+    formData.append("is_nda_required", "");
+    formData.append("is_bc_required", "");
+    formData.append("certification_required", "");
+    formData.append(
+      "asset_description_attachment",
+      data.asset_description_attachment
+    );
+    const response = await fetch(`${API_URL}${url}`, {
+      method: "POST",
+      body: formData,
     });
     debugger;
     const result = await response.json();

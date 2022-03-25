@@ -9,6 +9,7 @@ import {
   delGroup,
   getAAssociation,
   isEmpDuplicate,
+  postAsset,
 } from "./api_helper";
 import * as url from "./url_helper";
 
@@ -316,11 +317,13 @@ const onAddComment = (productId, commentText) => {
 export const getAssets = () =>
   get(url.GET_ASSETS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
 
+export const getAssetOverview = (id) => get(url.GET_ASSET_OVERVIEW, id);
+
 export const getAssetsAssociation = (association) =>
   getAAssociation(url.GET_ASSETS_ASSOCIATION, association);
 
 // add asset
-export const addNewAsset = (asset) => post(url.ADD_NEW_ASSET, asset);
+export const addNewAsset = (asset) => postAsset(url.ADD_NEW_ASSET, asset);
 
 // update asset
 export const updateAsset = (asset) => put(url.UPDATE_ASSET, asset);

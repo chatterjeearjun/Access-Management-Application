@@ -13,6 +13,8 @@ import EmployeeManagement from "../pages/EmployeeManagement/index";
 //Assets
 import AssetsManagement from "../pages/AssetsManagement/assets";
 
+import AssetsOverview from "../pages/AssetOverView/index";
+
 //Roles
 import RolesManagement from "../pages/RolesManagement/index";
 
@@ -134,7 +136,7 @@ const userRoutes = [
 
   //assets
   { path: "/assetsmanagement", component: AssetsManagement },
-
+  { path: "/assetoverview", component: AssetsOverview },
   //roles
   { path: "/rolesmanagement", component: RolesManagement },
 

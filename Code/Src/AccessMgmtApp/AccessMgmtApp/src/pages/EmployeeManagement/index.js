@@ -655,7 +655,7 @@ const EmployeeManagement = (props) => {
                                                     {rolesList.map((role) => (
                                                       <option
                                                         key={role.id}
-                                                        value={role.role_name}
+                                                        value={role.identifier}
                                                       >
                                                         {role.role_name}
                                                       </option>

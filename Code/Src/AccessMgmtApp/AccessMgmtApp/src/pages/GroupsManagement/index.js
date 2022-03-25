@@ -168,7 +168,7 @@ const GroupsManagement = (props) => {
         {
           label: "Delete",
           onClick: () => {
-            dispatch(dispatch(onDeleteGroup(group)));
+            dispatch(onDeleteGroup(group));
           },
         },
         {

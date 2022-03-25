@@ -12,6 +12,7 @@ import {
   ModalBody,
   Input,
   Label,
+  UncontrolledAlert,
 } from "reactstrap";
 
 import paginationFactory, {
@@ -44,16 +45,18 @@ import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 import { getAssetsAssociation } from "../../helpers/fakebackend_helper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const AssetsManagement = (props) => {
   const dispatch = useDispatch();
 
-  const { assets } = useSelector((state) => ({
+  const { assets, result } = useSelector((state) => ({
     assets: state.assetsManagement.assets,
+    result: state.assetsManagement.result,
   }));
   const { owners } = useSelector((state) => ({
     owners: state.contacts.users,
   }));
-
   const [assetList, setAssetList] = useState([]);
   const [ownersList, setOwnersList] = useState([]);
   const [selectedOwner, setSelectedOwner] = useState([]);
@@ -90,6 +93,11 @@ const AssetsManagement = (props) => {
     {
       text: "Asset ID",
       dataField: "asset_identifier",
+      sort: true,
+    },
+    {
+      text: "Serial No",
+      dataField: "asset_id",
       sort: true,
     },
     {
@@ -146,6 +154,12 @@ const AssetsManagement = (props) => {
       text: "Action",
       formatter: (cellContent, asset) => (
         <div className="d-flex gap-3">
+          <Link
+            className="text-primary"
+            to={`assetoverview?${asset.asset_identifier}`}
+          >
+            <i className="mdi mdi-eye font-size-18" id="viewtooltip"></i>
+          </Link>
           <Link className="text-success" to="#">
             <i
               className="mdi mdi-pencil font-size-18"
@@ -202,6 +216,7 @@ const AssetsManagement = (props) => {
     const asset = arg;
     setAssetList({
       id: asset.asset_identifier,
+      serialno: asset.asset_id,
       companyid: asset.company_identifier,
       assetid: asset.asset_id,
       name: asset.asset_name,
@@ -258,6 +273,7 @@ const AssetsManagement = (props) => {
       const updateAsset = {
         asset_identifier: assetList.id,
         company_identifier: assetList.companyid,
+        asset_id: values["assetserialno"],
         asset_name: values["name"],
         asset_type: values["type"],
         asset_owner: selectedOwner,
@@ -288,6 +304,7 @@ const AssetsManagement = (props) => {
       const newAsset = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
           .companyID,
+        asset_id: values["assetserialno"],
         asset_name: values["name"],
         asset_type: values["type"],
         asset_owner: selectedOwner,
@@ -310,6 +327,7 @@ const AssetsManagement = (props) => {
           .startOf("day")
           .toISOString()
           .replace(/T.*/gi, "T00:00:00.000Z"),
+        asset_description_attachment: file,
       };
       // save new asset
       dispatch(onAddNewAsset(newAsset));
@@ -326,7 +344,15 @@ const AssetsManagement = (props) => {
     debugger;
     setSelectedOwner(e.target.value);
   };
+  const [file, setFile] = useState();
 
+  if (result === "Asset Deleted") {
+    toast("Asset Deleted Successfully !", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+      toastId: "007",
+    });
+  }
   return (
     <React.Fragment>
       <div className="page-content">
@@ -336,6 +362,7 @@ const AssetsManagement = (props) => {
         <Container fluid>
           {/* Render Breadcrumbs */}
           <Breadcrumbs title="Assets" breadcrumbItem="Asset List" />
+          <ToastContainer />
           <Row>
             <Col lg="12">
               <Card>
@@ -403,8 +430,8 @@ const AssetsManagement = (props) => {
                                     defaultSorted={defaultSorted}
                                     selectRow={selectRow}
                                     TableChangeType={"filter"}
-                                    classes={"table align-middle table-nowrap"}
-                                    headerWrapperClasses={"thead-light"}
+                                    classes={"table"}
+                                    headerWrapperClasses={"thead-dark"}
                                     {...toolkitProps.baseProps}
                                     {...paginationTableProps}
                                   />
@@ -425,14 +452,15 @@ const AssetsManagement = (props) => {
                                         <Row form>
                                           <Col xs={12}>
                                             <Row>
-                                              {/* <Col xs={6}>
+                                              <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
-                                                    name="assetid"
-                                                    label="Asset ID"
-                                                    placeholder="Asset Id"
+                                                    name="assetserialno"
+                                                    label="Asset Serial No"
+                                                    placeholder="Asset Serial No"
                                                     type="text"
-                                                    errorMessage="please provide valid asset id"
+                                                    maxLength={6}
+                                                    errorMessage="please provide valid asset serial no"
                                                     disabled={
                                                       isEdit ? true : false
                                                     }
@@ -440,11 +468,11 @@ const AssetsManagement = (props) => {
                                                       required: { value: true },
                                                     }}
                                                     value={
-                                                      assetList.assetid || ""
+                                                      assetList.serialno || ""
                                                     }
                                                   />
                                                 </div>
-                                              </Col> */}
+                                              </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -460,6 +488,8 @@ const AssetsManagement = (props) => {
                                                   />
                                                 </div>
                                               </Col>
+                                            </Row>
+                                            <Row>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -479,8 +509,7 @@ const AssetsManagement = (props) => {
                                                   />
                                                 </div>
                                               </Col>
-                                            </Row>
-                                            <Row>
+
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -503,6 +532,8 @@ const AssetsManagement = (props) => {
                                                   />
                                                 </div>
                                               </Col>
+                                            </Row>
+                                            <Row>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -520,8 +551,7 @@ const AssetsManagement = (props) => {
                                                   />
                                                 </div>
                                               </Col>
-                                            </Row>
-                                            <Row>
+
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   {/* <AvField
@@ -566,6 +596,8 @@ const AssetsManagement = (props) => {
                                                   </datalist>
                                                 </div>
                                               </Col>
+                                            </Row>
+                                            <Row>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -604,8 +636,7 @@ const AssetsManagement = (props) => {
                                                   </AvField>
                                                 </div>
                                               </Col>
-                                            </Row>
-                                            <Row>
+
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -661,6 +692,8 @@ const AssetsManagement = (props) => {
                                                   </AvField>
                                                 </div>
                                               </Col>
+                                            </Row>
+                                            <Row>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -670,11 +703,15 @@ const AssetsManagement = (props) => {
                                                     type="file"
                                                     errorMessage="please provide valid file"
                                                     value={""}
+                                                    onChange={(e) => {
+                                                      setFile(
+                                                        e.target.files[0]
+                                                      );
+                                                    }}
                                                   />
                                                 </div>
                                               </Col>
-                                            </Row>
-                                            <Row>
+
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <AvField
@@ -692,6 +729,8 @@ const AssetsManagement = (props) => {
                                                   />
                                                 </div>
                                               </Col>
+                                            </Row>
+                                            <Row>
                                               <Col xs={6}>
                                                 {isEdit ? (
                                                   <div className="mb-3">

@@ -119,6 +119,7 @@ export const ON_ADD_COMMENT = "/comments-product-add-comment";
 
 //AssetsManagement
 export const GET_ASSETS = "/api/Asset?companyId=";
+export const GET_ASSET_OVERVIEW = "/api/Asset/";
 export const ADD_NEW_ASSET = "/api/Asset";
 export const UPDATE_ASSET = "/api/Asset";
 export const DELETE_ASSET = "/api/Asset";

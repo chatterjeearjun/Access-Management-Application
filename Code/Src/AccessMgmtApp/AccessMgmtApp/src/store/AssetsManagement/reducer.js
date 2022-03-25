@@ -1,6 +1,8 @@
 import {
   GET_ASSETS_SUCCESS,
   GET_ASSETS_FAIL,
+  GET_ASSET_OVERVIEW_SUCCESS,
+  GET_ASSET_OVERVIEW_FAIL,
   ADD_ASSET_SUCCESS,
   ADD_ASSET_FAIL,
   UPDATE_ASSET_SUCCESS,
@@ -11,6 +13,7 @@ import {
 
 const INIT_STATE = {
   assets: [],
+  asset: [],
   error: {},
   result: "",
 };
@@ -30,7 +33,19 @@ const assetsManagement = (state = INIT_STATE, action) => {
         ...state,
         error: action.payload,
       };
+    case GET_ASSET_OVERVIEW_SUCCESS:
+      return {
+        ...state,
+        asset: action.payload,
+      };
+
+    case GET_ASSET_OVERVIEW_FAIL:
+      return {
+        ...state,
+        error: action.payload,
+      };
     case ADD_ASSET_SUCCESS:
+      debugger;
       return {
         ...state,
         assets: [...state.assets, action.payload],
@@ -65,14 +80,13 @@ const assetsManagement = (state = INIT_STATE, action) => {
         assets: state.assets.filter(
           (asset) => asset.id.toString() !== action.payload.id.toString()
         ),
-        result: "success",
+        result: "Asset Deleted",
       };
 
     case DELETE_ASSET_FAIL:
       return {
         ...state,
         error: action.payload,
-        result: "success",
       };
     default:
       return state;

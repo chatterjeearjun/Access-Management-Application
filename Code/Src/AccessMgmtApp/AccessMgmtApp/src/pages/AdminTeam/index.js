@@ -97,6 +97,9 @@ const AdminTeam = (props) => {
       dataField: "approver_role",
       text: "User Role",
       sort: true,
+      // formatter: (cellContent, approver) => (
+      //   <>{getRoleName(approver.approver_role)?.role_name}</>
+      // ),
     },
     {
       dataField: "approver_email",
@@ -138,18 +141,6 @@ const AdminTeam = (props) => {
   ];
 
   useEffect(() => {
-    if (approvers && !approvers.length) {
-      dispatch(onGetApprovers());
-      setIsEdit(false);
-    }
-  }, [dispatch, approvers]);
-
-  useEffect(() => {
-    setApproverList(approvers);
-    setIsEdit(false);
-  }, [approvers]);
-
-  useEffect(() => {
     if (roles && !roles.length) {
       dispatch(onGetRoles());
       setIsEdit(false);
@@ -160,6 +151,18 @@ const AdminTeam = (props) => {
     setRolesList(roles);
     //setIsEdit(false);
   }, [roles]);
+
+  useEffect(() => {
+    if (approvers && !approvers.length) {
+      dispatch(onGetApprovers());
+      setIsEdit(false);
+    }
+  }, [dispatch, approvers]);
+
+  useEffect(() => {
+    setApproverList(approvers);
+    setIsEdit(false);
+  }, [approvers]);
 
   const toggle = () => {
     setModal(!modal);
@@ -253,6 +256,18 @@ const AdminTeam = (props) => {
     toggle();
   };
 
+  const getRoleName = async (id) => {
+    debugger;
+    const rolename = await fetch(`https://localhost:5001/api/Role/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await rolename.json();
+    console.log(data, "872634g23jhgeigwjerwmbw,bddfhjfjhwgejwgejweg");
+    return data;
+  };
   return (
     <React.Fragment>
       <div className="page-content">
@@ -449,7 +464,9 @@ const AdminTeam = (props) => {
                                                     {rolesList.map((role) => (
                                                       <option
                                                         key={role.id}
-                                                        value={role.role_name}
+                                                        value={
+                                                          role.role_identifier
+                                                        }
                                                       >
                                                         {role.role_name}
                                                       </option>

@@ -2,6 +2,9 @@ import {
   GET_ASSETS,
   GET_ASSETS_FAIL,
   GET_ASSETS_SUCCESS,
+  GET_ASSET_OVERVIEW,
+  GET_ASSET_OVERVIEW_SUCCESS,
+  GET_ASSET_OVERVIEW_FAIL,
   ADD_NEW_ASSET,
   ADD_ASSET_SUCCESS,
   ADD_ASSET_FAIL,
@@ -25,6 +28,20 @@ export const getAssets = () => ({
 export const getAssetsSuccess = (users) => ({
   type: GET_ASSETS_SUCCESS,
   payload: users,
+});
+
+export const getAssetOverview = (id) => ({
+  type: GET_ASSET_OVERVIEW,
+  payload: id,
+});
+
+export const getAssetOverviewSuccess = (users) => ({
+  type: GET_ASSET_OVERVIEW_SUCCESS,
+  payload: users,
+});
+export const getAssetOverviewFail = (error) => ({
+  type: GET_ASSET_OVERVIEW_FAIL,
+  payload: error,
 });
 
 export const addNewAsset = (user) => ({

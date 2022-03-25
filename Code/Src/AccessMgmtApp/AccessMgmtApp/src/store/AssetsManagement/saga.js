@@ -3,6 +3,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 // Crypto Redux States
 import {
   GET_ASSETS,
+  GET_ASSET_OVERVIEW,
   ADD_NEW_ASSET,
   DELETE_ASSET,
   UPDATE_ASSET,
@@ -12,6 +13,8 @@ import {
 import {
   getAssetsSuccess,
   getAssetsFail,
+  getAssetOverviewSuccess,
+  getAssetOverviewFail,
   addAssetFail,
   addAssetSuccess,
   updateAssetSuccess,
@@ -26,6 +29,7 @@ import {
   addNewAsset,
   updateAsset,
   deleteAsset,
+  getAssetOverview,
 } from "../../helpers/fakebackend_helper";
 
 //AssetsManagement
@@ -36,6 +40,14 @@ function* fetchAssets() {
     yield put(getAssetsSuccess(response));
   } catch (error) {
     yield put(getAssetsFail(error));
+  }
+}
+function* fetchAssetOverview({ payload: id }) {
+  try {
+    const response = yield call(getAssetOverview, id);
+    yield put(getAssetOverviewSuccess(response));
+  } catch (error) {
+    yield put(getAssetOverviewFail(error));
   }
 }
 
@@ -70,6 +82,7 @@ function* onAddNewAsset({ payload: user }) {
 
 function* assetsSaga() {
   yield takeEvery(GET_ASSETS, fetchAssets);
+  yield takeEvery(GET_ASSET_OVERVIEW, fetchAssetOverview);
   yield takeEvery(ADD_NEW_ASSET, onAddNewAsset);
   yield takeEvery(UPDATE_ASSET, onUpdateAsset);
   yield takeEvery(DELETE_ASSET, onDeleteAsset);
