@@ -37,7 +37,7 @@ namespace AccessMgmtBackend.Controllers
                     foreach (var role in roles)
                     {
                         viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
-                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role).role_name);
+                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role)?.role_name);
                     }
                     viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
                 }
@@ -64,7 +64,7 @@ namespace AccessMgmtBackend.Controllers
                     foreach (var role in roles)
                     {
                         viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
-                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == approver.company_identifier && x.role_identifier.ToString() == role).role_name);
+                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == approver.company_identifier && x.role_identifier.ToString() == role)?.role_name);
                     }
                     viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
                 }
@@ -109,7 +109,7 @@ namespace AccessMgmtBackend.Controllers
                 foreach (var role in roles)
                 {
                     viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
-            _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newapprover.company_identifier && x.role_identifier.ToString() == role).role_name);
+            _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newapprover.company_identifier && x.role_identifier.ToString() == role)?.role_name);
                 }
                 viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
             }
@@ -160,7 +160,7 @@ namespace AccessMgmtBackend.Controllers
                     foreach (var role in roles)
                     {
                         viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
-                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newapprover.company_identifier && x.role_identifier.ToString() == role).role_name);
+                _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newapprover.company_identifier && x.role_identifier.ToString() == role)?.role_name);
                     }
                     viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
                 }
@@ -199,7 +199,7 @@ namespace AccessMgmtBackend.Controllers
                         foreach (var role in roles)
                         {
                             viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
-                    _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role).role_name);
+                    _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role)?.role_name);
                         }
                         viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
                     }
@@ -224,7 +224,7 @@ namespace AccessMgmtBackend.Controllers
                         foreach (var role in roles)
                         {
                             viewApprover.approver_role_name = String.Join(",", viewApprover.approver_role_name,
-                    _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role).role_name);
+                    _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == i.company_identifier && x.role_identifier.ToString() == role)?.role_name);
                         }
                         viewApprover.approver_role_name = viewApprover.approver_role_name.TrimStart(',');
                     }
