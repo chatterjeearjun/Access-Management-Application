@@ -60,7 +60,7 @@ const RolesManagement = (props) => {
   const [groupList, setGroupList] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-
+  const [file, setFile] = useState();
   const { SearchBar } = Search;
 
   const pageOptions = {
@@ -224,7 +224,7 @@ const RolesManagement = (props) => {
         company_identifier: roleList.companyid,
         role_name: values["name"],
         role_description: values["description"],
-        role_description_attachment: "",
+        role_description_attachment: roleList.roledescattachment,
         is_active: roleList.isactive,
         is_mda_required: values["nda"] === "Required" ? true : false,
         is_bc_required: values["bc"] === "Required" ? true : false,
@@ -241,7 +241,7 @@ const RolesManagement = (props) => {
           .companyID,
         role_name: values["name"],
         role_description: values["description"],
-        role_description_attachment: "",
+        role_description_attachment: file,
         is_active: true,
         is_mda_required: values["nda"] === "Required" ? true : false,
         is_bc_required: values["bc"] === "Required" ? true : false,
@@ -249,6 +249,7 @@ const RolesManagement = (props) => {
           values["certificates"] === "Required" ? true : false,
         associated_assets: assetsSelected.toString(),
       };
+      console.log(newRole, "newrole");
       // save new role
       dispatch(onAddNewRole(newRole));
     }
@@ -263,7 +264,6 @@ const RolesManagement = (props) => {
 
   let assetlist = [];
   for (var i = 0; i < assetList.length; i++) {
-    debugger;
     assetlist[i] = {
       label: assetList[i].asset_name,
       key: assetList[i].asset_identifier,
@@ -396,7 +396,8 @@ const RolesManagement = (props) => {
                                                       required: { value: true },
                                                     }}
                                                     value={
-                                                      roleList.roledesc || ""
+                                                      roleList.roledescattachment ||
+                                                      ""
                                                     }
                                                   />
                                                 </div>
@@ -404,20 +405,47 @@ const RolesManagement = (props) => {
                                             </Row>
                                             <Row>
                                               <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    name="roledescattchment"
-                                                    label="Job Description Attachment"
-                                                    inputClass="form-control"
-                                                    type="file"
-                                                    //placeholder="choose employee photo"
-                                                    errorMessage="please provide valid file"
-                                                    // validate={{
-                                                    //   required: { value: true },
-                                                    // }}
-                                                    value={""}
-                                                  />
-                                                </div>
+                                                {isEdit ? (
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="roleattach"
+                                                      label="Job Description Attachment"
+                                                      type="text"
+                                                      //mask="99/99/9999"
+                                                      disabled={true}
+                                                      errorMessage="please provide valid file"
+                                                      validate={{
+                                                        required: {
+                                                          value: true,
+                                                        },
+                                                      }}
+                                                      value={
+                                                        roleList.descattach ||
+                                                        ""
+                                                      }
+                                                    />
+                                                  </div>
+                                                ) : (
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="roledescattchment"
+                                                      label="Job Description Attachment"
+                                                      inputClass="form-control"
+                                                      type="file"
+                                                      //placeholder="choose employee photo"
+                                                      errorMessage="please provide valid file"
+                                                      // validate={{
+                                                      //   required: { value: true },
+                                                      // }}
+                                                      onChange={(e) => {
+                                                        setFile(
+                                                          e.target.files[0]
+                                                        );
+                                                      }}
+                                                      value={""}
+                                                    />
+                                                  </div>
+                                                )}
                                               </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">

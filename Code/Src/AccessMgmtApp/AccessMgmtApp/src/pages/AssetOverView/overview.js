@@ -6,15 +6,18 @@ import {
   CardHeader,
   CardTitle,
   Col,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
   Row,
-  UncontrolledDropdown,
+  Button,
 } from "reactstrap";
 import "./callout.css";
+import moment from "moment";
+import { saveAs } from "file-saver";
 
 const OverviewTab = (props) => {
+  // const downloadFile = (file) => {
+  //   saveAs(file, file?.split("/Asset/")[1]);
+  // };
+
   console.log(props, "props");
   return (
     <React.Fragment>
@@ -89,7 +92,11 @@ const OverviewTab = (props) => {
                 <Col xs={12}>
                   <div className="bd-callout bd-callout-default">
                     <h6>Asset First Active Date</h6>
-                    <h4>{props?.data?.alocation_start_date}</h4>
+                    <h4>
+                      {moment(props?.data?.alocation_start_date).format(
+                        "DD-MM-YYYY"
+                      )}
+                    </h4>
                   </div>
                 </Col>
               </Row>
@@ -118,212 +125,33 @@ const OverviewTab = (props) => {
                       <div className="flex-grow-1 overflow-hidden">
                         <h5 className="font-size-14 text-truncate">
                           <Link to="#" className="text-dark">
-                            Beautiful Day with Friends
+                            {
+                              props?.data?.asset_description_attachment?.split(
+                                "/Asset/"
+                              )[1]
+                            }
                           </Link>
                         </h5>
                         <p className="font-size-13 text-muted mb-0">
-                          10 Apr, 2020
+                          {moment(props?.data?.alocation_start_date).format(
+                            "DD-MM-YYYY"
+                          )}
                         </p>
                       </div>
-                      <div className="flex-shrink-0 ms-2">
-                        <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn btn-link text-muted font-size-16 p-1 py-0 shadow-none"
-                            tag="a"
-                          >
-                            <i className="bx bx-dots-horizontal-rounded"></i>
-                          </DropdownToggle>
-                          <DropdownMenu className="dropdown-menu-end">
-                            <li>
-                              <DropdownItem to="#">Action</DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem to="#">Another action</DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem to="#">
-                                Something else here
-                              </DropdownItem>
-                            </li>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </div>
                     </div>
                   </div>
-
-                  <div className="position-relative">
-                    <img src={"img1"} alt="" className="img-thumbnail" />
-                  </div>
-
                   <div className="p-3">
-                    <ul className="list-inline">
-                      <li className="list-inline-item me-3">
-                        <Link to="#" className="text-muted">
-                          <i className="bx bx-purchase-tag-alt align-middle text-muted me-1"></i>{" "}
-                          Project
-                        </Link>
-                      </li>
-                      <li className="list-inline-item me-3">
-                        <Link to="#" className="text-muted">
-                          <i className="bx bx-comment-dots align-middle text-muted me-1"></i>{" "}
-                          12 Comments
-                        </Link>
-                      </li>
-                    </ul>
-                    <p className="text-muted">
-                      Neque porro quisquam est, qui dolorem ipsum quia dolor sit
-                      amet
-                    </p>
-
                     <div>
-                      <Link to="/contacts-list" className="text-primary">
-                        Read more <i className="mdi mdi-arrow-right"></i>
-                      </Link>
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-
-              <Col xl={4}>
-                <Card className="p-1 mb-xl-0">
-                  <div className="p-3">
-                    <div className="d-flex align-items-start">
-                      <div className="flex-grow-1 overflow-hidden">
-                        <h5 className="font-size-14 text-truncate">
-                          <Link to="#" className="text-dark">
-                            Drawing a sketch
-                          </Link>
-                        </h5>
-                        <p className="font-size-13 text-muted mb-0">
-                          24 Mar, 2020
-                        </p>
-                      </div>
-                      <div className="flex-shrink-0 ms-2">
-                        <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn btn-link text-muted font-size-16 p-1 py-0 shadow-none"
-                            tag="a"
-                          >
-                            <i className="bx bx-dots-horizontal-rounded"></i>
-                          </DropdownToggle>
-                          <DropdownMenu className="dropdown-menu-end">
-                            <li>
-                              <DropdownItem to="#">Action</DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem to="#">Another action</DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem to="#">
-                                Something else here
-                              </DropdownItem>
-                            </li>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="position-relative">
-                    <img src={"img2"} alt="" className="img-thumbnail" />
-                  </div>
-
-                  <div className="p-3">
-                    <ul className="list-inline">
-                      <li className="list-inline-item me-3">
-                        <Link to="#" className="text-muted">
-                          <i className="bx bx-purchase-tag-alt align-middle text-muted me-1"></i>{" "}
-                          Development
-                        </Link>
-                      </li>
-                      <li className="list-inline-item me-3">
-                        <Link to="#" className="text-muted">
-                          <i className="bx bx-comment-dots align-middle text-muted me-1"></i>{" "}
-                          08 Comments
-                        </Link>
-                      </li>
-                    </ul>
-                    <p className="text-muted">
-                      At vero eos et accusamus et iusto odio dignissimos ducimus
-                      quos
-                    </p>
-
-                    <div>
-                      <Link to="/contacts-list" className="text-primary">
-                        Read more <i className="mdi mdi-arrow-right"></i>
-                      </Link>
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-
-              <Col xl={4}>
-                <Card className="p-1 mb-sm-0">
-                  <div className="p-3">
-                    <div className="d-flex align-items-start">
-                      <div className="flex-grow-1 overflow-hidden">
-                        <h5 className="font-size-14 text-truncate">
-                          <Link to="#" className="text-dark">
-                            Project discussion with team
-                          </Link>
-                        </h5>
-                        <p className="font-size-13 text-muted mb-0">
-                          20 Mar, 2020
-                        </p>
-                      </div>
-                      <div className="flex-shrink-0 ms-2">
-                        <UncontrolledDropdown>
-                          <DropdownToggle
-                            className="btn btn-link text-muted font-size-16 p-1 py-0 shadow-none"
-                            tag="a"
-                          >
-                            <i className="bx bx-dots-horizontal-rounded"></i>
-                          </DropdownToggle>
-                          <DropdownMenu className="dropdown-menu-end">
-                            <li>
-                              <DropdownItem to="#">Action</DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem to="#">Another action</DropdownItem>
-                            </li>
-                            <li>
-                              <DropdownItem to="#">
-                                Something else here
-                              </DropdownItem>
-                            </li>
-                          </DropdownMenu>
-                        </UncontrolledDropdown>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="position-relative">
-                    <img src={"img3"} alt="" className="img-thumbnail" />
-                  </div>
-
-                  <div className="p-3">
-                    <ul className="list-inline">
-                      <li className="list-inline-item me-3">
-                        <Link to="#" className="text-muted">
-                          <i className="bx bx-purchase-tag-alt align-middle text-muted me-1"></i>{" "}
-                          Project
-                        </Link>
-                      </li>
-                      <li className="list-inline-item me-3">
-                        <Link to="#" className="text-muted">
-                          <i className="bx bx-comment-dots align-middle text-muted me-1"></i>{" "}
-                          08 Comments
-                        </Link>
-                      </li>
-                    </ul>
-                    <p className="text-muted">
-                      Itaque earum rerum hic tenetur a sapiente delectus ut aut
-                    </p>
-
-                    <div>
-                      <Link to="/contacts-list" className="text-primary">
-                        Read more <i className="mdi mdi-arrow-right"></i>
-                      </Link>
+                      <Button
+                        className="btn btn-primary bg-primary"
+                        href={props?.data?.asset_description_attachment}
+                        download
+                        // onClick={downloadFile(
+                        //   props?.data?.asset_description_attachment
+                        // )}
+                      >
+                        <i className="mdi mdi-download"></i> Download
+                      </Button>
                     </div>
                   </div>
                 </Card>

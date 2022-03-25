@@ -47,6 +47,8 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { getAssetsAssociation } from "../../helpers/fakebackend_helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import LoadingOverlay from "react-loading-overlay";
+// import BounceLoader from "react-spinners/BounceLoader";
 const AssetsManagement = (props) => {
   const dispatch = useDispatch();
 
@@ -62,6 +64,7 @@ const AssetsManagement = (props) => {
   const [selectedOwner, setSelectedOwner] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  //const [isLoader, setIsLoader] = useState(false);
 
   const { SearchBar } = Search;
 
@@ -276,7 +279,7 @@ const AssetsManagement = (props) => {
         asset_id: values["assetserialno"],
         asset_name: values["name"],
         asset_type: values["type"],
-        asset_owner: selectedOwner,
+        asset_owner: assetList.owner,
         asset_description: values["description"],
         asset_location: values["location"],
         asset_risk_ranking: values["riskranking"],
@@ -296,11 +299,13 @@ const AssetsManagement = (props) => {
           .startOf("day")
           .toISOString()
           .replace(/T.*/gi, "T00:00:00.000Z"),
+        asset_description_attachment: assetList.descattach,
       };
       // update asset
       dispatch(onUpdateAsset(updateAsset));
       setIsEdit(false);
     } else {
+      //setIsLoader(true);
       const newAsset = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
           .companyID,
@@ -353,12 +358,22 @@ const AssetsManagement = (props) => {
       toastId: "007",
     });
   }
+  // if (result === "Asset Added") {
+  //   setIsLoader(false);
+  // }
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
           <title>Assets | Crossleaf - Access Management</title>
         </MetaTags>
+        {/* {isLoader === true ? (
+          <LoadingOverlay active={true} spinner={<BounceLoader />}>
+            Adding...
+          </LoadingOverlay>
+        ) : (
+          ""
+        )} */}
         <Container fluid>
           {/* Render Breadcrumbs */}
           <Breadcrumbs title="Assets" breadcrumbItem="Asset List" />
@@ -461,9 +476,9 @@ const AssetsManagement = (props) => {
                                                     type="text"
                                                     maxLength={6}
                                                     errorMessage="please provide valid asset serial no"
-                                                    disabled={
-                                                      isEdit ? true : false
-                                                    }
+                                                    // disabled={
+                                                    //   isEdit ? true : false
+                                                    // }
                                                     validate={{
                                                       required: { value: true },
                                                     }}
@@ -695,21 +710,43 @@ const AssetsManagement = (props) => {
                                             </Row>
                                             <Row>
                                               <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    name="assetinfo"
-                                                    label="Asset Info"
-                                                    inputClass="form-control"
-                                                    type="file"
-                                                    errorMessage="please provide valid file"
-                                                    value={""}
-                                                    onChange={(e) => {
-                                                      setFile(
-                                                        e.target.files[0]
-                                                      );
-                                                    }}
-                                                  />
-                                                </div>
+                                                {isEdit ? (
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="assetattach"
+                                                      label="Asset Info"
+                                                      type="text"
+                                                      //mask="99/99/9999"
+                                                      disabled={true}
+                                                      errorMessage="please select asset info attachment"
+                                                      validate={{
+                                                        required: {
+                                                          value: true,
+                                                        },
+                                                      }}
+                                                      value={
+                                                        assetList.descattach ||
+                                                        ""
+                                                      }
+                                                    />
+                                                  </div>
+                                                ) : (
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="assetinfo"
+                                                      label="Asset Info"
+                                                      inputClass="form-control"
+                                                      type="file"
+                                                      errorMessage="please provide valid file"
+                                                      value={""}
+                                                      onChange={(e) => {
+                                                        setFile(
+                                                          e.target.files[0]
+                                                        );
+                                                      }}
+                                                    />
+                                                  </div>
+                                                )}
                                               </Col>
 
                                               <Col xs={6}>

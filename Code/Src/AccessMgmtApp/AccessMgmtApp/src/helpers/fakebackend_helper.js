@@ -10,6 +10,7 @@ import {
   getAAssociation,
   isEmpDuplicate,
   postAsset,
+  postRole,
 } from "./api_helper";
 import * as url from "./url_helper";
 
@@ -338,7 +339,7 @@ export const getRoles = () =>
   get(url.GET_ROLES, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
 
 // add role
-export const addNewRole = (role) => post(url.ADD_NEW_ROLE, role);
+export const addNewRole = (role) => postRole(url.ADD_NEW_ROLE, role);
 
 // update role
 export const updateRole = (role) => put(url.UPDATE_ROLE, role);

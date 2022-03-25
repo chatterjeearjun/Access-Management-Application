@@ -14,6 +14,7 @@ import classnames from "classnames";
 import OverviewTab from "./overview";
 
 const AssetInfo = (props) => {
+  console.log(props, "propsinfo");
   return (
     <React.Fragment>
       <Row>

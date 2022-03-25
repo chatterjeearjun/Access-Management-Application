@@ -30,6 +30,8 @@ const AssetOverview = (props) => {
     setAssetData(asset);
   }, [asset]);
 
+  console.log(assetData, "assetData");
+
   return (
     <React.Fragment>
       <div className="page-content">
