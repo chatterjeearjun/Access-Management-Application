@@ -19,7 +19,7 @@ const AssetInfo = (props) => {
     <React.Fragment>
       <Row>
         <Col xl={9} lg={8}>
-          <Card>
+          <Card className="shadow-sm">
             <CardBody>
               <Row>
                 <div className="col-sm order-2 order-sm-1">

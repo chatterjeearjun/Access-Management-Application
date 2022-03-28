@@ -94,7 +94,7 @@ const AdminTeam = (props) => {
       ),
     },
     {
-      dataField: "approver_role",
+      dataField: "approver_role_name",
       text: "User Role",
       sort: true,
       // formatter: (cellContent, approver) => (
@@ -187,6 +187,7 @@ const AdminTeam = (props) => {
       mobile: approver.approver_mobile_number,
       startdate: approver.created_date.split("T")[0],
       status: approver.is_active,
+      rolename: approver.approver_role_name,
     });
     setIsEdit(true);
 

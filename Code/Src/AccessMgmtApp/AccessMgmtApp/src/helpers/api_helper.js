@@ -79,7 +79,7 @@ export async function postRole(url, data) {
     formData.append("role_name", data.role_name);
     formData.append("role_description", data.role_description);
     formData.append("is_active", data.is_active);
-    formData.append("is_mda_required", data.is_mda_required);
+    formData.append("is_nda_required", data.is_nda_required);
     formData.append("is_bc_required", data.is_bc_required);
     formData.append(
       "is_certification_required",
@@ -88,7 +88,7 @@ export async function postRole(url, data) {
     formData.append("associated_assets", data.associated_assets);
     formData.append(
       "role_description_attachment",
-      data.asset_description_attachment
+      data.role_description_attachment
     );
     const response = await fetch(`${API_URL}${url}`, {
       method: "POST",

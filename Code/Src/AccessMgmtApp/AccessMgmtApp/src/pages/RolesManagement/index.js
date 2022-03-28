@@ -183,16 +183,16 @@ const RolesManagement = (props) => {
       roledesc: role.role_description,
       roledescattachment: role.role_description_attachment,
       isactive: role.is_active,
-      nda: role.is_mda_required === true ? "Required" : "Not Required",
+      nda: role.is_nda_required === true ? "Required" : "Not Required",
       bc: role.is_bc_required === true ? "Required" : "Not Required",
       certificates:
         role.is_certification_required === true ? "Required" : "Not Required",
-      associatedassets: role.associated_assets.split(","),
+      associatedassets: role.associated_assets?.split(","),
     });
     setIsEdit(true);
     toggle();
   };
-
+  console.log(roleList, "roleList");
   const handleDeleteRole = (role) => {
     confirmAlert({
       title: "Deleting Role",
@@ -226,7 +226,7 @@ const RolesManagement = (props) => {
         role_description: values["description"],
         role_description_attachment: roleList.roledescattachment,
         is_active: roleList.isactive,
-        is_mda_required: values["nda"] === "Required" ? true : false,
+        is_nda_required: values["nda"] === "Required" ? true : false,
         is_bc_required: values["bc"] === "Required" ? true : false,
         is_certification_required:
           values["certificates"] === "Required" ? true : false,
@@ -243,7 +243,7 @@ const RolesManagement = (props) => {
         role_description: values["description"],
         role_description_attachment: file,
         is_active: true,
-        is_mda_required: values["nda"] === "Required" ? true : false,
+        is_nda_required: values["nda"] === "Required" ? true : false,
         is_bc_required: values["bc"] === "Required" ? true : false,
         is_certification_required:
           values["certificates"] === "Required" ? true : false,
@@ -396,8 +396,7 @@ const RolesManagement = (props) => {
                                                       required: { value: true },
                                                     }}
                                                     value={
-                                                      roleList.roledescattachment ||
-                                                      ""
+                                                      roleList.roledesc || ""
                                                     }
                                                   />
                                                 </div>
@@ -420,7 +419,7 @@ const RolesManagement = (props) => {
                                                         },
                                                       }}
                                                       value={
-                                                        roleList.descattach ||
+                                                        roleList.roledescattachment ||
                                                         ""
                                                       }
                                                     />
