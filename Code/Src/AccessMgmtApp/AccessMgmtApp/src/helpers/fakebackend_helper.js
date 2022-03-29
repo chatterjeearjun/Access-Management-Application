@@ -367,6 +367,9 @@ export const empDuplicateCheck = (empEmail) =>
     url.EMP_DUPLICATE_CHECK(empEmail, "6c0276ec-fea1-4fa8-bb1f-5d428a850222")
   );
 
+//Employee Profile
+export const getEmployeeProfile = (id) => get(url.GET_EMP_PROFILE, id);
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

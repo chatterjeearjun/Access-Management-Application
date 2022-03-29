@@ -47,6 +47,8 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import { getAssetsAssociation } from "../../helpers/fakebackend_helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import filterFactory, { selectFilter } from "react-bootstrap-table2-filter";
+import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 // import LoadingOverlay from "react-loading-overlay";
 // import BounceLoader from "react-spinners/BounceLoader";
 const AssetsManagement = (props) => {
@@ -67,6 +69,10 @@ const AssetsManagement = (props) => {
   //const [isLoader, setIsLoader] = useState(false);
 
   const { SearchBar } = Search;
+  let selectOptions = [];
+  const { filter } = selectFilter({
+    options: selectOptions,
+  });
 
   const pageOptions = {
     sizePerPage: 10,
@@ -361,6 +367,15 @@ const AssetsManagement = (props) => {
   // if (result === "Asset Added") {
   //   setIsLoader(false);
   // }
+  if (assetList.length > 0) {
+    console.log(assetList, "hsdgfiuywehwkej76");
+    for (var i = 0; i < assetList.length; i++) {
+      selectOptions[i] = {
+        label: assetList[i]?.name,
+        value: assetList[i]?.name,
+      };
+    }
+  }
   return (
     <React.Fragment>
       <div className="page-content">

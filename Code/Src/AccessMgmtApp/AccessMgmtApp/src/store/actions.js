@@ -23,3 +23,6 @@ export * from "./GroupsManagement/actions";
 
 //AssetsManagement
 export * from "./AssetsManagement/actions";
+
+//Employee Profile
+export * from "././EmployeeProfile/actions";

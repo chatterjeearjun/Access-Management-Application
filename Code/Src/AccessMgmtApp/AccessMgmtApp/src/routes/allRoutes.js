@@ -10,6 +10,8 @@ import AdminTeam from "../pages/AdminTeam/index";
 //Users
 import EmployeeManagement from "../pages/EmployeeManagement/index";
 
+import EmployeeProfile from "../pages/EmployeeProfile/index";
+
 //Assets
 import AssetsManagement from "../pages/AssetsManagement/assets";
 
@@ -134,8 +136,11 @@ const userRoutes = [
   //users
   { path: "/employeemanagement", component: EmployeeManagement },
 
+  { path: "/employeeprofile", component: EmployeeProfile },
+
   //assets
   { path: "/assetsmanagement", component: AssetsManagement },
+
   { path: "/assetoverview", component: AssetsOverview },
   //roles
   { path: "/rolesmanagement", component: RolesManagement },

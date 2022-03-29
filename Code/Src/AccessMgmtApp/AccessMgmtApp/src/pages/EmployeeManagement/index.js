@@ -10,6 +10,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Label,
 } from "reactstrap";
 import paginationFactory, {
   PaginationListStandalone,
@@ -36,6 +37,7 @@ import { isEmpty } from "lodash";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
+// Form Mask
 import InputMask from "react-input-mask";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
@@ -133,6 +135,12 @@ const EmployeeManagement = (props) => {
       text: "Action",
       formatter: (cellContent, user) => (
         <div className="d-flex gap-3">
+          <Link
+            className="text-primary"
+            to={`EmployeeProfile?${user.employee_identifier}`}
+          >
+            <i className="mdi mdi-eye font-size-18" id="viewemployee"></i>
+          </Link>
           <Link className="text-success" to="#">
             <i
               className="mdi mdi-pencil font-size-18"
@@ -550,7 +558,7 @@ const EmployeeManagement = (props) => {
                                               </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">
-                                                  <AvField
+                                                  {/* <AvField
                                                     name="mobile"
                                                     label="Phone"
                                                     type="tel"
@@ -566,7 +574,16 @@ const EmployeeManagement = (props) => {
                                                     value={
                                                       userList.mobile || ""
                                                     }
-                                                  />
+                                                  /> */}
+                                                  <Label>Phone</Label>
+                                                  <InputMask
+                                                    mask="(999) 999-9999"
+                                                    value={props.value}
+                                                    className="form-control input-color"
+                                                    onChange={props.onChange}
+                                                    errorMessage="please provide valid Phone Number"
+                                                    required
+                                                  ></InputMask>
                                                 </div>
                                               </Col>
                                             </Row>
@@ -684,7 +701,131 @@ const EmployeeManagement = (props) => {
                                               </Col>
                                             </Row>
                                             <Row>
-                                              <Col xs={6}>
+                                              {/* <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    type="select"
+                                                    name="nda"
+                                                    className="form-select"
+                                                    label="Is NDA required"
+                                                    errorMessage="please select nda required?"
+                                                    multiple={false}
+                                                    required
+                                                    value={userList.nda || ""}
+                                                  >
+                                                    <option value="">
+                                                      Select NDA Required
+                                                    </option>
+                                                    <option>Required</option>
+                                                    <option>
+                                                      Not Required
+                                                    </option>
+                                                  </AvField>
+                                                </div>
+                                              </Col> */}
+                                              <Col xs={12}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="ndafile"
+                                                    label="NDA Required Files"
+                                                    inputClass="form-control"
+                                                    type="file"
+                                                    placeholder="choose NDA Required Files"
+                                                    errorMessage="please provide valid file"
+                                                    validate={{
+                                                      required: { value: true },
+                                                    }}
+                                                    value={""}
+                                                  />
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            <Row>
+                                              {/* <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    type="select"
+                                                    name="bc"
+                                                    className="form-select"
+                                                    label="Is BC required"
+                                                    errorMessage="please select bc required?"
+                                                    multiple={false}
+                                                    required
+                                                    value={userList.bc || ""}
+                                                  >
+                                                    <option value="">
+                                                      Select BC Required
+                                                    </option>
+                                                    <option>Required</option>
+                                                    <option>
+                                                      Not Required
+                                                    </option>
+                                                  </AvField>
+                                                </div>
+                                              </Col> */}
+                                              <Col xs={12}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="bcfile"
+                                                    label="BC Required Files"
+                                                    inputClass="form-control"
+                                                    type="file"
+                                                    placeholder="choose BC Required Files"
+                                                    errorMessage="please provide valid file"
+                                                    validate={{
+                                                      required: { value: true },
+                                                    }}
+                                                    value={""}
+                                                  />
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            <Row>
+                                              {/* <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    type="select"
+                                                    name="certificate"
+                                                    className="form-select"
+                                                    label="Is Certificates required?"
+                                                    errorMessage="please select certificates required"
+                                                    multiple={false}
+                                                    required
+                                                    value={
+                                                      userList.certificates ||
+                                                      ""
+                                                    }
+                                                  >
+                                                    <option value="">
+                                                      Select Certificates
+                                                      Required
+                                                    </option>
+                                                    <option>Required</option>
+                                                    <option>
+                                                      Not Required
+                                                    </option>
+                                                  </AvField>
+                                                </div>
+                                              </Col> */}
+                                              <Col xs={12}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="certificatefile"
+                                                    label="Certificate Required Files"
+                                                    inputClass="form-control"
+                                                    type="file"
+                                                    placeholder="choose Certificate Required Files"
+                                                    errorMessage="please provide valid file"
+                                                    validate={{
+                                                      required: { value: true },
+                                                    }}
+                                                    value={""}
+                                                  />
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            <Row>
+                                              <Col xs={12}>
                                                 <div className="mb-3">
                                                   <AvField
                                                     name="empphoto"

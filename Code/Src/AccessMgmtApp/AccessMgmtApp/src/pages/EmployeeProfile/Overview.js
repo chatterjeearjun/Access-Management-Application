@@ -10,13 +10,8 @@ import {
   Button,
 } from "reactstrap";
 import moment from "moment";
-import { saveAs } from "file-saver";
 
 const OverviewTab = (props) => {
-  // const downloadFile = (file) => {
-  //   saveAs(file, file?.split("/Asset/")[1]);
-  // };
-
   console.log(props, "props");
   return (
     <React.Fragment>
@@ -24,78 +19,68 @@ const OverviewTab = (props) => {
         <Col>
           <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle className="mb-0 h5">Asset Details</CardTitle>
+              <CardTitle className="mb-0 h5">Employee Details</CardTitle>
             </CardHeader>
             <CardBody>
               <div>
                 <div className="pb-3">
                   <Row>
                     <Col xs={4}>
-                      <h6>Asset Id:</h6>
+                      <h6>Employee Id:</h6>
                     </Col>
                     <Col xs={8}>
-                      <p>{props?.data?.asset_identifier}</p>
+                      <p>{props?.data?.employee_identifier}</p>
                     </Col>
                   </Row>
                 </div>
                 <div className="pb-3">
                   <Row>
                     <Col xs={4}>
-                      <h6>Asset Name:</h6>
+                      <h6>Employee Email:</h6>
                     </Col>
                     <Col xs={8}>
-                      <p>{props?.data?.asset_name}</p>
+                      <p>{props?.data?.emp_email}</p>
                     </Col>
                   </Row>
                 </div>
                 <div className="pb-3">
                   <Row>
                     <Col xs={4}>
-                      <h6>Asset Type:</h6>
+                      <h6>Employee Role:</h6>
                     </Col>
                     <Col xs={8}>
-                      <p>{props?.data?.asset_type}</p>
+                      <p>{props?.data?.emp_role}</p>
                     </Col>
                   </Row>
                 </div>
                 <div className="pb-3">
                   <Row>
                     <Col xs={4}>
-                      <h6>Asset Owner:</h6>
+                      <h6>Employee Type:</h6>
                     </Col>
                     <Col xs={8}>
-                      <p>{props?.data?.asset_owner}</p>
+                      <p>{props?.data?.emp_designation}</p>
                     </Col>
                   </Row>
                 </div>
                 <div className="pb-3">
                   <Row>
                     <Col xs={4}>
-                      <h6>Asset Description:</h6>
+                      <h6>Employee Phone:</h6>
                     </Col>
                     <Col xs={8}>
-                      <p>{props?.data?.asset_description}</p>
+                      <p>{props?.data?.emp_office_phone}</p>
                     </Col>
                   </Row>
                 </div>
                 <div className="pb-3">
                   <Row>
                     <Col xs={4}>
-                      <h6>Asset Location:</h6>
-                    </Col>
-                    <Col xs={8}>
-                      <p>{props?.data?.asset_location}</p>
-                    </Col>
-                  </Row>
-                </div>
-                <div className="pb-3">
-                  <Row>
-                    <Col xs={4}>
-                      <h6>First Active Date:</h6>
+                      <h6>Employee Joining Date:</h6>
                     </Col>
                     <Col xs={8}>
                       <p>
-                        {moment(props?.data?.alocation_start_date).format(
+                        {moment(props?.data?.emp_joining_date).format(
                           "DD-MM-YYYY"
                         )}
                       </p>
@@ -109,14 +94,14 @@ const OverviewTab = (props) => {
         <Col>
           <Card className="shadow-sm">
             <CardHeader>
-              <CardTitle className="mb-0 h5">Asset Mappings</CardTitle>
+              <CardTitle className="mb-0 h5">Employee Mappings</CardTitle>
             </CardHeader>
             <CardBody>
               <div>
                 <div className="pb-3">
                   <Row>
                     <Col xs={12}>
-                      <h6>Asset Mapped To:</h6>
+                      <h6>Employee Mapped To:</h6>
                     </Col>
                   </Row>
                 </div>
@@ -124,38 +109,35 @@ const OverviewTab = (props) => {
                   <Row className="align-middle">
                     <Col xs={12} className="border align-middle">
                       <div className="m-2">
-                        <Link
-                          to={`/EmployeeProfile?22e4fea0-d00e-459d-1d9b-08da0db4080c`}
-                          className="badge badge-soft-primary m-1 p-1"
-                        >
-                          {props?.data?.asset_owner}
-                        </Link>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
                         </h5>
                         <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
+                          {props?.data?.emp_email}
+                        </h5>
+                        <h5 className="badge badge-soft-primary m-1 p-1">
+                          {props?.data?.emp_email}
                         </h5>
                       </div>
                     </Col>
@@ -171,7 +153,7 @@ const OverviewTab = (props) => {
           <div className="d-flex">
             <div className="flex-grow-1">
               <CardTitle className="mb-0 h5">
-                Asset Description Attchments
+                Employee Description Attchments
               </CardTitle>
             </div>
           </div>
@@ -188,7 +170,7 @@ const OverviewTab = (props) => {
                           <Link to="#" className="text-dark">
                             {
                               props?.data?.asset_description_attachment?.split(
-                                "/Asset/"
+                                "/Employee/"
                               )[1]
                             }
                           </Link>
@@ -207,9 +189,6 @@ const OverviewTab = (props) => {
                         className="btn btn-primary bg-primary"
                         href={props?.data?.asset_description_attachment}
                         download
-                        // onClick={downloadFile(
-                        //   props?.data?.asset_description_attachment
-                        // )}
                       >
                         <i className="mdi mdi-download"></i> Download
                       </Button>

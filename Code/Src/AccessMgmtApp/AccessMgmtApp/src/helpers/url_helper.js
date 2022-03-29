@@ -139,3 +139,5 @@ export const DELETE_COMPGROUP = "/api/Group";
 
 export const EMP_DUPLICATE_CHECK = (empEmail, compid) =>
   `/DuplicateCheck?EmployeeEmail=${empEmail}&CompanyIdentifier=${compid}`;
+
+export const GET_EMP_PROFILE = "/api/Employee/";
