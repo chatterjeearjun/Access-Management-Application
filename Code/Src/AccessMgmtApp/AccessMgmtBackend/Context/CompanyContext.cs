@@ -35,6 +35,8 @@
         public DbSet<ApproverToRole> ApproverToRoles { get; set; }
         public DbSet<GroupToUser> GroupToUsers { get; set; }
         public DbSet<RoleToUser> RoleToUsers { get; set; }
+        public DbSet<EmployeeToGroup> EmployeeToGroups { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add your own configuration here

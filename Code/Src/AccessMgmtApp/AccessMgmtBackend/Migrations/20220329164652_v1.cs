@@ -175,6 +175,26 @@ namespace AccessMgmtBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ac_employee_group",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    employee_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    group_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_employee_group", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ac_employee_role",
                 columns: table => new
                 {
@@ -203,6 +223,7 @@ namespace AccessMgmtBackend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     emp_role = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    emp_group = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     emp_first_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     emp_last_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -214,20 +235,15 @@ namespace AccessMgmtBackend.Migrations
                     emp_relieving_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     emp_nda_document1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_nda_document2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_nda_document3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_nda_document4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_nda_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     emp_bc_document1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_bc_document2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_bc_document3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_bc_document4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_bc_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     emp_cert_document1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_cert_document2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_cert_document3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_cert_document4 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     associated_assets = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_cert_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    emp_profile_picture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -687,6 +703,9 @@ namespace AccessMgmtBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "ac_companies");
+
+            migrationBuilder.DropTable(
+                name: "ac_employee_group");
 
             migrationBuilder.DropTable(
                 name: "ac_employee_role");
