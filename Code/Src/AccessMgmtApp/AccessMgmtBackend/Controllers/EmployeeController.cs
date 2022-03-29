@@ -33,10 +33,28 @@ namespace AccessMgmtBackend.Controllers
                 var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId).ToList();
                 foreach (var employee in listEmployees)
                 {
+                    employee.emp_profile_picture = !string.IsNullOrEmpty(employee.emp_profile_picture) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_profile_picture)?.blob_file_name : String.Empty;
+                    employee.emp_nda_document1 = !string.IsNullOrEmpty(employee.emp_nda_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_nda_document1)?.blob_file_name : String.Empty;
+                    employee.emp_nda_document2 = !string.IsNullOrEmpty(employee.emp_nda_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_nda_document2)?.blob_file_name : String.Empty;
+                    employee.emp_bc_document1 = !string.IsNullOrEmpty(employee.emp_bc_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_bc_document1)?.blob_file_name : String.Empty;
+                    employee.emp_bc_document2 = !string.IsNullOrEmpty(employee.emp_bc_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_bc_document2)?.blob_file_name : String.Empty;
+                    employee.emp_cert_document1 = !string.IsNullOrEmpty(employee.emp_cert_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_cert_document1)?.blob_file_name : String.Empty;
+                    employee.emp_cert_document2 = !string.IsNullOrEmpty(employee.emp_cert_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_cert_document2)?.blob_file_name : String.Empty;
                     employee.emp_role = String.Join(",",
                         _companyContext.EmployeeToRoles.Where
                         (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
                         Select(x => x.role_identifier));
+                    employee.emp_group = String.Join(",",
+                       _companyContext.EmployeeToGroups.Where
+                       (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
+                       Select(x => x.group_identifier));
                     employee.associated_assets = String.Join(",",
                         _companyContext.AssetToEmployees.Where
                         (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
@@ -58,9 +76,27 @@ namespace AccessMgmtBackend.Controllers
             var employee = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == new Guid(guid));
             if (employee != null)
             {
+                employee.emp_profile_picture = !string.IsNullOrEmpty(employee.emp_profile_picture) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_profile_picture)?.blob_file_name : String.Empty;
+                employee.emp_nda_document1 = !string.IsNullOrEmpty(employee.emp_nda_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_nda_document1)?.blob_file_name : String.Empty;
+                employee.emp_nda_document2 = !string.IsNullOrEmpty(employee.emp_nda_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_nda_document2)?.blob_file_name : String.Empty;
+                employee.emp_bc_document1 = !string.IsNullOrEmpty(employee.emp_bc_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_bc_document1)?.blob_file_name : String.Empty;
+                employee.emp_bc_document2 = !string.IsNullOrEmpty(employee.emp_bc_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_bc_document2)?.blob_file_name : String.Empty;
+                employee.emp_cert_document1 = !string.IsNullOrEmpty(employee.emp_cert_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_cert_document1)?.blob_file_name : String.Empty;
+                employee.emp_cert_document2 = !string.IsNullOrEmpty(employee.emp_cert_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_cert_document2)?.blob_file_name : String.Empty;
                 employee.emp_role = String.Join(",",
                  _companyContext.EmployeeToRoles.Where(x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
                  Select(x => x.role_identifier));
+                employee.emp_group = String.Join(",",
+                       _companyContext.EmployeeToGroups.Where
+                       (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
+                       Select(x => x.group_identifier));
                 employee.associated_assets = String.Join(",",
                         _companyContext.AssetToEmployees.Where
                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
@@ -68,15 +104,69 @@ namespace AccessMgmtBackend.Controllers
             }
             return employee;
         }
+        private async Task<UploadedFile> PostUploadFile(IFormFile document, string companyId)
+        {
+            UploadedFile employeeResponse = new UploadedFile();
+            GenericAPICalls request = new GenericAPICalls();
+            var file = new FileModel
+            {
+                File = document,
+                upload_category = "Employee",
+                company_identifier = companyId,
+                user_identifier = ""
+            };
+            var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
+            if (response.Result.IsSuccessStatusCode)
+            {
+                employeeResponse = await response.Result.Content.ReadAsAsync<UploadedFile>();
+            }
+            return employeeResponse;
+        }
 
         // POST api/<EmployeeController>
         [HttpPost]
-        public Employee Post([FromBody] CreateEmployee value)
+        public async Task<Employee> Post([FromForm] CreateEmployee value)
         {
             var employee = new Employee();
             employee.created_date = DateTime.UtcNow;
             employee.created_by = "Application";
             employee.is_active = true;
+            if (value.emp_profile_picture != null)
+            {
+                UploadedFile employeeResponse = await PostUploadFile(value.emp_profile_picture, value.company_identifier);
+                employee.emp_profile_picture = employeeResponse?.file_identifier.ToString();
+            }
+            if (value.emp_nda_document1 != null)
+            {
+                UploadedFile employeeResponse = await PostUploadFile(value.emp_nda_document1, value.company_identifier);
+                employee.emp_nda_document1 = employeeResponse?.file_identifier.ToString();
+            }
+            if (value.emp_nda_document2 != null)
+            {
+                UploadedFile employeeResponse = await PostUploadFile(value.emp_nda_document2, value.company_identifier);
+                employee.emp_nda_document2 = employeeResponse?.file_identifier.ToString();
+            }
+            if (value.emp_bc_document1 != null)
+            {
+                UploadedFile employeeResponse = await PostUploadFile(value.emp_bc_document1, value.company_identifier);
+                employee.emp_bc_document1 = employeeResponse?.file_identifier.ToString();
+            }
+            if (value.emp_bc_document2 != null)
+            {
+                UploadedFile employeeResponse = await PostUploadFile(value.emp_bc_document2, value.company_identifier);
+                employee.emp_bc_document2 = employeeResponse?.file_identifier.ToString();
+            }
+            if (value.emp_cert_document1 != null)
+            {
+                UploadedFile employeeResponse = await PostUploadFile(value.emp_cert_document1, value.company_identifier);
+                employee.emp_cert_document1 = employeeResponse?.file_identifier.ToString();
+            }
+            if (value.emp_cert_document2 != null)
+            {
+                UploadedFile employeeResponse = await PostUploadFile(value.emp_cert_document2, value.company_identifier);
+                employee.emp_cert_document2 = employeeResponse?.file_identifier.ToString();
+            }
+
             PropertyCopier<CreateEmployee, Employee>.Copy(value, employee);
             _companyContext.Employees.Add(employee);
             if (!string.IsNullOrEmpty(employee.emp_role))
@@ -99,8 +189,26 @@ namespace AccessMgmtBackend.Controllers
                     employee.associated_assets = (!string.IsNullOrEmpty(employee.associated_assets)) ?
                         employee.associated_assets + "," + String.Join(",", associatedRolesAssets) : String.Join(",", associatedRolesAssets);
                 }
-
             }
+
+            if (!string.IsNullOrEmpty(employee.emp_group))
+            {
+                string[] groups = employee.emp_group.Split(',');
+                foreach (var group in groups)
+                {
+                    _companyContext.EmployeeToGroups.Add(new EmployeeToGroup
+                    {
+                        id = 0,
+                        company_identifier = employee.company_identifier,
+                        employee_identifier = employee.employee_identifier.ToString(),
+                        group_identifier = group.ToString(),
+                        is_active = true,
+                        created_date = DateTime.UtcNow,
+                        created_by = "Application"
+                    });                    
+                }
+            }
+
             if (!string.IsNullOrEmpty(employee.associated_assets))
             {
                 string[] assets = employee.associated_assets.Split(',');
@@ -143,6 +251,9 @@ namespace AccessMgmtBackend.Controllers
                     (x => x.company_identifier == employeeStore.company_identifier && x.employee_identifier == employeeStore.employee_identifier.ToString()));
                 _companyContext.EmployeeToRoles.RemoveRange(_companyContext.EmployeeToRoles.Where
                     (x => x.company_identifier == employeeStore.company_identifier && x.employee_identifier == employeeStore.employee_identifier.ToString()));
+                _companyContext.EmployeeToGroups.RemoveRange(_companyContext.EmployeeToGroups.Where
+                   (x => x.company_identifier == employeeStore.company_identifier && x.employee_identifier == employeeStore.employee_identifier.ToString()));
+
                 if (!string.IsNullOrEmpty(employeeNew.associated_assets))
                 {
                     string[] assets = employeeNew.associated_assets.Split(',');
@@ -177,6 +288,23 @@ namespace AccessMgmtBackend.Controllers
                         });
                     }
                 }
+                if (!string.IsNullOrEmpty(employeeNew.emp_group))
+                {
+                    string[] groups = employeeNew.emp_group.Split(',');
+                    foreach (var group in groups)
+                    {
+                        _companyContext.EmployeeToGroups.Add(new EmployeeToGroup
+                        {
+                            id = 0,
+                            company_identifier = employeeNew.company_identifier,
+                            employee_identifier = employeeNew.employee_identifier.ToString(),
+                            group_identifier = group.ToString(),
+                            is_active = true,
+                            created_date = DateTime.UtcNow,
+                            created_by = "Application"
+                        });
+                    }
+                }
                 _companyContext.SaveChanges();
                 return _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == value.employee_identifier);
             }
@@ -195,6 +323,10 @@ namespace AccessMgmtBackend.Controllers
             {
                 _companyContext.Employees.Remove(employeeStore);
                 _companyContext.EmployeeToRoles.RemoveRange(_companyContext.EmployeeToRoles.Where
+                   (x => x.company_identifier == value.company_identifier && x.employee_identifier == value.employee_identifier.ToString()));
+                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where
+                   (x => x.company_identifier == value.company_identifier && x.employee_identifier == value.employee_identifier.ToString()));
+                _companyContext.EmployeeToGroups.RemoveRange(_companyContext.EmployeeToGroups.Where
                    (x => x.company_identifier == value.company_identifier && x.employee_identifier == value.employee_identifier.ToString()));
                 _companyContext.SaveChanges();
                 return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier).ToList();

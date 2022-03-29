@@ -54,7 +54,32 @@ namespace AccessMgmtBackend.Controllers
                 {
                     listEmployees = _companyContext.Employees.ToList().Where(x => listOfMappings.Any(y=>y.ToString()==x.employee_identifier.ToString())).ToList();
                 }
-                
+                foreach (var employee in listEmployees)
+                {
+                    employee.emp_profile_picture = !string.IsNullOrEmpty(employee.emp_profile_picture) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_profile_picture)?.blob_file_name : String.Empty;
+                    employee.emp_nda_document1 = !string.IsNullOrEmpty(employee.emp_nda_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_nda_document1)?.blob_file_name : String.Empty;
+                    employee.emp_nda_document2 = !string.IsNullOrEmpty(employee.emp_nda_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_nda_document2)?.blob_file_name : String.Empty;
+                    employee.emp_bc_document1 = !string.IsNullOrEmpty(employee.emp_bc_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_bc_document1)?.blob_file_name : String.Empty;
+                    employee.emp_bc_document2 = !string.IsNullOrEmpty(employee.emp_bc_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_bc_document2)?.blob_file_name : String.Empty;
+                    employee.emp_cert_document1 = !string.IsNullOrEmpty(employee.emp_cert_document1) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_cert_document1)?.blob_file_name : String.Empty;
+                    employee.emp_cert_document2 = !string.IsNullOrEmpty(employee.emp_cert_document2) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == employee.emp_cert_document2)?.blob_file_name : String.Empty;
+                    employee.emp_role = String.Join(",",
+                        _companyContext.EmployeeToRoles.Where
+                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
+                        Select(x => x.role_identifier));
+                    employee.associated_assets = String.Join(",",
+                        _companyContext.AssetToEmployees.Where
+                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
+                        Select(x => x.asset_identifier));
+                }
+
                 return listEmployees;
             }
             else

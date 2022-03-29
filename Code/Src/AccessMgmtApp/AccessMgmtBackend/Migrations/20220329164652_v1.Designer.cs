@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220323181922_v1")]
+    [Migration("20220329164652_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -550,12 +550,6 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<string>("emp_bc_document2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("emp_bc_document3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_bc_document4")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("emp_bc_review_date")
                         .HasColumnType("datetime2");
 
@@ -563,12 +557,6 @@ namespace AccessMgmtBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("emp_cert_document2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_cert_document3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_cert_document4")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("emp_cert_review_date")
@@ -589,6 +577,9 @@ namespace AccessMgmtBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("emp_group")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("emp_joining_date")
                         .HasColumnType("datetime2");
 
@@ -606,16 +597,13 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<string>("emp_nda_document2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("emp_nda_document3")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_nda_document4")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("emp_nda_review_date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("emp_office_phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("emp_profile_picture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("emp_relieving_date")
@@ -642,6 +630,46 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("employee_identifier");
 
                     b.ToTable("ac_employees");
+                });
+
+            modelBuilder.Entity("AccessMgmtBackend.Models.EmployeeToGroup", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
+
+                    b.Property<string>("company_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("employee_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("group_identifier")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("is_active")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("modified_by")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("modified_date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id");
+
+                    b.ToTable("ac_employee_group");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.EmployeeToRole", b =>
