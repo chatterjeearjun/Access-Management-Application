@@ -11,6 +11,7 @@ import {
   isEmpDuplicate,
   postAsset,
   postRole,
+  postEmployee,
 } from "./api_helper";
 import * as url from "./url_helper";
 
@@ -211,7 +212,7 @@ export const getUsers = () =>
   get(url.GET_USERS, "6C0276EC-FEA1-4FA8-BB1F-5D428A850222");
 
 // add user
-export const addNewUser = (user) => post(url.ADD_NEW_USER, user);
+export const addNewUser = (user) => postEmployee(url.ADD_NEW_USER, user);
 
 // update user
 export const updateUser = (user) => put(url.UPDATE_USER, user);

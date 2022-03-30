@@ -72,6 +72,9 @@ export async function post(url, data) {
     console.log(error, "post error");
   }
 }
+
+//Adding New Role
+
 export async function postRole(url, data) {
   try {
     const formData = new FormData();
@@ -101,6 +104,9 @@ export async function postRole(url, data) {
     console.log(error, "post error");
   }
 }
+
+//Adding New Asset
+
 export async function postAsset(url, data) {
   try {
     const formData = new FormData();
@@ -131,6 +137,39 @@ export async function postAsset(url, data) {
     return result;
   } catch (error) {
     console.log(error, "post error");
+  }
+}
+
+//Adding New Emplopyee
+
+export async function postEmployee(url, data) {
+  try {
+    const formData = new FormData();
+    formData.append("company_identifier", data.company_identifier);
+    formData.append("emp_role", data.emp_role);
+    formData.append("emp_group", data.emp_group);
+    formData.append("emp_designation", data.emp_designation);
+    formData.append("emp_first_name", data.emp_first_name);
+    formData.append("emp_last_name", data.emp_last_name);
+    formData.append("emp_email", data.emp_email);
+    formData.append("emp_office_phone", data.emp_office_phone);
+    formData.append("emp_mobile_number", data.emp_mobile_number);
+    formData.append("emp_joining_date", data.emp_joining_date);
+    formData.append("emp_nda_document1", data.emp_nda_document1);
+    formData.append("emp_bc_document1", data.emp_bc_document1);
+    formData.append("emp_cert_document1", data.emp_cert_document1);
+    formData.append("emp_profile_picture", data.emp_profile_picture);
+    formData.append("is_active", data.is_active);
+    formData.append("associated_assets", data.associated_assets);
+    const response = await fetch(`${API_URL}${url}`, {
+      method: "POST",
+      body: formData,
+    });
+    debugger;
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.log(error, "postEmployee error");
   }
 }
 export async function postforlogin(url, data, config = {}) {

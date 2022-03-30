@@ -20,7 +20,7 @@ import paginationFactory, {
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-
+import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { empDuplicateCheck } from "../../helpers/fakebackend_helper";
@@ -31,6 +31,7 @@ import {
   deleteUser as onDeleteUser,
   getCompGroups as onGetGroups,
   getRoles as onGetRoles,
+  getAssets as onGetAssets,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
 
@@ -59,6 +60,9 @@ const EmployeeManagement = (props) => {
   const { result } = useSelector((state) => ({
     result: state.contacts.result,
   }));
+  const { assets } = useSelector((state) => ({
+    assets: state.assetsManagement.assets,
+  }));
 
   const [userList, setUserList] = useState([]);
   const [groupList, setGroupsList] = useState([]);
@@ -67,6 +71,12 @@ const EmployeeManagement = (props) => {
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isEmpDuplicate, setIsEmpDuplicate] = useState(false);
+  const [selectedProfileFile, setSelectedProfileFile] = useState();
+  const [selectedNdaFile, setSelectedNdaFile] = useState();
+  const [selectedBcFile, setSelectedBcFile] = useState();
+  const [selectedCertificateFile, setSelectedCertificateFile] = useState();
+  const [assetList, setAssetList] = useState([]);
+  const [assetsSelected, setAssetSelected] = useState([]);
 
   const { SearchBar } = Search;
 
@@ -194,6 +204,17 @@ const EmployeeManagement = (props) => {
     setGroupsList(groups);
   }, [groups]);
 
+  //Assets
+  useEffect(() => {
+    if (assets && !assets.length) {
+      dispatch(onGetAssets());
+    }
+  }, [dispatch, assets]);
+
+  useEffect(() => {
+    setAssetList(assets);
+  }, [assets]);
+
   const toggle = () => {
     setModal(!modal);
     if (!modal && !isEmpty(users) && !!isEdit) {
@@ -255,7 +276,6 @@ const EmployeeManagement = (props) => {
    */
   const handleValidUserSubmit = (e, values) => {
     debugger;
-    // if (isEmpDuplicate) {
     if (isEdit) {
       const updateUser = {
         employee_identifier: userList.employeeid,
@@ -286,15 +306,12 @@ const EmployeeManagement = (props) => {
       setResult(result);
       console.log(results, "jksdfgiuwenbkjwpowqpo");
     } else {
-      // let photo = document.getElementById("image-file").files[0];
-      // let formData = new FormData();
-      // formData.append("photo", photo);
-      // fetch("../../images", { method: "POST", body: formData });
       const newUser = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
           .companyID,
         emp_designation: values["employeetype"],
         emp_role: values["role"],
+        emp_group: values["employeegroup"],
         emp_first_name: values["fname"],
         emp_last_name: values["lname"],
         emp_email: values["email"],
@@ -307,16 +324,19 @@ const EmployeeManagement = (props) => {
         )
           .toISOString()
           .slice(0, 19),
-        created_date: new Date().toISOString().slice(0, 19),
-        created_by: JSON.parse(localStorage.getItem("authUser")).username,
-        modified_date: new Date().toISOString().slice(0, 19),
-        modified_by: JSON.parse(localStorage.getItem("authUser")).username,
+        emp_nda_document1: selectedNdaFile ? selectedNdaFile : "",
+        emp_bc_document1: selectedBcFile ? selectedBcFile : "",
+        emp_cert_document1: selectedCertificateFile
+          ? selectedCertificateFile
+          : "",
+        emp_profile_picture: selectedProfileFile,
+        is_active: true,
+        associated_assets: assetsSelected.toString(),
       };
       // save new user
       dispatch(onAddNewUser(newUser));
     }
     toggle();
-    // }
   };
 
   const handleUserClicks = () => {
@@ -324,15 +344,7 @@ const EmployeeManagement = (props) => {
     setIsEdit(false);
     toggle();
   };
-  // const Phone = (props) => (
-  //   <InputMask
-  //     mask="(999) 999-9999"
-  //     value={props.value}
-  //     className="form-control input-color"
-  //     onChange={props.onChange}
-  //   ></InputMask>
-  // );
-  const [selectedFiles, setselectedFiles] = useState([]);
+  //const [selectedFiles, setselectedFiles] = useState([]);
 
   function handleAcceptedFiles(files) {
     files.map((file) =>
@@ -341,7 +353,7 @@ const EmployeeManagement = (props) => {
         formattedSize: formatBytes(file.size),
       })
     );
-    setselectedFiles(files);
+    //setselectedFiles(files);
   }
   /**
    * Formats the size
@@ -355,12 +367,7 @@ const EmployeeManagement = (props) => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   }
-  // const [selectedFile, setSelectedFile] = useState();
-  // const [isFilePicked, setIsFilePicked] = useState(false);
-  // const changeHandler = (event) => {
-  //   setSelectedFile(event.target.files[0]);
-  //   setIsFilePicked(true);
-  // };
+
   const empEmailChange = async (e) => {
     if (
       e.target.value != "" &&
@@ -369,7 +376,15 @@ const EmployeeManagement = (props) => {
     )
       setIsEmpDuplicate(await empDuplicateCheck(e.target.value));
   };
-  console.log(isEmpDuplicate, "iwueyiuweyiuywiuye");
+
+  let assetlist = [];
+  for (var i = 0; i < assetList.length; i++) {
+    assetlist[i] = {
+      label: assetList[i].asset_name,
+      key: assetList[i].asset_identifier,
+    };
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -397,27 +412,6 @@ const EmployeeManagement = (props) => {
                         search
                         //filter={filterFactory()}
                       >
-                        {/* <Input
-                          type="select"
-                          id="vesselName"
-                          onChange={(e) =>
-                            this.handleSelectedSite(e.target.value)
-                          }
-                        >
-                          <option>Select Role/Designation</option>
-                          <option>SE</option>
-                          <option>SSE</option>
-                          <option>Developer</option>
-                          <option>Designer</option>
-                          <option>BA</option>
-                          <option>Tech Architect</option>
-                          <option>Tech Analyst</option>
-                          <option>Tech Lead</option>
-                          <option>Project Manager</option>
-                          <option>Sr Project Manager</option>
-                          <option>Group Manager</option>
-                          <option>HR</option>
-                        </Input> */}
                         {(toolkitProps) => (
                           <React.Fragment>
                             <Row className="mb-2">
@@ -577,6 +571,7 @@ const EmployeeManagement = (props) => {
                                                   /> */}
                                                   <Label>Phone</Label>
                                                   <InputMask
+                                                    name="mobile"
                                                     mask="(999) 999-9999"
                                                     value={props.value}
                                                     className="form-control input-color"
@@ -633,7 +628,9 @@ const EmployeeManagement = (props) => {
                                                     {groupList.map((group) => (
                                                       <option
                                                         key={group.id}
-                                                        value={group.group_name}
+                                                        value={
+                                                          group.group_identifier
+                                                        }
                                                       >
                                                         {group.group_name}
                                                       </option>
@@ -656,6 +653,29 @@ const EmployeeManagement = (props) => {
                                             <Row>
                                               <Col xs={6}>
                                                 <div className="mb-3">
+                                                  <label>Link Assets</label>
+                                                  <DropdownMultiselect
+                                                    placeholder="select asset/assets"
+                                                    buttonClass="btn-light"
+                                                    selectDeselectLabel="Select/Deselect All"
+                                                    required={true}
+                                                    value={""}
+                                                    options={assetlist}
+                                                    name="assets"
+                                                    handleOnChange={(
+                                                      selected
+                                                    ) => {
+                                                      setAssetSelected(
+                                                        selected
+                                                      );
+                                                    }}
+                                                  />
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                            <Row>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
                                                   <AvField
                                                     type="select"
                                                     name="role"
@@ -665,6 +685,7 @@ const EmployeeManagement = (props) => {
                                                     multiple={false}
                                                     required
                                                     value={userList.role || ""}
+                                                    //onChange={handleRoleChange()}
                                                   >
                                                     <option value="">
                                                       Select Employee Role
@@ -735,6 +756,11 @@ const EmployeeManagement = (props) => {
                                                     validate={{
                                                       required: { value: true },
                                                     }}
+                                                    onChange={(e) => {
+                                                      setSelectedNdaFile(
+                                                        e.target.files[0]
+                                                      );
+                                                    }}
                                                     value={""}
                                                   />
                                                 </div>
@@ -771,10 +797,15 @@ const EmployeeManagement = (props) => {
                                                     inputClass="form-control"
                                                     type="file"
                                                     placeholder="choose BC Required Files"
-                                                    errorMessage="please provide valid file"
+                                                    errormessage="please provide valid file"
                                                     validate={{
                                                       required: { value: true },
                                                     }}
+                                                    onChange={(e) =>
+                                                      setSelectedBcFile(
+                                                        e.target.files[0]
+                                                      )
+                                                    }
                                                     value={""}
                                                   />
                                                 </div>
@@ -815,10 +846,15 @@ const EmployeeManagement = (props) => {
                                                     inputClass="form-control"
                                                     type="file"
                                                     placeholder="choose Certificate Required Files"
-                                                    errorMessage="please provide valid file"
+                                                    errormessage="please provide valid file"
                                                     validate={{
                                                       required: { value: true },
                                                     }}
+                                                    onChange={(e) =>
+                                                      setSelectedCertificateFile(
+                                                        e.target.files[0]
+                                                      )
+                                                    }
                                                     value={""}
                                                   />
                                                 </div>
@@ -833,10 +869,15 @@ const EmployeeManagement = (props) => {
                                                     inputClass="form-control"
                                                     type="file"
                                                     placeholder="choose employee photo"
-                                                    errorMessage="please provide valid file"
+                                                    errormessage="please provide valid file"
                                                     validate={{
                                                       required: { value: true },
                                                     }}
+                                                    onChange={(e) =>
+                                                      setSelectedProfileFile(
+                                                        e.target.files[0]
+                                                      )
+                                                    }
                                                     value={""}
                                                   />
                                                 </div>

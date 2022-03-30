@@ -140,4 +140,9 @@ export const DELETE_COMPGROUP = "/api/Group";
 export const EMP_DUPLICATE_CHECK = (empEmail, compid) =>
   `/DuplicateCheck?EmployeeEmail=${empEmail}&CompanyIdentifier=${compid}`;
 
+export const ASSET_TO_EMP = (asssetid, compid) => {
+  debugger;
+  return `/api/Card/AssetToEmployees?companyId=${compid}&assetId=${asssetid}`;
+};
+
 export const GET_EMP_PROFILE = "/api/Employee/";

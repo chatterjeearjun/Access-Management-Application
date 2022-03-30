@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Card,
@@ -8,16 +8,34 @@ import {
   Col,
   Row,
   Button,
+  UncontrolledTooltip,
 } from "reactstrap";
 import moment from "moment";
-import { saveAs } from "file-saver";
+import { ASSET_TO_EMP } from "../../helpers/url_helper";
 
 const OverviewTab = (props) => {
   // const downloadFile = (file) => {
   //   saveAs(file, file?.split("/Asset/")[1]);
   // };
+  const [employeeData, setEmployeedata] = useState([]);
+  const assetid = window.location.search.slice(1);
 
-  console.log(props, "props");
+  const empData = async () => {
+    const res = await fetch(
+      `https://localhost:5001${ASSET_TO_EMP(
+        assetid,
+        JSON.parse(localStorage.getItem("authUser")).companyID
+      )}`,
+      { method: "POST" }
+    );
+    const data = await res.json();
+    setEmployeedata(data);
+  };
+  if (employeeData.length === 0 && props) {
+    empData();
+  }
+
+  console.log(employeeData, "employeeData");
   return (
     <React.Fragment>
       <Row>
@@ -124,39 +142,23 @@ const OverviewTab = (props) => {
                   <Row className="align-middle">
                     <Col xs={12} className="border align-middle">
                       <div className="m-2">
-                        <Link
-                          to={`/EmployeeProfile?22e4fea0-d00e-459d-1d9b-08da0db4080c`}
-                          className="badge badge-soft-primary m-1 p-1"
-                        >
-                          {props?.data?.asset_owner}
-                        </Link>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
-                        <h5 className="badge badge-soft-primary m-1 p-1">
-                          {props?.data?.asset_owner}
-                        </h5>
+                        {employeeData.map((data) => (
+                          <>
+                            <Link
+                              to={`/EmployeeProfile?${data.employee_identifier}`}
+                              className="badge badge-soft-primary m-1 p-1"
+                              id={`mappings${data.id}`}
+                            >
+                              {data.emp_first_name} {data.emp_last_name}
+                            </Link>
+                            <UncontrolledTooltip
+                              placement="top"
+                              target={`mappings${data.id}`}
+                            >
+                              {data.emp_email}
+                            </UncontrolledTooltip>
+                          </>
+                        ))}
                       </div>
                     </Col>
                   </Row>

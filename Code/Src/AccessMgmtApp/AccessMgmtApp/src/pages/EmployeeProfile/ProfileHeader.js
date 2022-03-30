@@ -27,7 +27,7 @@ const EmployeeProfileHeader = (props) => {
                     <div className="flex-shrink-0">
                       <div className="avatar-xl me-3">
                         <img
-                          src={avatar}
+                          src={`${props?.data?.emp_profile_picture}`}
                           alt="no profile pic"
                           className="img-fluid rounded-circle d-block"
                         />
