@@ -3,6 +3,7 @@ using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -55,10 +56,18 @@ namespace AccessMgmtBackend.Controllers
                        _companyContext.EmployeeToGroups.Where
                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
                        Select(x => x.group_identifier));
-                    employee.associated_assets = String.Join(",",
-                        _companyContext.AssetToEmployees.Where
-                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
-                        Select(x => x.asset_identifier));
+                    var list = new List<KeyValuePair<string, string>>();
+                    var assetToEmployees = _companyContext.AssetToEmployees.Where
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                    foreach (var assetDetail in assetToEmployees)
+                    {
+                        var assetName = _companyContext.Assets.FirstOrDefault
+                                 (x => x.company_identifier == employee.company_identifier && x.asset_identifier.ToString() == assetDetail.asset_identifier.ToString())
+                                 ?.asset_name;
+
+                        if (!string.IsNullOrEmpty(assetName)) list.Add(new KeyValuePair<string, string>(assetName, assetDetail.asset_identifier));
+                    }
+                    employee.associated_assets = JsonConvert.SerializeObject(list);
                 }
                 return listEmployees;
             }
@@ -97,10 +106,19 @@ namespace AccessMgmtBackend.Controllers
                        _companyContext.EmployeeToGroups.Where
                        (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
                        Select(x => x.group_identifier));
-                employee.associated_assets = String.Join(",",
-                        _companyContext.AssetToEmployees.Where
-                        (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
-                        Select(x => x.asset_identifier));
+
+                var list = new List<KeyValuePair<string, string>>();
+                var assetToEmployees = _companyContext.AssetToEmployees.Where
+                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                foreach (var assetDetail in assetToEmployees)
+                {
+                    var assetName = _companyContext.Assets.FirstOrDefault
+                             (x => x.company_identifier == employee.company_identifier && x.asset_identifier.ToString() == assetDetail.asset_identifier.ToString())
+                             ?.asset_name;
+
+                   if(!string.IsNullOrEmpty(assetName)) list.Add(new KeyValuePair<string, string>(assetName, assetDetail.asset_identifier));
+                }
+                employee.associated_assets = JsonConvert.SerializeObject(list);
             }
             return employee;
         }
@@ -244,6 +262,13 @@ namespace AccessMgmtBackend.Controllers
                 employeeNew.created_date = employeeStore.created_date;
                 employeeNew.modified_date = DateTime.UtcNow;
                 employeeNew.modified_by = "Application";
+                employeeNew.emp_profile_picture = employeeStore.emp_profile_picture;
+                employeeNew.emp_nda_document1 = employeeStore.emp_nda_document1;
+                employeeNew.emp_nda_document2 = employeeStore.emp_nda_document2;
+                employeeNew.emp_bc_document1 = employeeStore.emp_bc_document1;
+                employeeNew.emp_bc_document2 = employeeStore.emp_bc_document2;
+                employeeNew.emp_cert_document1 = employeeStore.emp_cert_document1;
+                employeeNew.emp_cert_document2 = employeeStore.emp_cert_document2;
                 PropertyCopier<UpdateEmployee, Employee>.Copy(value, employeeNew);
                 _companyContext.Entry<Employee>(employeeStore).CurrentValues.SetValues(employeeNew);
                 //Added logic for asset addition/updation
