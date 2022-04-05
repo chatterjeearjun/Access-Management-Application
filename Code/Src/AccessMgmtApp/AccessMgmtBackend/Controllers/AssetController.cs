@@ -44,11 +44,11 @@ namespace AccessMgmtBackend.Controllers
         {
             List<string> association = new List<string>();
             association.Add(string.Join(',', _companyContext.AssetToEmployees.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x => x.employee_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.employee_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToRoles.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x => x.role_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.role_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToUsers.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid).Select(x => x.user_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.user_identifier)));
             association.RemoveAll(s => s == "");
             return association;
         }

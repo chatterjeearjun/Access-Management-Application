@@ -86,7 +86,7 @@ namespace AccessMgmtBackend.Controllers
                         company_identifier = appUser.company_identifier,
                         asset_identifier = asset.ToString(),
                         user_identifier = appUser.user_identifier.ToString(),
-                        is_active = true,
+                        is_active = false,
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
@@ -132,7 +132,7 @@ namespace AccessMgmtBackend.Controllers
                             company_identifier = appUser.company_identifier,
                             asset_identifier = asset.ToString(),
                             user_identifier = appUser.user_identifier.ToString(),
-                            is_active = true,
+                            is_active = false,
                             created_date = DateTime.UtcNow,
                             created_by = "Application"
                         });

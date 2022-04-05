@@ -30,10 +30,10 @@ namespace AccessMgmtBackend.Controllers
                 foreach (var i in listOfRoles)
                 {
                     i.associated_groups = String.Join(",",
-                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active).
                     Select(x => x.group_identifier));
                     i.associated_assets = String.Join(",",
-                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active).
                     Select(x => x.asset_identifier));
                 }
                 return listOfRoles;
@@ -54,10 +54,10 @@ namespace AccessMgmtBackend.Controllers
                 role.role_description_attachment = !string.IsNullOrEmpty(role.role_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
                         (s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : String.Empty;
                 role.associated_groups = String.Join(",",
-                 _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).
+                 _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active).
                  Select(x => x.group_identifier));
                 role.associated_assets = String.Join(",",
-                _companyContext.AssetToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).
+                _companyContext.AssetToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active).
                 Select(x => x.asset_identifier));
             }
             return role;
@@ -105,7 +105,7 @@ namespace AccessMgmtBackend.Controllers
                         company_identifier = role.company_identifier,
                         asset_identifier = asset.ToString(),
                         role_identifier = role.role_identifier.ToString(),
-                        is_active = true,
+                        is_active = false,
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
@@ -176,7 +176,7 @@ namespace AccessMgmtBackend.Controllers
                             company_identifier = roleNew.company_identifier,
                             asset_identifier = asset.ToString(),
                             role_identifier = roleNew.role_identifier.ToString(),
-                            is_active = true,
+                            is_active = false,
                             created_date = DateTime.UtcNow,
                             created_by = "Application"
                         });

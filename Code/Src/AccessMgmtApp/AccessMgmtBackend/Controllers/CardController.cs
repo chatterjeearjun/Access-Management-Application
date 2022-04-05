@@ -25,7 +25,7 @@ namespace AccessMgmtBackend.Controllers
 
             if (!string.IsNullOrEmpty(companyId) && !string.IsNullOrEmpty(assetId))
             {
-                var listOfMappings = _companyContext.AssetToUsers.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId)?
+                var listOfMappings = _companyContext.AssetToUsers.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId && x.is_active)?
                     .Select(x => x.user_identifier)?.Distinct()?.ToList();
                 if (listOfMappings != null && listOfMappings.Count > 0)
                 {
@@ -48,7 +48,7 @@ namespace AccessMgmtBackend.Controllers
 
             if (!string.IsNullOrEmpty(companyId) && !string.IsNullOrEmpty(assetId))
             {
-                var listOfMappings = _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId)?
+                var listOfMappings = _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId && x.is_active)?
                     .Select(x => x.role_identifier)?.Distinct()?.ToList();
                 if (listOfMappings != null && listOfMappings.Count > 0)
                 {
@@ -57,10 +57,10 @@ namespace AccessMgmtBackend.Controllers
                 foreach (var i in listRoles)
                 {
                     i.associated_groups = String.Join(",",
-                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active).
                     Select(x => x.group_identifier));
                     i.associated_assets = String.Join(",",
-                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active).
                     Select(x => x.asset_identifier));
                 }
                 return listRoles;
@@ -78,7 +78,7 @@ namespace AccessMgmtBackend.Controllers
 
             if (!string.IsNullOrEmpty(companyId) && !string.IsNullOrEmpty(assetId))
             {
-                var listOfMappings = _companyContext.AssetToEmployees.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId)?
+                var listOfMappings = _companyContext.AssetToEmployees.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId && x.is_active)?
                     .Select(x=>x.employee_identifier)?.Distinct()?.ToList();
                 if(listOfMappings != null && listOfMappings.Count>0)
                 {
@@ -102,11 +102,11 @@ namespace AccessMgmtBackend.Controllers
                            (s => s.file_identifier.ToString() == employee.emp_cert_document2)?.blob_file_name : String.Empty;
                     employee.emp_role = String.Join(",",
                         _companyContext.EmployeeToRoles.Where
-                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
+                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active).
                         Select(x => x.role_identifier));
                     employee.associated_assets = String.Join(",",
                         _companyContext.AssetToEmployees.Where
-                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
+                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active).
                         Select(x => x.asset_identifier));
                 }
 

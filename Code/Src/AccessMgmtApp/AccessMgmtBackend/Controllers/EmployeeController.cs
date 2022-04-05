@@ -52,7 +52,7 @@ namespace AccessMgmtBackend.Controllers
 
                     var listRoles = new List<KeyValuePair<string, string>>();
                     var employeesToRoles = _companyContext.EmployeeToRoles.Where
-                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active).ToList();
                     foreach (var roleDetail in employeesToRoles)
                     {
                         var roleName = _companyContext.CompanyRoles.FirstOrDefault
@@ -70,7 +70,7 @@ namespace AccessMgmtBackend.Controllers
 
                     var list = new List<KeyValuePair<string, string>>();
                     var assetToEmployees = _companyContext.AssetToEmployees.Where
-                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active).ToList();
                     foreach (var assetDetail in assetToEmployees)
                     {
                         var assetName = _companyContext.Assets.FirstOrDefault
@@ -114,7 +114,7 @@ namespace AccessMgmtBackend.Controllers
 
                 var listRoles = new List<KeyValuePair<string, string>>();
                 var employeesToRoles = _companyContext.EmployeeToRoles.Where
-                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active).ToList();
                 foreach (var roleDetail in employeesToRoles)
                 {
                     var roleName = _companyContext.CompanyRoles.FirstOrDefault
@@ -127,12 +127,12 @@ namespace AccessMgmtBackend.Controllers
 
                 employee.emp_group = String.Join(",",
                        _companyContext.EmployeeToGroups.Where
-                       (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
+                       (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active).
                        Select(x => x.group_identifier));
 
                 var list = new List<KeyValuePair<string, string>>();
                 var assetToEmployees = _companyContext.AssetToEmployees.Where
-                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active).ToList();
                 foreach (var assetDetail in assetToEmployees)
                 {
                     var assetName = _companyContext.Assets.FirstOrDefault
@@ -225,7 +225,7 @@ namespace AccessMgmtBackend.Controllers
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
-                    var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == role && s.company_identifier == employee.company_identifier).ToList()
+                    var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == role && s.company_identifier == employee.company_identifier && s.is_active).ToList()
                     .Select(x => x.asset_identifier);
                     employee.associated_assets = (!string.IsNullOrEmpty(employee.associated_assets)) ?
                         employee.associated_assets + "," + String.Join(",", associatedRolesAssets) : String.Join(",", associatedRolesAssets);
@@ -261,7 +261,7 @@ namespace AccessMgmtBackend.Controllers
                         company_identifier = employee.company_identifier,
                         asset_identifier = asset.ToString(),
                         employee_identifier = employee.employee_identifier.ToString(),
-                        is_active = true,
+                        is_active = false,
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
@@ -313,7 +313,7 @@ namespace AccessMgmtBackend.Controllers
                             company_identifier = employeeNew.company_identifier,
                             asset_identifier = asset.ToString(),
                             employee_identifier = employeeNew.employee_identifier.ToString(),
-                            is_active = true,
+                            is_active = false,
                             created_date = DateTime.UtcNow,
                             created_by = "Application"
                         });
