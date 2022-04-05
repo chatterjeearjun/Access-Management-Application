@@ -40,6 +40,36 @@ namespace AccessMgmtBackend.Controllers
             }
         }
 
+        [Route("AssetToRoles")]
+        [HttpPost]
+        public IEnumerable<Role> AssetToRoles(string companyId, string assetId)
+        {
+            var listRoles = new List<Role>();
+
+            if (!string.IsNullOrEmpty(companyId) && !string.IsNullOrEmpty(assetId))
+            {
+                var listOfMappings = _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId)?
+                    .Select(x => x.role_identifier)?.Distinct()?.ToList();
+                if (listOfMappings != null && listOfMappings.Count > 0)
+                {
+                    listRoles = _companyContext.CompanyRoles.ToList().Where(x => listOfMappings.Any(y => y.ToString() == x.company_identifier.ToString())).ToList();
+                }
+                foreach (var i in listRoles)
+                {
+                    i.associated_groups = String.Join(",",
+                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    Select(x => x.group_identifier));
+                    i.associated_assets = String.Join(",",
+                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString()).
+                    Select(x => x.asset_identifier));
+                }
+                return listRoles;
+            }
+            else
+            {
+                return null;
+            }
+        }
         [Route("AssetToEmployees")]
         [HttpPost]
         public IEnumerable<Employee> AssetToEmployees(string companyId, string assetId)

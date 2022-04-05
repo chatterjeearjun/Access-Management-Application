@@ -4,6 +4,7 @@ using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -48,14 +49,25 @@ namespace AccessMgmtBackend.Controllers
                            (s => s.file_identifier.ToString() == employee.emp_cert_document1)?.blob_file_name : String.Empty;
                     employee.emp_cert_document2 = !string.IsNullOrEmpty(employee.emp_cert_document2) ? _companyContext.UploadedFiles.FirstOrDefault
                            (s => s.file_identifier.ToString() == employee.emp_cert_document2)?.blob_file_name : String.Empty;
-                    employee.emp_role = String.Join(",",
-                        _companyContext.EmployeeToRoles.Where
-                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
-                        Select(x => x.role_identifier));
+
+                    var listRoles = new List<KeyValuePair<string, string>>();
+                    var employeesToRoles = _companyContext.EmployeeToRoles.Where
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                    foreach (var roleDetail in employeesToRoles)
+                    {
+                        var roleName = _companyContext.CompanyRoles.FirstOrDefault
+                                 (x => x.company_identifier == employee.company_identifier && x.role_identifier.ToString() == roleDetail.role_identifier.ToString())
+                                 ?.role_name;
+
+                        if (!string.IsNullOrEmpty(roleName)) listRoles.Add(new KeyValuePair<string, string>(roleName, roleDetail.role_identifier));
+                    }
+                    employee.emp_role = JsonConvert.SerializeObject(listRoles);
+
                     employee.emp_group = String.Join(",",
                        _companyContext.EmployeeToGroups.Where
                        (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString()).
                        Select(x => x.group_identifier));
+
                     var list = new List<KeyValuePair<string, string>>();
                     var assetToEmployees = _companyContext.AssetToEmployees.Where
                              (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
@@ -99,9 +111,20 @@ namespace AccessMgmtBackend.Controllers
                        (s => s.file_identifier.ToString() == employee.emp_cert_document1)?.blob_file_name : String.Empty;
                 employee.emp_cert_document2 = !string.IsNullOrEmpty(employee.emp_cert_document2) ? _companyContext.UploadedFiles.FirstOrDefault
                        (s => s.file_identifier.ToString() == employee.emp_cert_document2)?.blob_file_name : String.Empty;
-                employee.emp_role = String.Join(",",
-                 _companyContext.EmployeeToRoles.Where(x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
-                 Select(x => x.role_identifier));
+
+                var listRoles = new List<KeyValuePair<string, string>>();
+                var employeesToRoles = _companyContext.EmployeeToRoles.Where
+                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                foreach (var roleDetail in employeesToRoles)
+                {
+                    var roleName = _companyContext.CompanyRoles.FirstOrDefault
+                             (x => x.company_identifier == employee.company_identifier && x.role_identifier.ToString() == roleDetail.role_identifier.ToString())
+                             ?.role_name;
+
+                    if (!string.IsNullOrEmpty(roleName)) listRoles.Add(new KeyValuePair<string, string>(roleName, roleDetail.role_identifier));
+                }
+                employee.emp_role = JsonConvert.SerializeObject(listRoles);
+
                 employee.emp_group = String.Join(",",
                        _companyContext.EmployeeToGroups.Where
                        (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
@@ -122,7 +145,7 @@ namespace AccessMgmtBackend.Controllers
             }
             return employee;
         }
-        private async Task<UploadedFile> PostUploadFile(IFormFile document, string companyId)
+        private async Task<UploadedFile> PostUploadFile(IFormFile document, string companyId,[Optional] string userIdentifier)
         {
             UploadedFile employeeResponse = new UploadedFile();
             GenericAPICalls request = new GenericAPICalls();
@@ -131,7 +154,7 @@ namespace AccessMgmtBackend.Controllers
                 File = document,
                 upload_category = "Employee",
                 company_identifier = companyId,
-                user_identifier = ""
+                user_identifier = userIdentifier
             };
             var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
             if (response.Result.IsSuccessStatusCode)
@@ -362,5 +385,30 @@ namespace AccessMgmtBackend.Controllers
                 return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier).ToList();
             }
         }
+
+        [Route("EmployeeImageUpload")]
+        [HttpPost]
+        public async Task<Employee> EmployeeImageUpload([FromForm] EmployeePhotoUpload value)
+        {
+            var listEmployees = new List<Employee>();
+
+            if (!string.IsNullOrEmpty(value.employee_identifier) && !string.IsNullOrEmpty(value.company_identifier) && value.emp_profile_picture != null)
+            {
+                var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier.ToString() == value.employee_identifier);
+                if(employeeStore != null)
+                {
+                    UploadedFile employeeResponse = await PostUploadFile(value.emp_profile_picture, value.company_identifier,value.employee_identifier);
+                    employeeStore.emp_profile_picture = employeeResponse?.file_identifier.ToString();
+                }
+
+                return employeeStore;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
     }
 }
