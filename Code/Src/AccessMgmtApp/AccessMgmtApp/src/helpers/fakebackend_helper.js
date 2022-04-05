@@ -12,6 +12,7 @@ import {
   postAsset,
   postRole,
   postEmployee,
+  isapproverDuplicate,
 } from "./api_helper";
 import * as url from "./url_helper";
 
@@ -366,6 +367,13 @@ export const deleteCompGroup = (group) => delGroup(url.DELETE_COMPGROUP, group);
 export const empDuplicateCheck = (empEmail) =>
   isEmpDuplicate(
     url.EMP_DUPLICATE_CHECK(empEmail, "6c0276ec-fea1-4fa8-bb1f-5d428a850222")
+  );
+export const approverDuplicateCheck = (aprproverEmail) =>
+  isapproverDuplicate(
+    url.APPROVER_DUPLICATE_CHECK(
+      aprproverEmail,
+      "6c0276ec-fea1-4fa8-bb1f-5d428a850222"
+    )
   );
 
 //Employee Profile

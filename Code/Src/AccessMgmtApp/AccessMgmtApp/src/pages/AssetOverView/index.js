@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
 import { Container, Row } from "reactstrap";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 //import components
-import AssetInfo from "./AssetInfo";
+import AssetProfileHeader from "./AssetProfileHeader";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -30,8 +30,6 @@ const AssetOverview = (props) => {
     setAssetData(asset);
   }, [asset]);
 
-  console.log(assetData, "assetData");
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -48,7 +46,7 @@ const AssetOverview = (props) => {
 
           <Row>
             {/* Render profilemenu */}
-            <AssetInfo data={assetData} />
+            <AssetProfileHeader data={assetData} />
           </Row>
         </Container>
       </div>
@@ -56,4 +54,4 @@ const AssetOverview = (props) => {
   );
 };
 
-export default AssetOverview;
+export default withRouter(AssetOverview);

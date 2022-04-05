@@ -19,6 +19,8 @@ import AssetsOverview from "../pages/AssetOverView/index";
 
 //Roles
 import RolesManagement from "../pages/RolesManagement/index";
+//Required Documents
+import RequiredDocuments from "../pages/RequiredDocuments/index";
 
 //Groups
 import GroupsManagement from "../pages/GroupsManagement/index";
@@ -147,6 +149,8 @@ const userRoutes = [
 
   //roles
   { path: "/groupsmanagement", component: GroupsManagement },
+  //Required Documents
+  { path: "/requireddocuments", component: RequiredDocuments },
 
   //profile
   { path: "/profile", component: userProfile },

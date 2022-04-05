@@ -32,7 +32,6 @@ import {
 const INIT_STATE = {
   users: [],
   approvers: [],
-  assets: [],
   userProfile: {},
   error: {},
   result: "",
@@ -45,6 +44,7 @@ const contacts = (state = INIT_STATE, action) => {
       return {
         ...state,
         users: action.payload,
+        result: "",
       };
     case GET_USERS_FAIL:
       return {
@@ -91,12 +91,12 @@ const contacts = (state = INIT_STATE, action) => {
       };
 
     case DELETE_USER_SUCCESS:
-      debugger;
       return {
         ...state,
         users: state.users.filter(
           (user) => user.id.toString() !== action.payload.id.toString()
         ),
+        result: "Employee Deleted",
       };
 
     case DELETE_USER_FAIL:
@@ -117,6 +117,7 @@ const contacts = (state = INIT_STATE, action) => {
       return {
         ...state,
         approvers: action.payload,
+        result: "",
       };
 
     case GET_APPROVERS_FAIL:
@@ -168,14 +169,14 @@ const contacts = (state = INIT_STATE, action) => {
         approvers: state.approvers.filter(
           (approver) => approver.id.toString() !== action.payload.id.toString()
         ),
-        result: "success",
+        result: "approver delete success",
       };
 
     case DELETE_APPROVER_FAIL:
       return {
         ...state,
         error: action.payload,
-        result: "success",
+        result: "delete fail",
       };
 
     case GET_APPROVER_PROFILE_FAIL:

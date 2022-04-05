@@ -16,13 +16,18 @@ import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
-//Import Breadcrumb
+import { FaUserEdit } from "react-icons/fa";
+import { TiUserDelete } from "react-icons/ti";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import InputMask from "react-input-mask";
+import Loading from "react-fullscreen-loading";
+import SweetAlert from "react-bootstrap-sweetalert";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { empDuplicateCheck } from "../../helpers/fakebackend_helper";
 import {
   getUsers as onGetUsers,
@@ -34,20 +39,12 @@ import {
   getAssets as onGetAssets,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
-
-//redux
 import { useSelector, useDispatch } from "react-redux";
 
-// Form Mask
-import InputMask from "react-input-mask";
-
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-
-const EmployeeManagement = (props) => {
+const EmployeeManagement = () => {
   const dispatch = useDispatch();
 
-  const { users } = useSelector((state) => ({
+  const { users, result } = useSelector((state) => ({
     users: state.contacts.users,
     result: state.contacts.result,
   }));
@@ -57,27 +54,27 @@ const EmployeeManagement = (props) => {
   const { roles } = useSelector((state) => ({
     roles: state.contacts.roles,
   }));
-  const { result } = useSelector((state) => ({
-    result: state.contacts.result,
-  }));
   const { assets } = useSelector((state) => ({
     assets: state.assetsManagement.assets,
   }));
 
-  const [userList, setUserList] = useState([]);
-  const [groupList, setGroupsList] = useState([]);
-  const [rolesList, setRolesList] = useState([]);
-  const [results, setResult] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [isEmpDuplicate, setIsEmpDuplicate] = useState(false);
-  const [selectedProfileFile, setSelectedProfileFile] = useState();
-  const [selectedNdaFile, setSelectedNdaFile] = useState();
-  const [selectedBcFile, setSelectedBcFile] = useState();
-  const [selectedCertificateFile, setSelectedCertificateFile] = useState();
-  const [assetList, setAssetList] = useState([]);
-  const [assetsSelected, setAssetSelected] = useState([]);
-
+  const [userList, setUserList] = useState([]),
+    [groupList, setGroupsList] = useState([]),
+    [rolesList, setRolesList] = useState([]),
+    [modal, setModal] = useState(false),
+    [isEdit, setIsEdit] = useState(false),
+    [isEmpDuplicate, setIsEmpDuplicate] = useState(false),
+    [selectedProfileFile, setSelectedProfileFile] = useState(),
+    [selectedNdaFile, setSelectedNdaFile] = useState(),
+    [selectedBcFile, setSelectedBcFile] = useState(),
+    [selectedCertificateFile, setSelectedCertificateFile] = useState(),
+    [assetList, setAssetList] = useState([]),
+    [assetsSelected, setAssetSelected] = useState([]),
+    [docsRequired, setDocsRequired] = useState(),
+    [isLoading, setIsLoading] = useState(false),
+    [phone, setPhone] = useState(""),
+    [deleteAlert, setDeleteAlert] = useState(false),
+    [deleteRow, setDeleteRow] = useState(false);
   const { SearchBar } = Search;
 
   const pageOptions = {
@@ -116,7 +113,6 @@ const EmployeeManagement = (props) => {
               {user.emp_first_name} {user.emp_last_name}
             </Link>
           </h5>
-          {/* <p className="text-muted mb-0">{user.designation}</p> */}
         </>
       ),
     },
@@ -152,17 +148,20 @@ const EmployeeManagement = (props) => {
             <i className="mdi mdi-eye font-size-18" id="viewemployee"></i>
           </Link>
           <Link className="text-success" to="#">
-            <i
-              className="mdi mdi-pencil font-size-18"
+            <FaUserEdit
+              className="font-size-18"
               id="edittooltip"
               onClick={() => handleUserClick(user)}
-            ></i>
+            ></FaUserEdit>
           </Link>
           <Link className="text-danger" to="#">
             <i
               className="mdi mdi-delete font-size-18"
               id="deletetooltip"
-              onClick={() => handleDeleteUser(user)}
+              onClick={() => {
+                setDeleteAlert(true);
+                setDeleteRow(user);
+              }}
             ></i>
           </Link>
         </div>
@@ -221,11 +220,12 @@ const EmployeeManagement = (props) => {
       setTimeout(() => {
         setUserList(users);
         setIsEdit(false);
+        setDocsRequired(null);
+        setPhone("");
         document.body.classList.add("no_padding");
       }, 500);
     }
   };
-
   const handleUserClick = (arg) => {
     const user = arg;
     setUserList({
@@ -238,37 +238,24 @@ const EmployeeManagement = (props) => {
       mobile: user.emp_mobile_number,
       designation: user.emp_designation,
       role: user.emp_role,
+      group: user.emp_group,
       email: user.emp_email,
       startdate: user.emp_joining_date.split("T")[0],
       createdby: user.created_by,
       createddate: user.created_date,
       modifiedby: user.modified_by,
       modifieddate: user.modified_date,
+      ndadoc: user.emp_nda_document1,
+      bcdoc: user.emp_bc_document1,
+      certdoc: user.emp_cert_document1,
     });
     setIsEdit(true);
+    setPhone(user.emp_mobile_number);
     toggle();
   };
 
-  const handleDeleteUser = (user) => {
-    confirmAlert({
-      title: "Deleting Employee",
-      message: "Are you sure you want to delete this Employee?",
-      buttons: [
-        {
-          label: "Delete",
-          onClick: () => {
-            dispatch(onDeleteUser(user));
-            setResult(result);
-          },
-        },
-        {
-          label: "Cancel",
-          onClick: () => {
-            return false;
-          },
-        },
-      ],
-    });
+  const handleDeleteUser = () => {
+    dispatch(onDeleteUser(deleteRow));
   };
 
   /**
@@ -281,12 +268,13 @@ const EmployeeManagement = (props) => {
         employee_identifier: userList.employeeid,
         company_identifier: userList.companyid,
         emp_designation: values["employeetype"],
-        emp_role: values["role"],
+        emp_role: userList.role,
+        emp_group: values["employeegroup"],
         emp_first_name: values["fname"],
         emp_last_name: values["lname"],
         emp_email: values["email"],
-        emp_office_phone: values["mobile"],
-        emp_mobile_number: values["mobile"],
+        emp_office_phone: phone,
+        emp_mobile_number: phone,
         emp_joining_date: new Date(
           values["startdate"].split("-")[0],
           values["startdate"].split("-")[1],
@@ -294,18 +282,17 @@ const EmployeeManagement = (props) => {
         )
           .toISOString()
           .slice(0, 19),
-        modified_date: new Date().toISOString().slice(0, 19),
-        modified_by: JSON.parse(localStorage.getItem("authUser")).username,
-        created_date: userList.createddate,
-        created_by: userList.createdby,
+        emp_bc_document1: userList.bcdoc,
+        emp_nda_document1: userList.ndadoc,
+        emp_cert_document1: userList.certdoc,
+        associated_assets: assetsSelected.toString(),
       };
 
       // update user
       dispatch(onUpdateUser(updateUser));
       setIsEdit(false);
-      setResult(result);
-      console.log(results, "jksdfgiuwenbkjwpowqpo");
     } else {
+      setIsLoading(true);
       const newUser = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
           .companyID,
@@ -315,8 +302,8 @@ const EmployeeManagement = (props) => {
         emp_first_name: values["fname"],
         emp_last_name: values["lname"],
         emp_email: values["email"],
-        emp_office_phone: values["mobile"],
-        emp_mobile_number: values["mobile"],
+        emp_office_phone: phone,
+        emp_mobile_number: phone,
         emp_joining_date: new Date(
           values["startdate"].split("-")[0],
           values["startdate"].split("-")[1],
@@ -338,10 +325,16 @@ const EmployeeManagement = (props) => {
     }
     toggle();
   };
+  useEffect(() => {
+    if (result != null && result === "add user success") {
+      setIsLoading(false);
+    }
+  }, [result, isLoading]);
 
   const handleUserClicks = () => {
     setUserList("");
     setIsEdit(false);
+    setDocsRequired(null);
     toggle();
   };
   //const [selectedFiles, setselectedFiles] = useState([]);
@@ -370,11 +363,13 @@ const EmployeeManagement = (props) => {
 
   const empEmailChange = async (e) => {
     if (
-      e.target.value != "" &&
-      e.target.value != undefined &&
-      e.target.value != null
-    )
-      setIsEmpDuplicate(await empDuplicateCheck(e.target.value));
+      e.target.value !== "" &&
+      e.target.value !== undefined &&
+      e.target.value !== null
+    ) {
+      const isexists = await empDuplicateCheck(e.target.value);
+      setIsEmpDuplicate(isexists);
+    }
   };
 
   let assetlist = [];
@@ -385,8 +380,54 @@ const EmployeeManagement = (props) => {
     };
   }
 
+  const handleRoleChange = (e) => {
+    const final = rolesList.filter(
+      (role) => role.role_identifier === e.target.value
+    );
+    setDocsRequired(final[0]);
+  };
+
+  useEffect(() => {}, [docsRequired]);
+  const handleInput = (e) => {
+    console.log(e.target.value, "phone");
+    setPhone(e.target.value);
+  };
+
+  //Toasts
+  if (result === "Employee Deleted") {
+    toast("Employee Deleted Successfully !", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      autoClose: 2000,
+      toastId: "009",
+    });
+  }
+
   return (
     <React.Fragment>
+      <SweetAlert
+        title="Are you sure want to Delete"
+        custom
+        showConfirm
+        showCancel
+        confirmBtnBsStyle="danger"
+        confirmBtnText="Delete"
+        cancelBtnText="Cancel"
+        cancelBtnBsStyle="light"
+        customIcon={""}
+        onConfirm={() => {
+          setDeleteAlert(false);
+          handleDeleteUser(deleteRow);
+        }}
+        onCancel={() => {
+          setDeleteAlert(false);
+        }}
+        show={deleteAlert}
+      />
+      <Loading
+        loading={isLoading}
+        background="#ffffffcc"
+        loaderColor="#5156be"
+      />
       <div className="page-content">
         <MetaTags>
           <title>Employee Management | Crossleaf - Access Management</title>
@@ -394,6 +435,7 @@ const EmployeeManagement = (props) => {
         <Container fluid>
           {/* Render Breadcrumbs */}
           <Breadcrumbs title="Employees" breadcrumbItem="Employee List" />
+          <ToastContainer />
           <Row>
             <Col lg="12">
               <Card>
@@ -492,7 +534,7 @@ const EmployeeManagement = (props) => {
                                                     label="First Name"
                                                     type="text"
                                                     placeholder="employee first name"
-                                                    errorMessage="please provide valid first name"
+                                                    errormessage="please provide valid first name"
                                                     maxLength="15"
                                                     validate={{
                                                       required: { value: true },
@@ -508,7 +550,7 @@ const EmployeeManagement = (props) => {
                                                     label="Last Name"
                                                     type="text"
                                                     placeholder="employee last name"
-                                                    errorMessage="please provide valid last name"
+                                                    errormessage="please provide valid last name"
                                                     maxLength="15"
                                                     validate={{
                                                       required: { value: true },
@@ -526,58 +568,38 @@ const EmployeeManagement = (props) => {
                                                     label="Email"
                                                     type="email"
                                                     placeholder="acs@crossleaf.ca"
-                                                    errorMessage={
+                                                    errormessage={
                                                       "please provide valid Email"
                                                     }
-                                                    //   isEmpDuplicate !== "" &&
-                                                    //   isEmpDuplicate === true
-                                                    //     ? "User Already Exists"
-                                                    //     : "please provide valid Email"
-                                                    // }
                                                     maxLength="75"
                                                     validate={{
+                                                      match: {
+                                                        value: isEmpDuplicate,
+                                                        errorMessage:
+                                                          "Email already exists!",
+                                                      },
                                                       required: {
                                                         value: true,
                                                       },
                                                     }}
                                                     value={userList.email || ""}
-                                                    // onChange={empEmailChange}
+                                                    onChange={empEmailChange}
                                                   />
-                                                  {isEmpDuplicate && (
-                                                    <p className="error">
-                                                      {"User Already Exists"}
-                                                    </p>
-                                                  )}
                                                 </div>
                                               </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">
-                                                  {/* <AvField
-                                                    name="mobile"
-                                                    label="Phone"
-                                                    type="tel"
-                                                    placeholder="(999)999-9999"
-                                                    errorMessage="please provide valid Phone Number"
-                                                    maxLength="10"
-                                                    validate={{
-                                                      required: {
-                                                        value: true,
-                                                        tel: true,
-                                                      },
-                                                    }}
-                                                    value={
-                                                      userList.mobile || ""
-                                                    }
-                                                  /> */}
                                                   <Label>Phone</Label>
                                                   <InputMask
-                                                    name="mobile"
+                                                    value={phone || ""}
+                                                    onChange={handleInput}
                                                     mask="(999) 999-9999"
-                                                    value={props.value}
-                                                    className="form-control input-color"
-                                                    onChange={props.onChange}
-                                                    errorMessage="please provide valid Phone Number"
-                                                    required
+                                                    alwaysShowMask={true}
+                                                    className="form-control
+                                                    input-color"
+                                                    errormessage="please provide
+                                                    valid Phone Number"
+                                                    required={true}
                                                   ></InputMask>
                                                 </div>
                                               </Col>
@@ -592,7 +614,7 @@ const EmployeeManagement = (props) => {
                                                     label="Employee Type"
                                                     multiple={false}
                                                     required
-                                                    errorMessage="please select employee type"
+                                                    errormessage="please select employee type"
                                                     value={
                                                       userList.designation || ""
                                                     }
@@ -617,10 +639,8 @@ const EmployeeManagement = (props) => {
                                                     label="Employee Group"
                                                     multiple={false}
                                                     required
-                                                    errorMessage="please select employee group"
-                                                    value={
-                                                      groupList.group_name || ""
-                                                    }
+                                                    errormessage="please select employee group"
+                                                    value={userList.group || ""}
                                                   >
                                                     <option value="">
                                                       Select Employee Group
@@ -681,11 +701,14 @@ const EmployeeManagement = (props) => {
                                                     name="role"
                                                     className="form-select"
                                                     label="Role"
-                                                    errorMessage="please select employee role"
+                                                    errormessage="please select employee role"
                                                     multiple={false}
+                                                    disabled={
+                                                      isEdit ? true : false
+                                                    }
                                                     required
                                                     value={userList.role || ""}
-                                                    //onChange={handleRoleChange()}
+                                                    onChange={handleRoleChange}
                                                   >
                                                     <option value="">
                                                       Select Employee Role
@@ -693,7 +716,9 @@ const EmployeeManagement = (props) => {
                                                     {rolesList.map((role) => (
                                                       <option
                                                         key={role.id}
-                                                        value={role.identifier}
+                                                        value={
+                                                          role.role_identifier
+                                                        }
                                                       >
                                                         {role.role_name}
                                                       </option>
@@ -710,7 +735,7 @@ const EmployeeManagement = (props) => {
                                                     placeholder="99/99/9999"
                                                     // disabled={true}
                                                     //mask="99/99/9999"
-                                                    errorMessage="please provide valid Date"
+                                                    errormessage="please provide valid Date"
                                                     validate={{
                                                       required: { value: true },
                                                     }}
@@ -721,145 +746,102 @@ const EmployeeManagement = (props) => {
                                                 </div>
                                               </Col>
                                             </Row>
-                                            <Row>
-                                              {/* <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    type="select"
-                                                    name="nda"
-                                                    className="form-select"
-                                                    label="Is NDA required"
-                                                    errorMessage="please select nda required?"
-                                                    multiple={false}
-                                                    required
-                                                    value={userList.nda || ""}
-                                                  >
-                                                    <option value="">
-                                                      Select NDA Required
-                                                    </option>
-                                                    <option>Required</option>
-                                                    <option>
-                                                      Not Required
-                                                    </option>
-                                                  </AvField>
-                                                </div>
-                                              </Col> */}
-                                              <Col xs={12}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    name="ndafile"
-                                                    label="NDA Required Files"
-                                                    inputClass="form-control"
-                                                    type="file"
-                                                    placeholder="choose NDA Required Files"
-                                                    errorMessage="please provide valid file"
-                                                    validate={{
-                                                      required: { value: true },
-                                                    }}
-                                                    onChange={(e) => {
-                                                      setSelectedNdaFile(
-                                                        e.target.files[0]
-                                                      );
-                                                    }}
-                                                    value={""}
-                                                  />
-                                                </div>
-                                              </Col>
-                                            </Row>
-                                            <Row>
-                                              {/* <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    type="select"
-                                                    name="bc"
-                                                    className="form-select"
-                                                    label="Is BC required"
-                                                    errorMessage="please select bc required?"
-                                                    multiple={false}
-                                                    required
-                                                    value={userList.bc || ""}
-                                                  >
-                                                    <option value="">
-                                                      Select BC Required
-                                                    </option>
-                                                    <option>Required</option>
-                                                    <option>
-                                                      Not Required
-                                                    </option>
-                                                  </AvField>
-                                                </div>
-                                              </Col> */}
-                                              <Col xs={12}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    name="bcfile"
-                                                    label="BC Required Files"
-                                                    inputClass="form-control"
-                                                    type="file"
-                                                    placeholder="choose BC Required Files"
-                                                    errormessage="please provide valid file"
-                                                    validate={{
-                                                      required: { value: true },
-                                                    }}
-                                                    onChange={(e) =>
-                                                      setSelectedBcFile(
-                                                        e.target.files[0]
-                                                      )
-                                                    }
-                                                    value={""}
-                                                  />
-                                                </div>
-                                              </Col>
-                                            </Row>
-                                            <Row>
-                                              {/* <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    type="select"
-                                                    name="certificate"
-                                                    className="form-select"
-                                                    label="Is Certificates required?"
-                                                    errorMessage="please select certificates required"
-                                                    multiple={false}
-                                                    required
-                                                    value={
-                                                      userList.certificates ||
-                                                      ""
-                                                    }
-                                                  >
-                                                    <option value="">
-                                                      Select Certificates
-                                                      Required
-                                                    </option>
-                                                    <option>Required</option>
-                                                    <option>
-                                                      Not Required
-                                                    </option>
-                                                  </AvField>
-                                                </div>
-                                              </Col> */}
-                                              <Col xs={12}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    name="certificatefile"
-                                                    label="Certificate Required Files"
-                                                    inputClass="form-control"
-                                                    type="file"
-                                                    placeholder="choose Certificate Required Files"
-                                                    errormessage="please provide valid file"
-                                                    validate={{
-                                                      required: { value: true },
-                                                    }}
-                                                    onChange={(e) =>
-                                                      setSelectedCertificateFile(
-                                                        e.target.files[0]
-                                                      )
-                                                    }
-                                                    value={""}
-                                                  />
-                                                </div>
-                                              </Col>
-                                            </Row>
+                                            {!isEdit &&
+                                            docsRequired?.is_nda_required !=
+                                              null &&
+                                            docsRequired?.is_nda_required ? (
+                                              <Row>
+                                                <Col xs={12}>
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="ndafile"
+                                                      label="NDA Required Files"
+                                                      inputClass="form-control"
+                                                      type="file"
+                                                      placeholder="choose NDA Required Files"
+                                                      errormessage="please provide valid file"
+                                                      validate={{
+                                                        required: {
+                                                          value: true,
+                                                        },
+                                                      }}
+                                                      onChange={(e) => {
+                                                        setSelectedNdaFile(
+                                                          e.target.files[0]
+                                                        );
+                                                      }}
+                                                      value={""}
+                                                    />
+                                                  </div>
+                                                </Col>
+                                              </Row>
+                                            ) : (
+                                              ""
+                                            )}
+                                            {!isEdit &&
+                                            docsRequired?.is_bc_required !=
+                                              null &&
+                                            docsRequired?.is_bc_required ? (
+                                              <Row>
+                                                <Col xs={12}>
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="bcfile"
+                                                      label="BC Required Files"
+                                                      inputClass="form-control"
+                                                      type="file"
+                                                      placeholder="choose BC Required Files"
+                                                      errormessage="please provide valid file"
+                                                      validate={{
+                                                        required: {
+                                                          value: true,
+                                                        },
+                                                      }}
+                                                      onChange={(e) =>
+                                                        setSelectedBcFile(
+                                                          e.target.files[0]
+                                                        )
+                                                      }
+                                                      value={""}
+                                                    />
+                                                  </div>
+                                                </Col>
+                                              </Row>
+                                            ) : (
+                                              ""
+                                            )}
+                                            {!isEdit &&
+                                            docsRequired?.is_certification_required !=
+                                              null &&
+                                            docsRequired?.is_certification_required ? (
+                                              <Row>
+                                                <Col xs={12}>
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="certificatefile"
+                                                      label="Certificate Required Files"
+                                                      inputClass="form-control"
+                                                      type="file"
+                                                      placeholder="choose Certificate Required Files"
+                                                      errormessage="please provide valid file"
+                                                      validate={{
+                                                        required: {
+                                                          value: true,
+                                                        },
+                                                      }}
+                                                      onChange={(e) =>
+                                                        setSelectedCertificateFile(
+                                                          e.target.files[0]
+                                                        )
+                                                      }
+                                                      value={""}
+                                                    />
+                                                  </div>
+                                                </Col>
+                                              </Row>
+                                            ) : (
+                                              ""
+                                            )}
                                             <Row>
                                               <Col xs={12}>
                                                 <div className="mb-3">

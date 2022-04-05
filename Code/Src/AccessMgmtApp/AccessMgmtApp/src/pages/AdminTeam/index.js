@@ -10,22 +10,22 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  Label,
 } from "reactstrap";
-
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
 } from "react-bootstrap-table2-paginator";
-
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-
-//Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
-
-import { confirmAlert } from "react-confirm-alert"; // Import
-import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import InputMask from "react-input-mask";
+import SweetAlert from "react-bootstrap-sweetalert";
+import { FaUserEdit } from "react-icons/fa";
+import { TiUserDelete } from "react-icons/ti";
 import {
   getApprovers as onGetApprovers,
   addNewApprover as onAddNewApprover,
@@ -34,24 +34,29 @@ import {
   getRoles as onGetRoles,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
-
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-const AdminTeam = (props) => {
+import { approverDuplicateCheck } from "../../helpers/fakebackend_helper";
+
+const AdminTeam = () => {
   const dispatch = useDispatch();
 
-  const { approvers } = useSelector((state) => ({
+  let { approvers, result } = useSelector((state) => ({
     approvers: state.contacts.approvers,
+    result: state.contacts.result,
   }));
   const { roles } = useSelector((state) => ({
     roles: state.contacts.roles,
   }));
 
-  const [approverList, setApproverList] = useState([]);
-  const [rolesList, setRolesList] = useState([]);
-  const [modal, setModal] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
+  const [approverList, setApproverList] = useState([]),
+    [rolesList, setRolesList] = useState([]),
+    [modal, setModal] = useState(false),
+    [isEdit, setIsEdit] = useState(false),
+    [isEmpDuplicate, setIsEmpDuplicate] = useState(""),
+    [phone, setPhone] = useState(""),
+    [deleteAlert, setDeleteAlert] = useState(false),
+    [deleteRow, setDeleteRow] = useState(false);
 
   const { SearchBar } = Search;
 
@@ -89,7 +94,6 @@ const AdminTeam = (props) => {
           <h5 className="font-size-14 mb-1 text-dark">
             {approver.approver_first_name} {approver.approver_last_name}
           </h5>
-          {/* <p className="text-muted mb-0">{approver.designation}</p> */}
         </>
       ),
     },
@@ -97,9 +101,6 @@ const AdminTeam = (props) => {
       dataField: "approver_role_name",
       text: "User Role",
       sort: true,
-      // formatter: (cellContent, approver) => (
-      //   <>{getRoleName(approver.approver_role)?.role_name}</>
-      // ),
     },
     {
       dataField: "approver_email",
@@ -122,17 +123,20 @@ const AdminTeam = (props) => {
       formatter: (cellContent, approver) => (
         <div className="d-flex gap-3">
           <Link className="text-success" to="#">
-            <i
-              className="mdi mdi-pencil font-size-18"
+            <FaUserEdit
+              className="font-size-18"
               id="edittooltip"
               onClick={() => handleApproverClick(approver)}
-            ></i>
+            ></FaUserEdit>
           </Link>
           <Link className="text-danger" to="#">
             <i
               className="mdi mdi-delete font-size-18"
               id="deletetooltip"
-              onClick={() => handleDeleteApprover(approver)}
+              onClick={() => {
+                setDeleteAlert(true);
+                setDeleteRow(approver);
+              }}
             ></i>
           </Link>
         </div>
@@ -149,7 +153,6 @@ const AdminTeam = (props) => {
 
   useEffect(() => {
     setRolesList(roles);
-    //setIsEdit(false);
   }, [roles]);
 
   useEffect(() => {
@@ -170,6 +173,7 @@ const AdminTeam = (props) => {
       setTimeout(() => {
         setApproverList(approvers);
         setIsEdit(false);
+        setPhone("");
       }, 500);
     }
   };
@@ -189,30 +193,13 @@ const AdminTeam = (props) => {
       status: approver.is_active,
       rolename: approver.approver_role_name,
     });
+    setPhone(approver.approver_mobile_number);
     setIsEdit(true);
-
     toggle();
   };
 
   const handleDeleteApprover = (approver) => {
-    confirmAlert({
-      title: "Deleting User",
-      message: "Are you sure you want to delete this User?",
-      buttons: [
-        {
-          label: "Delete",
-          onClick: () => {
-            dispatch(onDeleteApprover(approver));
-          },
-        },
-        {
-          label: "Cancel",
-          onClick: () => {
-            return false;
-          },
-        },
-      ],
-    });
+    dispatch(onDeleteApprover(approver));
   };
 
   /**
@@ -225,16 +212,15 @@ const AdminTeam = (props) => {
         company_identifier: approverList.companyidentifier,
         approver_first_name: values["fname"],
         approver_last_name: values["lname"],
-        approver_email: values["email"],
-        approver_mobile_number: values["mobile"],
-        approver_office_phone: values["mobile"],
+        approver_email: approverList.email,
+        approver_mobile_number: phone,
+        approver_office_phone: phone,
         approver_role: values["designation"],
         is_active: approverList.status,
       };
-      console.log(moment(values["startdate"]).format().slice(0, 19));
-      // update approver
       dispatch(onUpdateApprover(updateApprover));
       setIsEdit(false);
+      setPhone("");
     } else {
       const newApprover = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
@@ -242,35 +228,72 @@ const AdminTeam = (props) => {
         approver_first_name: values["fname"],
         approver_last_name: values["lname"],
         approver_email: values["email"],
-        approver_mobile_number: values["mobile"],
-        approver_office_phone: values["mobile"],
+        approver_mobile_number: phone,
+        approver_office_phone: phone,
         approver_role: values["designation"],
       };
-      // save new approver
       dispatch(onAddNewApprover(newApprover));
+      setPhone("");
     }
     toggle();
   };
-  const handleApproverClicks = () => {
+
+  const handleAddApproverClick = () => {
     setApproverList("");
     setIsEdit(false);
     toggle();
   };
 
-  const getRoleName = async (id) => {
-    debugger;
-    const rolename = await fetch(`https://localhost:5001/api/Role/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await rolename.json();
-    console.log(data, "872634g23jhgeigwjerwmbw,bddfhjfjhwgejwgejweg");
-    return data;
+  //DuplicateEmailCheck
+  const empEmailChange = async (e) => {
+    setIsEmpDuplicate();
+    if (
+      e.target.value !== "" &&
+      e.target.value !== undefined &&
+      e.target.value != null
+    ) {
+      const empEmail = await approverDuplicateCheck(e.target.value);
+      setIsEmpDuplicate(empEmail);
+    }
   };
+
+  //setting masked Phone number
+  const handleInput = (e) => {
+    setPhone(e.target.value);
+  };
+
+  //Delete Toasts
+  if (result === "approver delete success") {
+    toast("Asset Deleted Successfully !", {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2000,
+      toastId: "007",
+    });
+    result = "";
+  }
+
   return (
     <React.Fragment>
+      <SweetAlert
+        title="Are you sure want to Delete"
+        custom
+        showConfirm
+        showCancel
+        confirmBtnBsStyle="danger"
+        confirmBtnText="Delete"
+        cancelBtnText="Cancel"
+        cancelBtnBsStyle="light"
+        customIcon={""}
+        onConfirm={() => {
+          setDeleteAlert(false);
+          handleDeleteApprover(deleteRow);
+        }}
+        onCancel={() => {
+          setDeleteAlert(false);
+        }}
+        show={deleteAlert}
+      />
+
       <div className="page-content">
         <MetaTags>
           <title>Users | Crossleaf - Access Management</title>
@@ -278,6 +301,7 @@ const AdminTeam = (props) => {
         <Container fluid>
           {/* Render Breadcrumbs */}
           <Breadcrumbs title="Users" breadcrumbItem="Users List" />
+          <ToastContainer />
           <Row>
             <Col lg="12">
               <Card>
@@ -316,7 +340,7 @@ const AdminTeam = (props) => {
                                       <Link
                                         to="#"
                                         className="btn btn-light"
-                                        onClick={handleApproverClicks}
+                                        onClick={handleAddApproverClick}
                                       >
                                         <i className="bx bx-plus me-1"></i> Add
                                         User
@@ -412,34 +436,38 @@ const AdminTeam = (props) => {
                                                     placeholder="acs@crossleaf.ca"
                                                     type="email"
                                                     errorMessage="please provide valid Email"
+                                                    disabled={
+                                                      isEdit ? true : false
+                                                    }
                                                     validate={{
+                                                      match: {
+                                                        value: isEmpDuplicate,
+                                                        errorMessage:
+                                                          "Email already exists!",
+                                                      },
                                                       required: { value: true },
                                                     }}
                                                     value={
                                                       approverList.email || ""
                                                     }
+                                                    onChange={empEmailChange}
                                                   />
                                                 </div>
                                               </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">
-                                                  <AvField
-                                                    name="mobile"
-                                                    label="User Phone"
-                                                    type="tel"
-                                                    placeholder="(999)999-9999"
-                                                    errorMessage="please provide valid Phone Number"
-                                                    maxlength="10"
-                                                    validate={{
-                                                      required: {
-                                                        value: true,
-                                                        tel: true,
-                                                      },
-                                                    }}
-                                                    value={
-                                                      approverList.mobile || ""
-                                                    }
-                                                  />
+                                                  <Label>User Phone</Label>
+                                                  <InputMask
+                                                    value={phone || ""}
+                                                    onChange={handleInput}
+                                                    mask="(999) 999-9999"
+                                                    alwaysShowMask={true}
+                                                    className="form-control
+                                                    input-color"
+                                                    errormessage="please provide
+                                                    valid Phone Number"
+                                                    required={true}
+                                                  ></InputMask>
                                                 </div>
                                               </Col>
                                             </Row>

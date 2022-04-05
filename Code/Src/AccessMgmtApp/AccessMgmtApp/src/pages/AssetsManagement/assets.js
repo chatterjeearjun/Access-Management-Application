@@ -12,7 +12,6 @@ import {
   ModalBody,
   Input,
   Label,
-  UncontrolledAlert,
 } from "reactstrap";
 
 import paginationFactory, {
@@ -43,14 +42,11 @@ import moment from "moment";
 
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-
+import Loading from "react-fullscreen-loading";
 import { getAssetsAssociation } from "../../helpers/fakebackend_helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import filterFactory, { selectFilter } from "react-bootstrap-table2-filter";
-import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
-// import LoadingOverlay from "react-loading-overlay";
-// import BounceLoader from "react-spinners/BounceLoader";
+
 const AssetsManagement = (props) => {
   const dispatch = useDispatch();
 
@@ -66,13 +62,19 @@ const AssetsManagement = (props) => {
   const [selectedOwner, setSelectedOwner] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   //const [isLoader, setIsLoader] = useState(false);
+  // Array options
+  const selectOptionsArr = [];
+
+  for (var i = 0; i < assetList?.length; i++) {
+    selectOptionsArr[i] = {
+      label: assetList[i]?.name,
+      value: assetList[i]?.assetid,
+    };
+  }
 
   const { SearchBar } = Search;
-  let selectOptions = [];
-  const { filter } = selectFilter({
-    options: selectOptions,
-  });
 
   const pageOptions = {
     sizePerPage: 10,
@@ -108,6 +110,12 @@ const AssetsManagement = (props) => {
       text: "Serial No",
       dataField: "asset_id",
       sort: true,
+      // formatter: (cell, asset) =>
+      //   selectOptionsArr.filter((opt) => opt.value === asset.id)[0]?.label ||
+      //   "",
+      // filter: selectFilter({
+      //   options: selectOptionsArr,
+      // }),
     },
     {
       text: "Asset Name",
@@ -165,7 +173,7 @@ const AssetsManagement = (props) => {
         <div className="d-flex gap-3">
           <Link
             className="text-primary"
-            to={`assetoverview?${asset.asset_identifier}`}
+            to={`AssetOverview?${asset.asset_identifier}`}
           >
             <i className="mdi mdi-eye font-size-18" id="viewtooltip"></i>
           </Link>
@@ -311,7 +319,7 @@ const AssetsManagement = (props) => {
       dispatch(onUpdateAsset(updateAsset));
       setIsEdit(false);
     } else {
-      //setIsLoader(true);
+      setIsLoading(true);
       const newAsset = {
         company_identifier: JSON.parse(localStorage.getItem("authUser"))
           .companyID,
@@ -345,6 +353,12 @@ const AssetsManagement = (props) => {
     }
     toggle();
   };
+  useEffect(() => {
+    if (result != null && result === "Add Asset Success") {
+      setIsLoading(false);
+    }
+  }, [result, isLoading]);
+
   const handleAssetClicks = () => {
     setAssetList("");
     setIsEdit(false);
@@ -367,17 +381,22 @@ const AssetsManagement = (props) => {
   // if (result === "Asset Added") {
   //   setIsLoader(false);
   // }
-  if (assetList.length > 0) {
-    console.log(assetList, "hsdgfiuywehwkej76");
-    for (var i = 0; i < assetList.length; i++) {
-      selectOptions[i] = {
-        label: assetList[i]?.name,
-        value: assetList[i]?.name,
-      };
-    }
-  }
+  // if (assetList.length > 0) {
+  //   console.log(assetList, "hsdgfiuywehwkej76");
+  //   for (var i = 0; i < assetList.length; i++) {
+  //     selectOptions[i] = {
+  //       label: assetList[i]?.name,
+  //       value: assetList[i]?.name,
+  //     };
+  //   }
+  // }
   return (
     <React.Fragment>
+      <Loading
+        loading={isLoading}
+        background="#ffffffcc"
+        loaderColor="#5156be"
+      />
       <div className="page-content">
         <MetaTags>
           <title>Assets | Crossleaf - Access Management</title>
@@ -464,6 +483,8 @@ const AssetsManagement = (props) => {
                                     headerWrapperClasses={"thead-dark"}
                                     {...toolkitProps.baseProps}
                                     {...paginationTableProps}
+                                    columnFilter
+                                    // filter={filterFactory()}
                                   />
 
                                   <Modal

@@ -135,6 +135,12 @@ const SidebarContent = (props) => {
                 <span>{props.t("Groups Management")}</span>
               </Link>
             </li>
+            <li>
+              <Link to="/RequiredDocuments" className="">
+                <FeatherIcon icon="package" />
+                <span>{props.t("Required Documents")}</span>
+              </Link>
+            </li>
 
             {/* <li>
               <Link to="/#" className="has-arrow">

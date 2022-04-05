@@ -49,6 +49,7 @@ const assetsManagement = (state = INIT_STATE, action) => {
       return {
         ...state,
         assets: [...state.assets, action.payload],
+        result: "Add Asset Success",
       };
 
     case ADD_ASSET_FAIL:
@@ -74,7 +75,6 @@ const assetsManagement = (state = INIT_STATE, action) => {
       };
 
     case DELETE_ASSET_SUCCESS:
-      debugger;
       return {
         ...state,
         assets: state.assets.filter(

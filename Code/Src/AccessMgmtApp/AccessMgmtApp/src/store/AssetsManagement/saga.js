@@ -64,8 +64,7 @@ function* onUpdateAsset({ payload: asset }) {
 function* onDeleteAsset({ payload: user }) {
   try {
     yield call(deleteAsset, user);
-    const res = yield put(deleteAssetSuccess(user));
-    console.log(res, "result........");
+    yield put(deleteAssetSuccess(user));
   } catch (error) {
     yield put(deleteAssetFail(error));
   }

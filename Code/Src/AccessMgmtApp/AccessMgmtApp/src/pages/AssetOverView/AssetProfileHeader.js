@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
@@ -12,9 +12,30 @@ import {
 } from "reactstrap";
 import classnames from "classnames";
 import OverviewTab from "./overview";
+import EmpToAssets from "./EmpToAssets";
+import AssetAttachments from "./Attchmemnts";
+import { ASSET_TO_EMP } from "../../helpers/url_helper";
 
 const AssetInfo = (props) => {
-  console.log(props, "propsinfo");
+  const [activeTab, toggleTab] = useState("1");
+  const [employeeData, setEmployeedata] = useState([]);
+  const assetid = window.location.search.slice(1);
+
+  const empData = async () => {
+    const res = await fetch(
+      `https://localhost:5001${ASSET_TO_EMP(
+        assetid,
+        JSON.parse(localStorage.getItem("authUser")).companyID
+      )}`,
+      { method: "POST" }
+    );
+    const data = await res.json();
+    setEmployeedata(data);
+  };
+  if (employeeData.length === 0) {
+    empData();
+  }
+
   return (
     <React.Fragment>
       <Row>
@@ -56,27 +77,62 @@ const AssetInfo = (props) => {
                     to="#"
                     className={classnames(
                       {
-                        active: true,
+                        active: activeTab === "1",
                       },
                       "px-3"
                     )}
+                    onClick={() => {
+                      toggleTab("1");
+                    }}
                   >
                     Overview
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    to="#"
+                    className={classnames(
+                      {
+                        active: activeTab === "2",
+                      },
+                      "px-3"
+                    )}
+                    onClick={() => {
+                      toggleTab("2");
+                    }}
+                  >
+                    Mappings
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                    to="#"
+                    className={classnames(
+                      {
+                        active: activeTab === "3",
+                      },
+                      "px-3"
+                    )}
+                    onClick={() => {
+                      toggleTab("3");
+                    }}
+                  >
+                    Attachments
                   </NavLink>
                 </NavItem>
               </Nav>
             </CardBody>
           </Card>
-          <TabContent activeTab={"1"}>
+          <TabContent activeTab={activeTab}>
             <TabPane tabId="1">
               <OverviewTab data={props?.data} />
             </TabPane>
-            {/* <TabPane tabId="2">
-              <ProfileTab2 />
+            <TabPane tabId="2">
+              <EmpToAssets data={employeeData} />
             </TabPane>
             <TabPane tabId="3">
-              <ProfileTab3 />
-            </TabPane> */}
+              <AssetAttachments data={props?.data} />
+            </TabPane>
           </TabContent>
         </Col>
       </Row>

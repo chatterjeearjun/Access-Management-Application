@@ -1,22 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  Col,
-  Row,
-  Button,
-  UncontrolledTooltip,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, CardTitle, Col, Row } from "reactstrap";
 import moment from "moment";
 import { ASSET_TO_EMP } from "../../helpers/url_helper";
 
 const OverviewTab = (props) => {
-  // const downloadFile = (file) => {
-  //   saveAs(file, file?.split("/Asset/")[1]);
-  // };
   const [employeeData, setEmployeedata] = useState([]);
   const assetid = window.location.search.slice(1);
 
@@ -35,7 +22,6 @@ const OverviewTab = (props) => {
     empData();
   }
 
-  console.log(employeeData, "employeeData");
   return (
     <React.Fragment>
       <Row>
@@ -124,105 +110,7 @@ const OverviewTab = (props) => {
             </CardBody>
           </Card>
         </Col>
-        <Col>
-          <Card className="shadow-sm">
-            <CardHeader>
-              <CardTitle className="mb-0 h5">Asset Mappings</CardTitle>
-            </CardHeader>
-            <CardBody>
-              <div>
-                <div className="pb-3">
-                  <Row>
-                    <Col xs={12}>
-                      <h6>Asset Mapped To:</h6>
-                    </Col>
-                  </Row>
-                </div>
-                <div className="pb-3">
-                  <Row className="align-middle">
-                    <Col xs={12} className="border align-middle">
-                      <div className="m-2">
-                        {employeeData.map((data) => (
-                          <>
-                            <Link
-                              to={`/EmployeeProfile?${data.employee_identifier}`}
-                              className="badge badge-soft-primary m-1 p-1"
-                              id={`mappings${data.id}`}
-                            >
-                              {data.emp_first_name} {data.emp_last_name}
-                            </Link>
-                            <UncontrolledTooltip
-                              placement="top"
-                              target={`mappings${data.id}`}
-                            >
-                              {data.emp_email}
-                            </UncontrolledTooltip>
-                          </>
-                        ))}
-                      </div>
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
       </Row>
-      <Card className="shadow-sm">
-        <CardHeader>
-          <div className="d-flex">
-            <div className="flex-grow-1">
-              <CardTitle className="mb-0 h5">
-                Asset Description Attchments
-              </CardTitle>
-            </div>
-          </div>
-        </CardHeader>
-        <CardBody>
-          <div>
-            <Row>
-              <Col xl={4}>
-                <Card className="p-1 mb-xl-0">
-                  <div className="p-3">
-                    <div className="d-flex align-items-start">
-                      <div className="flex-grow-1 overflow-hidden">
-                        <h5 className="font-size-14 text-truncate">
-                          <Link to="#" className="text-dark">
-                            {
-                              props?.data?.asset_description_attachment?.split(
-                                "/Asset/"
-                              )[1]
-                            }
-                          </Link>
-                        </h5>
-                        <p className="font-size-13 text-muted mb-0">
-                          {moment(props?.data?.alocation_start_date).format(
-                            "DD-MM-YYYY"
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-3">
-                    <div>
-                      <Button
-                        className="btn btn-primary bg-primary"
-                        href={props?.data?.asset_description_attachment}
-                        download
-                        // onClick={downloadFile(
-                        //   props?.data?.asset_description_attachment
-                        // )}
-                      >
-                        <i className="mdi mdi-download"></i> Download
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-        </CardBody>
-      </Card>
     </React.Fragment>
   );
 };

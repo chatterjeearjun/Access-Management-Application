@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
 import MetaTags from "react-meta-tags";
 import { Container, Row } from "reactstrap";
-//import components
-import EmployeeProfileHeader from "./ProfileHeader";
-
-//Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import ProfileHeader from "./ProfileHeader";
 
-import { getEmployeeProfile as onGetEmployee } from "../../store/actions";
-//redux
-import { useSelector, useDispatch } from "react-redux";
-
-const EmployeeProfile = (props) => {
-  const dispatch = useDispatch();
+const EmployeeProfile = () => {
+  //apply base url for axios
+  const API_URL = "https://localhost:5001";
   const id = window.location.search.slice(1);
-  const { employee } = useSelector((state) => ({
-    employee: state.employeeProfileReducer.employee,
-  }));
+
   const [employeeData, setEmployeeData] = useState([]);
 
   useEffect(() => {
-    if (employee && !employee.length) {
-      dispatch(onGetEmployee(id));
-    }
+    const fetchData = async () => {
+      const response = await fetch(
+        `${API_URL}/api/Employee/${id !== null && id !== undefined ? id : ""}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const json = await response.json();
+      setEmployeeData(json);
+    };
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    setEmployeeData(employee);
-  }, [employee]);
-
-  return (
+  return employeeData != null && employeeData !== undefined ? (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
@@ -45,12 +45,14 @@ const EmployeeProfile = (props) => {
 
           <Row>
             {/* Render profilemenu */}
-            <EmployeeProfileHeader data={employeeData} />
+            <ProfileHeader data={employeeData} />
           </Row>
         </Container>
       </div>
     </React.Fragment>
+  ) : (
+    ""
   );
 };
 
-export default EmployeeProfile;
+export default withRouter(EmployeeProfile);
