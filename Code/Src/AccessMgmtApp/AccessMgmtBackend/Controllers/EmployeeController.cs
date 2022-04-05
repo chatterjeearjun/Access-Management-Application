@@ -390,8 +390,6 @@ namespace AccessMgmtBackend.Controllers
         [HttpPost]
         public async Task<Employee> EmployeeImageUpload([FromForm] EmployeePhotoUpload value)
         {
-            var listEmployees = new List<Employee>();
-
             if (!string.IsNullOrEmpty(value.employee_identifier) && !string.IsNullOrEmpty(value.company_identifier) && value.emp_profile_picture != null)
             {
                 var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier.ToString() == value.employee_identifier);
@@ -399,6 +397,9 @@ namespace AccessMgmtBackend.Controllers
                 {
                     UploadedFile employeeResponse = await PostUploadFile(value.emp_profile_picture, value.company_identifier,value.employee_identifier);
                     employeeStore.emp_profile_picture = employeeResponse?.file_identifier.ToString();
+                    _companyContext.Employees.Attach(employeeStore);
+                    _companyContext.Entry(employeeStore).Property(x => x.emp_profile_picture).IsModified = true;
+                    _companyContext.SaveChanges();
                 }
 
                 return employeeStore;
