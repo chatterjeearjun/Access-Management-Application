@@ -51,7 +51,7 @@ namespace AccessMgmtBackend.Controllers
             var group = new Group();
             group.created_date = DateTime.UtcNow;
             group.created_by = "Application";
-            group.is_active = true;
+            group.is_approved = true;
 
             if (value.group_description_attachment != null)
             {
@@ -113,9 +113,13 @@ namespace AccessMgmtBackend.Controllers
             var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier == value.group_identifier);
             if (group != null)
             {
-                _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
-                    (x => x.company_identifier == value.company_identifier && x.group_identifier == value.group_identifier.ToString()));
-                _companyContext.Groups.Remove(group);                
+                _companyContext.GroupToRoles.UpdateRange(_companyContext.GroupToRoles.Where
+                    (x => x.company_identifier == value.company_identifier && x.group_identifier == value.group_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                group.is_active = false;
+                group.modified_date = DateTime.UtcNow;
+                group.modified_by = "Application";
+                _companyContext.Groups.Update(group);                
                 _companyContext.SaveChanges();
                 return _companyContext.Groups.Where(x => x.company_identifier == value.company_identifier);
             }

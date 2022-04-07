@@ -27,11 +27,11 @@ namespace AccessMgmtBackend.Controllers
                 var assetToUser = _companyContext.AssetToUsers.FirstOrDefault(x => x.company_identifier == companyId && x.asset_identifier == assetId && x.user_identifier == UserId);
                 if (assetToUser != null)
                 {
-                    assetToUser.is_active = true;
+                    assetToUser.is_approved = true;
                     assetToUser.modified_date = DateTime.UtcNow;
                     assetToUser.modified_by = "Application";
                     _companyContext.AssetToUsers.Attach(assetToUser);
-                    _companyContext.Entry(assetToUser).Property(x => x.is_active).IsModified = true;
+                    _companyContext.Entry(assetToUser).Property(x => x.is_approved).IsModified = true;
                     _companyContext.Entry(assetToUser).Property(x => x.modified_date).IsModified = true;
                     _companyContext.Entry(assetToUser).Property(x => x.modified_by).IsModified = true;
                     _companyContext.SaveChanges();
@@ -54,11 +54,11 @@ namespace AccessMgmtBackend.Controllers
                 var assetToRole = _companyContext.AssetToRoles.FirstOrDefault(x => x.company_identifier == companyId && x.asset_identifier == assetId && x.role_identifier == RoleId);
                 if (assetToRole != null)
                 {
-                    assetToRole.is_active = true;
+                    assetToRole.is_approved = true;
                     assetToRole.modified_date = DateTime.UtcNow;
                     assetToRole.modified_by = "Application";
                     _companyContext.AssetToRoles.Attach(assetToRole);
-                    _companyContext.Entry(assetToRole).Property(x => x.is_active).IsModified = true;
+                    _companyContext.Entry(assetToRole).Property(x => x.is_approved).IsModified = true;
                     _companyContext.Entry(assetToRole).Property(x => x.modified_date).IsModified = true;
                     _companyContext.Entry(assetToRole).Property(x => x.modified_by).IsModified = true;
                     _companyContext.SaveChanges();
@@ -81,11 +81,11 @@ namespace AccessMgmtBackend.Controllers
                 var assetToEmployee = _companyContext.AssetToEmployees.FirstOrDefault(x => x.company_identifier == companyId && x.asset_identifier == assetId && x.employee_identifier == EmployeeId);
                 if (assetToEmployee != null)
                 {
-                    assetToEmployee.is_active = true;
+                    assetToEmployee.is_approved = true;
                     assetToEmployee.modified_date = DateTime.UtcNow;
                     assetToEmployee.modified_by = "Application";
                     _companyContext.AssetToEmployees.Attach(assetToEmployee);
-                    _companyContext.Entry(assetToEmployee).Property(x => x.is_active).IsModified = true;
+                    _companyContext.Entry(assetToEmployee).Property(x => x.is_approved).IsModified = true;
                     _companyContext.Entry(assetToEmployee).Property(x => x.modified_date).IsModified = true;
                     _companyContext.Entry(assetToEmployee).Property(x => x.modified_by).IsModified = true;
                     _companyContext.SaveChanges();

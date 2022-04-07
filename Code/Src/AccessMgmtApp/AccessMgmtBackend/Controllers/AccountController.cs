@@ -64,13 +64,13 @@ namespace AccessMgmtBackend.Controllers
                             associated_assets = model.associated_assets,
                             user_role = model.user_role,
                             user_group = model.user_group,
-                            is_active = model.is_active
+                            is_approved = model.is_approved
                         };
                         var response = request.AppUserPostEndpoint("api/appuser", appuser);
                         if (response.Result.IsSuccessStatusCode)
                         {
                             AppUser userResponse = await response.Result.Content.ReadAsAsync<AppUser>();
-                            Console.WriteLine("Id:{0}\tName:{1}", userResponse.id, userResponse.is_active);
+                            Console.WriteLine("Id:{0}\tName:{1}", userResponse.id, userResponse.is_approved);
                         }
                         else
                         {

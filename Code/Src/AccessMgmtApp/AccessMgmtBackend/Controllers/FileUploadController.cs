@@ -47,7 +47,7 @@ namespace AccessMgmtBackend.Controllers
                         uploadedFile.upload_category = file.upload_category;
                         uploadedFile.created_date = DateTime.UtcNow;
                         uploadedFile.created_by = "Application";
-                        uploadedFile.is_active = true;
+                        uploadedFile.is_approved = true;
                         _companyContext.UploadedFiles.Add(uploadedFile);
                         _companyContext.SaveChanges();
                     }

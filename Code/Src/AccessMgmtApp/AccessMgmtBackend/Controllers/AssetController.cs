@@ -44,11 +44,11 @@ namespace AccessMgmtBackend.Controllers
         {
             List<string> association = new List<string>();
             association.Add(string.Join(',', _companyContext.AssetToEmployees.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.employee_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_approved == true).Select(x => x.employee_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToRoles.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.role_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_approved == true).Select(x => x.role_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToUsers.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.user_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_approved == true).Select(x => x.user_identifier)));
             association.RemoveAll(s => s == "");
             return association;
         }
@@ -61,7 +61,7 @@ namespace AccessMgmtBackend.Controllers
             var asset = new Asset();
             asset.created_date = DateTime.UtcNow;
             asset.created_by = "Application";
-            asset.is_active = true;
+            asset.is_approved = true;
 
             if (value.asset_description_attachment != null)
             {
@@ -123,13 +123,19 @@ namespace AccessMgmtBackend.Controllers
             var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
             if (asset != null)
             {
-                _companyContext.AssetToEmployees.RemoveRange(_companyContext.AssetToEmployees.Where(x =>
-                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));
-                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where(x =>
-                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));
-                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x =>
-                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()));
-                _companyContext.Assets.Remove(asset);
+                _companyContext.AssetToEmployees.UpdateRange(_companyContext.AssetToEmployees.Where(x =>
+                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                _companyContext.AssetToRoles.UpdateRange(_companyContext.AssetToRoles.Where(x =>
+                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                _companyContext.AssetToUsers.UpdateRange(_companyContext.AssetToUsers.Where(x =>
+                x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                asset.is_active = false;
+                asset.modified_date = DateTime.UtcNow;
+                asset.modified_by = "Application";
+                _companyContext.Assets.Update(asset);
                 _companyContext.SaveChanges();
                 return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier);
             }

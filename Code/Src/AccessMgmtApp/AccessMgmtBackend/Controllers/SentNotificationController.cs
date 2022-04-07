@@ -38,7 +38,7 @@ namespace AccessMgmtBackend.Controllers
             var sentNotification = new SentNotification();
             sentNotification.created_date = DateTime.UtcNow;
             sentNotification.created_by = "Application";
-            sentNotification.is_active = true;
+            sentNotification.is_approved = true;
             PropertyCopier<CreateSentNotification, SentNotification>.Copy(value, sentNotification);
             _companyContext.SentNotifications.Add(sentNotification);
             _companyContext.SaveChanges();

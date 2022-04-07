@@ -80,7 +80,7 @@ namespace AccessMgmtBackend.Controllers
             var approver = new Approver();
             approver.created_date = DateTime.UtcNow;
             approver.created_by = "Application";
-            approver.is_active = true;
+            approver.is_approved = true;
             PropertyCopier<CreateApprover, Approver>.Copy(value, approver);
             _companyContext.Approvers.Add(approver);
             if (!string.IsNullOrEmpty(approver.approver_role))
@@ -180,9 +180,13 @@ namespace AccessMgmtBackend.Controllers
             var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == deleteApprover.approver_identifier);
             if (approver != null)
             {
-                _companyContext.Approvers.Remove(approver);
-                _companyContext.ApproverToRoles.RemoveRange(_companyContext.ApproverToRoles.Where
-                    (x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()));
+                approver.is_active = false;
+                approver.modified_date = DateTime.UtcNow;
+                approver.modified_by = "Application";
+                _companyContext.Approvers.Update(approver);
+                _companyContext.ApproverToRoles.UpdateRange(_companyContext.ApproverToRoles.Where
+                    (x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
                 _companyContext.SaveChanges();
                 var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier).ToList();
 

@@ -10,6 +10,7 @@
         public string? role_description { get; set; }
         public string? role_description_attachment { get; set; }
         public bool is_active { get; set; }
+        public bool? is_approved { get; set; }
         public bool? is_nda_required { get; set; }
         public bool? is_bc_required { get; set; }
         public bool? is_certification_required { get; set; }

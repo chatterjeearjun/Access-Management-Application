@@ -38,7 +38,7 @@ namespace AccessMgmtBackend.Controllers
             var notification = new NotificationType();
             notification.created_date = DateTime.UtcNow;
             notification.created_by = "Application";
-            notification.is_active = true;
+            notification.is_approved = true;
             PropertyCopier<CreateNotificationType, NotificationType>.Copy(value, notification);
             _companyContext.NotificationTypes.Add(notification);
             _companyContext.SaveChanges();
@@ -76,7 +76,10 @@ namespace AccessMgmtBackend.Controllers
             var notification = _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == value.notification_identifier);
             if (notification != null)
             {
-                _companyContext.NotificationTypes.Remove(notification);
+                notification.is_active = false;
+                notification.modified_date = DateTime.UtcNow;
+                notification.modified_by = "Application";
+                _companyContext.NotificationTypes.Update(notification);
                 _companyContext.SaveChanges();
                 return _companyContext.NotificationTypes.Where(x => x.company_identifier == value.company_identifier);
             }

@@ -30,10 +30,10 @@ namespace AccessMgmtBackend.Controllers
                 foreach (var i in listOfRoles)
                 {
                     i.associated_groups = String.Join(",",
-                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active).
+                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_approved == true).
                     Select(x => x.group_identifier));
                     i.associated_assets = String.Join(",",
-                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active).
+                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_approved == true).
                     Select(x => x.asset_identifier));
                 }
                 return listOfRoles;
@@ -54,10 +54,10 @@ namespace AccessMgmtBackend.Controllers
                 role.role_description_attachment = !string.IsNullOrEmpty(role.role_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
                         (s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : String.Empty;
                 role.associated_groups = String.Join(",",
-                 _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active).
+                 _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_approved == true).
                  Select(x => x.group_identifier));
                 role.associated_assets = String.Join(",",
-                _companyContext.AssetToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active).
+                _companyContext.AssetToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_approved == true).
                 Select(x => x.asset_identifier));
             }
             return role;
@@ -70,7 +70,7 @@ namespace AccessMgmtBackend.Controllers
             var role = new Role();
             role.created_date = DateTime.UtcNow;
             role.created_by = "Application";
-            role.is_active = true;
+            role.is_approved = true;
 
             if (value.role_description_attachment != null)
             {
@@ -215,15 +215,22 @@ namespace AccessMgmtBackend.Controllers
             var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == value.role_identifier);
             if (role != null)
             {
-                _companyContext.CompanyRoles.Remove(role);
-                _companyContext.AssetToRoles.RemoveRange(_companyContext.AssetToRoles.Where
-                   (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
-                _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
-                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
-                _companyContext.EmployeeToRoles.RemoveRange(_companyContext.EmployeeToRoles.Where
-                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
-                _companyContext.RoleToUsers.RemoveRange(_companyContext.RoleToUsers.Where
-                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                role.is_active = false;
+                role.modified_date = DateTime.UtcNow;
+                role.modified_by = "Application";
+                _companyContext.CompanyRoles.Update(role);
+                _companyContext.AssetToRoles.UpdateRange(_companyContext.AssetToRoles.Where
+                   (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                _companyContext.GroupToRoles.UpdateRange(_companyContext.GroupToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                _companyContext.EmployeeToRoles.UpdateRange(_companyContext.EmployeeToRoles.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                _companyContext.RoleToUsers.UpdateRange(_companyContext.RoleToUsers.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
                 if (_roleManager.RoleExistsAsync(role.role_identifier.ToString()).Result)
                 {
                     var result = Task.Run(async () =>

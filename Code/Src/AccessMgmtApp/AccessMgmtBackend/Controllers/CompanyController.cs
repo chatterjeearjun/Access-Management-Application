@@ -39,7 +39,7 @@ namespace AccessMgmtBackend.Controllers
             var company = new Company();
             company.created_date = DateTime.UtcNow;
             company.created_by = "Application";
-            company.is_active = true;
+            company.is_approved = true;
             PropertyCopier<CreateCompany, Company>.Copy(value, company);
             _companyContext.Companies.Add(company);
             _companyContext.SaveChanges();
@@ -77,7 +77,10 @@ namespace AccessMgmtBackend.Controllers
             var student = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
             if (student != null)
             {
-                _companyContext.Companies.Remove(student);
+                student.is_active = false;
+                student.modified_date = DateTime.UtcNow;
+                student.modified_by = "Application";
+                _companyContext.Companies.Update(student);
                 _companyContext.SaveChanges();
                 return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier);
             }

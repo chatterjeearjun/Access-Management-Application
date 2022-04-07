@@ -82,7 +82,10 @@ namespace AccessMgmtBackend.Controllers
             var joinercheck = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == value.checklist_identifier);
             if (joinercheck != null)
             {
-                _companyContext.JoinerChecklists.Remove(joinercheck);
+                joinercheck.is_active = false;
+                joinercheck.modified_date = DateTime.UtcNow;
+                joinercheck.modified_by = "Application";
+                _companyContext.JoinerChecklists.Update(joinercheck);
                 _companyContext.SaveChanges();
                 return _companyContext.JoinerChecklists.Where(x => x.company_identifier == value.company_identifier);
             }

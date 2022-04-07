@@ -52,7 +52,7 @@ namespace AccessMgmtBackend.Controllers
             var appUser = new AppUser();
             appUser.created_date = DateTime.UtcNow;
             appUser.created_by = "Application";
-            appUser.is_active = true;
+            appUser.is_approved = true;
 
             if (value.user_description_attachment != null)
             {
@@ -154,11 +154,16 @@ namespace AccessMgmtBackend.Controllers
             var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier);
             if (appuser != null)
             {
-                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x =>
-                x.company_identifier == deleteAppuser.company_identifier && x.user_identifier == deleteAppuser.user_identifier.ToString()));
-                _companyContext.RoleToUsers.RemoveRange(_companyContext.RoleToUsers.Where
-                    (x => x.company_identifier == appuser.company_identifier && x.user_identifier == appuser.user_identifier.ToString()));
-                _companyContext.AppUsers.Remove(appuser);
+                _companyContext.AssetToUsers.UpdateRange(_companyContext.AssetToUsers.Where(x =>
+                x.company_identifier == deleteAppuser.company_identifier && x.user_identifier == deleteAppuser.user_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                _companyContext.RoleToUsers.UpdateRange(_companyContext.RoleToUsers.Where
+                    (x => x.company_identifier == appuser.company_identifier && x.user_identifier == appuser.user_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                appuser.is_active = false;
+                appuser.modified_date = DateTime.UtcNow;
+                appuser.modified_by = "Application";
+                _companyContext.AppUsers.Update(appuser);
                 var identityUser = _companyContext.Users.FirstOrDefault(s => s.UserName == appuser.user_name);
                 if (identityUser != null)
                 {
