@@ -21,7 +21,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public IEnumerable<JoinerChecklist> Get(string guid)
         {
-            return _companyContext.JoinerChecklists.Where(s => s.checklist_identifier == new Guid(guid)).ToList();
+            return _companyContext.JoinerChecklists.Where(s => s.checklist_identifier == new Guid(guid) && s.is_active == true).ToList();
         }
 
         // GET api/<JoinerChecklistController>/5
@@ -45,6 +45,7 @@ namespace AccessMgmtBackend.Controllers
             var joinercheck = new JoinerChecklist();
             joinercheck.created_date = DateTime.UtcNow;
             joinercheck.created_by = "Application";
+            joinercheck.is_active = true;
             PropertyCopier<CreateJoinerChecklist, JoinerChecklist>.Copy(value, joinercheck);
             _companyContext.JoinerChecklists.Add(joinercheck);
             _companyContext.SaveChanges();
@@ -64,6 +65,7 @@ namespace AccessMgmtBackend.Controllers
                 joinercheckNew.created_date = joinercheck.created_date;
                 joinercheckNew.modified_date = DateTime.UtcNow;
                 joinercheckNew.modified_by = "Application";
+                joinercheckNew.is_active=true;
                 PropertyCopier<UpdateJoinerChecklist, JoinerChecklist>.Copy(value, joinercheckNew);
                 _companyContext.Entry<JoinerChecklist>(joinercheck).CurrentValues.SetValues(joinercheckNew);
                 _companyContext.SaveChanges();
@@ -79,7 +81,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<JoinerChecklist> Delete([FromBody] DeleteJoinerChecklist value)
         {
-            var joinercheck = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == value.checklist_identifier);
+            var joinercheck = _companyContext.JoinerChecklists.FirstOrDefault(s => s.checklist_identifier == value.checklist_identifier && s.is_active==true);
             if (joinercheck != null)
             {
                 joinercheck.is_active = false;
@@ -87,11 +89,11 @@ namespace AccessMgmtBackend.Controllers
                 joinercheck.modified_by = "Application";
                 _companyContext.JoinerChecklists.Update(joinercheck);
                 _companyContext.SaveChanges();
-                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == value.company_identifier && x.is_active==true);
             }
             else
             {
-                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.JoinerChecklists.Where(x => x.company_identifier == value.company_identifier && x.is_active==true);
             }
         }
     }

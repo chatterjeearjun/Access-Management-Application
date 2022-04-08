@@ -23,7 +23,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.Groups.Where(x => x.company_identifier == companyId).ToList();
+                return _companyContext.Groups.Where(x => x.company_identifier == companyId && x.is_active).ToList();
             }
             else
             {
@@ -51,7 +51,7 @@ namespace AccessMgmtBackend.Controllers
             var group = new Group();
             group.created_date = DateTime.UtcNow;
             group.created_by = "Application";
-            group.is_approved = true;
+            group.is_active = true;
 
             if (value.group_description_attachment != null)
             {
@@ -95,6 +95,7 @@ namespace AccessMgmtBackend.Controllers
                 groupNew.modified_date = DateTime.UtcNow;
                 groupNew.modified_by = "Application";
                 groupNew.group_identifier = group.group_identifier;
+                groupNew.is_active = true;
                 PropertyCopier<UpdateGroup, Group>.Copy(value, groupNew);
                 _companyContext.Entry<Group>(group).CurrentValues.SetValues(groupNew);
                 _companyContext.SaveChanges();
@@ -110,7 +111,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<Group> Delete([FromBody] DeleteGroup value)
         {
-            var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier == value.group_identifier);
+            var group = _companyContext.Groups.FirstOrDefault(s => s.group_identifier == value.group_identifier && s.is_active);
             if (group != null)
             {
                 _companyContext.GroupToRoles.UpdateRange(_companyContext.GroupToRoles.Where
@@ -121,11 +122,11 @@ namespace AccessMgmtBackend.Controllers
                 group.modified_by = "Application";
                 _companyContext.Groups.Update(group);                
                 _companyContext.SaveChanges();
-                return _companyContext.Groups.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Groups.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
             else
             {
-                return _companyContext.Groups.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Groups.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
         }
     }

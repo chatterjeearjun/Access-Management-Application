@@ -26,14 +26,14 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                var listOfRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId).ToList();
+                var listOfRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId && x.is_active).ToList();
                 foreach (var i in listOfRoles)
                 {
                     i.associated_groups = String.Join(",",
-                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_approved == true).
+                    _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active == true).
                     Select(x => x.group_identifier));
                     i.associated_assets = String.Join(",",
-                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_approved == true).
+                    _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active == true).
                     Select(x => x.asset_identifier));
                 }
                 return listOfRoles;
@@ -54,10 +54,10 @@ namespace AccessMgmtBackend.Controllers
                 role.role_description_attachment = !string.IsNullOrEmpty(role.role_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
                         (s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : String.Empty;
                 role.associated_groups = String.Join(",",
-                 _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_approved == true).
+                 _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active == true).
                  Select(x => x.group_identifier));
                 role.associated_assets = String.Join(",",
-                _companyContext.AssetToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_approved == true).
+                _companyContext.AssetToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active == true).
                 Select(x => x.asset_identifier));
             }
             return role;
@@ -70,7 +70,7 @@ namespace AccessMgmtBackend.Controllers
             var role = new Role();
             role.created_date = DateTime.UtcNow;
             role.created_by = "Application";
-            role.is_approved = true;
+            role.is_active = true;
 
             if (value.role_description_attachment != null)
             {
@@ -105,7 +105,7 @@ namespace AccessMgmtBackend.Controllers
                         company_identifier = role.company_identifier,
                         asset_identifier = asset.ToString(),
                         role_identifier = role.role_identifier.ToString(),
-                        is_active = false,
+                        is_active = true,
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
@@ -157,6 +157,7 @@ namespace AccessMgmtBackend.Controllers
                 roleNew.modified_date = DateTime.UtcNow;
                 roleNew.modified_by = "Application";
                 roleNew.role_identifier = role.role_identifier;
+                roleNew.is_active = true;
                 PropertyCopier<UpdateRole, Role>.Copy(value, roleNew);
                 _companyContext.Entry<Role>(role).CurrentValues.SetValues(roleNew);
                 //Added logic for asset addition/updation
@@ -176,7 +177,7 @@ namespace AccessMgmtBackend.Controllers
                             company_identifier = roleNew.company_identifier,
                             asset_identifier = asset.ToString(),
                             role_identifier = roleNew.role_identifier.ToString(),
-                            is_active = false,
+                            is_active = true,
                             created_date = DateTime.UtcNow,
                             created_by = "Application"
                         });
@@ -212,7 +213,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<Role> Delete([FromBody] DeleteRole value)
         {
-            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == value.role_identifier);
+            var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == value.role_identifier && s.is_active);
             if (role != null)
             {
                 role.is_active = false;
@@ -240,11 +241,11 @@ namespace AccessMgmtBackend.Controllers
                 }
 
                 _companyContext.SaveChanges();
-                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier).ToList();
+                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier && x.is_active).ToList();
             }
             else
             {
-                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier).ToList();
+                return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier && x.is_active).ToList();
             }
         }
     }

@@ -22,14 +22,14 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<Asset> GetByCompany(string companyId)
         {
-            return _companyContext.Assets.Where(x => x.company_identifier == companyId).ToList();
+            return _companyContext.Assets.Where(x => x.company_identifier == companyId && x.is_active).ToList();
         }
 
         // GET api/<AssetController>/{guid}
         [HttpGet("{guid}")]
         public Asset Get(string guid)
         {
-            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == new Guid(guid));
+            var asset = _companyContext.Assets.FirstOrDefault(x => x.asset_identifier == new Guid(guid) && x.is_active);
             if (asset != null)
             {
                 asset.asset_description_attachment = !string.IsNullOrEmpty(asset.asset_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
@@ -44,11 +44,11 @@ namespace AccessMgmtBackend.Controllers
         {
             List<string> association = new List<string>();
             association.Add(string.Join(',', _companyContext.AssetToEmployees.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_approved == true).Select(x => x.employee_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.employee_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToRoles.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_approved == true).Select(x => x.role_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.role_identifier)));
             association.Add(string.Join(',', _companyContext.AssetToUsers.Where
-                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_approved == true).Select(x => x.user_identifier)));
+                (x => x.asset_identifier == assetid && x.company_identifier == companyid && x.is_active).Select(x => x.user_identifier)));
             association.RemoveAll(s => s == "");
             return association;
         }
@@ -61,7 +61,7 @@ namespace AccessMgmtBackend.Controllers
             var asset = new Asset();
             asset.created_date = DateTime.UtcNow;
             asset.created_by = "Application";
-            asset.is_approved = true;
+            asset.is_active = true;
 
             if (value.asset_description_attachment != null)
             {
@@ -105,6 +105,7 @@ namespace AccessMgmtBackend.Controllers
                 assetNew.modified_date = DateTime.UtcNow;
                 assetNew.modified_by = "Application";
                 assetNew.asset_identifier = asset.asset_identifier;
+                assetNew.is_active = true;
                 PropertyCopier<UpdateAsset, Asset>.Copy(value, assetNew);
                 _companyContext.Entry<Asset>(asset).CurrentValues.SetValues(assetNew);
                 _companyContext.SaveChanges();
@@ -120,7 +121,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<Asset> Delete([FromBody] DeleteAsset value)
         {
-            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier);
+            var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier && s.is_active);
             if (asset != null)
             {
                 _companyContext.AssetToEmployees.UpdateRange(_companyContext.AssetToEmployees.Where(x =>
@@ -137,11 +138,11 @@ namespace AccessMgmtBackend.Controllers
                 asset.modified_by = "Application";
                 _companyContext.Assets.Update(asset);
                 _companyContext.SaveChanges();
-                return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
             else
             {
-                return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
         }
     }

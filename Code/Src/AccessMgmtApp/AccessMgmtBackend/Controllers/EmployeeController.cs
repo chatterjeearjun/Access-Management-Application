@@ -32,7 +32,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId).ToList();
+                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId && x.is_active).ToList();
                 foreach (var employee in listEmployees)
                 {
                     employee.emp_profile_picture = !string.IsNullOrEmpty(employee.emp_profile_picture) ? _companyContext.UploadedFiles.FirstOrDefault
@@ -52,7 +52,7 @@ namespace AccessMgmtBackend.Controllers
 
                     var listRoles = new List<KeyValuePair<string, string>>();
                     var employeesToRoles = _companyContext.EmployeeToRoles.Where
-                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_approved == true).ToList();
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
                     foreach (var roleDetail in employeesToRoles)
                     {
                         var roleName = _companyContext.CompanyRoles.FirstOrDefault
@@ -70,7 +70,7 @@ namespace AccessMgmtBackend.Controllers
 
                     var list = new List<KeyValuePair<string, string>>();
                     var assetToEmployees = _companyContext.AssetToEmployees.Where
-                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_approved == true).ToList();
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
                     foreach (var assetDetail in assetToEmployees)
                     {
                         var assetName = _companyContext.Assets.FirstOrDefault
@@ -114,7 +114,7 @@ namespace AccessMgmtBackend.Controllers
 
                 var listRoles = new List<KeyValuePair<string, string>>();
                 var employeesToRoles = _companyContext.EmployeeToRoles.Where
-                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_approved == true).ToList();
+                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
                 foreach (var roleDetail in employeesToRoles)
                 {
                     var roleName = _companyContext.CompanyRoles.FirstOrDefault
@@ -127,12 +127,12 @@ namespace AccessMgmtBackend.Controllers
 
                 employee.emp_group = String.Join(",",
                        _companyContext.EmployeeToGroups.Where
-                       (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_approved == true).
+                       (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).
                        Select(x => x.group_identifier));
 
                 var list = new List<KeyValuePair<string, string>>();
                 var assetToEmployees = _companyContext.AssetToEmployees.Where
-                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_approved == true).ToList();
+                         (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
                 foreach (var assetDetail in assetToEmployees)
                 {
                     var assetName = _companyContext.Assets.FirstOrDefault
@@ -171,7 +171,7 @@ namespace AccessMgmtBackend.Controllers
             var employee = new Employee();
             employee.created_date = DateTime.UtcNow;
             employee.created_by = "Application";
-            employee.is_approved = true;
+            employee.is_active = true;
             if (value.emp_profile_picture != null)
             {
                 UploadedFile employeeResponse = await PostUploadFile(value.emp_profile_picture, value.company_identifier);
@@ -228,7 +228,7 @@ namespace AccessMgmtBackend.Controllers
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
-                    var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == role && s.company_identifier == employee.company_identifier && s.is_approved == true).ToList()
+                    var associatedRolesAssets = _companyContext.AssetToRoles.Where(s => s.role_identifier == role && s.company_identifier == employee.company_identifier && s.is_active == true).ToList()
                     .Select(x => x.asset_identifier);
                     employee.associated_assets = (!string.IsNullOrEmpty(employee.associated_assets)) ?
                         employee.associated_assets + "," + String.Join(",", associatedRolesAssets) : String.Join(",", associatedRolesAssets);
@@ -264,7 +264,7 @@ namespace AccessMgmtBackend.Controllers
                         company_identifier = employee.company_identifier,
                         asset_identifier = asset.ToString(),
                         employee_identifier = employee.employee_identifier.ToString(),
-                        is_active = false,
+                        is_active = true,
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
@@ -295,6 +295,7 @@ namespace AccessMgmtBackend.Controllers
                 employeeNew.emp_bc_document2 = employeeStore.emp_bc_document2;
                 employeeNew.emp_cert_document1 = employeeStore.emp_cert_document1;
                 employeeNew.emp_cert_document2 = employeeStore.emp_cert_document2;
+                employeeNew.is_active = true;
                 if (value.emp_approval_overdue != null && value.emp_approval_overdue < DateTime.UtcNow)
                 {
                     employeeNew.emp_approval_overdue = DateTime.UtcNow.AddDays(7);
@@ -320,7 +321,7 @@ namespace AccessMgmtBackend.Controllers
                             company_identifier = employeeNew.company_identifier,
                             asset_identifier = asset.ToString(),
                             employee_identifier = employeeNew.employee_identifier.ToString(),
-                            is_active = false,
+                            is_active = true,
                             created_date = DateTime.UtcNow,
                             created_by = "Application"
                         });
@@ -373,7 +374,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<Employee> Delete([FromBody] DeleteEmployee value)
         {
-            var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == value.employee_identifier);
+            var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == value.employee_identifier && s.is_active);
             if (employeeStore != null)
             {
                 employeeStore.is_active = false;
@@ -390,12 +391,12 @@ namespace AccessMgmtBackend.Controllers
                    (x => x.company_identifier == value.company_identifier && x.employee_identifier == value.employee_identifier.ToString()).ToList()
                    .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
                 _companyContext.SaveChanges();
-                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier).ToList();
+                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier && x.is_active).ToList();
 
             }
             else
             {
-                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier).ToList();
+                return _companyContext.Employees.Where(x => x.company_identifier == value.company_identifier && x.is_active).ToList();
             }
         }
 
@@ -405,7 +406,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(value.employee_identifier) && !string.IsNullOrEmpty(value.company_identifier) && value.emp_profile_picture != null)
             {
-                var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier.ToString() == value.employee_identifier);
+                var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier.ToString() == value.employee_identifier && s.is_active);
                 if(employeeStore != null)
                 {
                     UploadedFile employeeResponse = await PostUploadFile(value.emp_profile_picture, value.company_identifier,value.employee_identifier);

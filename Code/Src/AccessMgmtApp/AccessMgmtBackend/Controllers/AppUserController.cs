@@ -23,7 +23,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.AppUsers.Where(x => x.company_identifier == companyId).ToList();
+                return _companyContext.AppUsers.Where(x => x.company_identifier == companyId && x.is_active).ToList();
             }
             else
             {
@@ -52,7 +52,7 @@ namespace AccessMgmtBackend.Controllers
             var appUser = new AppUser();
             appUser.created_date = DateTime.UtcNow;
             appUser.created_by = "Application";
-            appUser.is_approved = true;
+            appUser.is_active = true;
 
             if (value.user_description_attachment != null)
             {
@@ -86,7 +86,7 @@ namespace AccessMgmtBackend.Controllers
                         company_identifier = appUser.company_identifier,
                         asset_identifier = asset.ToString(),
                         user_identifier = appUser.user_identifier.ToString(),
-                        is_active = false,
+                        is_active = true,
                         created_date = DateTime.UtcNow,
                         created_by = "Application"
                     });
@@ -114,6 +114,7 @@ namespace AccessMgmtBackend.Controllers
                 appUser.created_date = appusers.created_date;
                 appUser.modified_date = DateTime.UtcNow;
                 appUser.modified_by = "Application";
+                appUser.is_active = true;
                 appUser.user_identifier = appusers.user_identifier;
                 PropertyCopier<UpdateAppUser, AppUser>.Copy(value, appUser);
                 _companyContext.Entry<AppUser>(appusers).CurrentValues.SetValues(appUser);
@@ -132,7 +133,7 @@ namespace AccessMgmtBackend.Controllers
                             company_identifier = appUser.company_identifier,
                             asset_identifier = asset.ToString(),
                             user_identifier = appUser.user_identifier.ToString(),
-                            is_active = false,
+                            is_active = true,
                             created_date = DateTime.UtcNow,
                             created_by = "Application"
                         });
@@ -151,7 +152,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<AppUser> Delete([FromBody] DeleteAppUser deleteAppuser)
         {
-            var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier);
+            var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier && s.is_active);
             if (appuser != null)
             {
                 _companyContext.AssetToUsers.UpdateRange(_companyContext.AssetToUsers.Where(x =>
@@ -174,11 +175,11 @@ namespace AccessMgmtBackend.Controllers
                     _companyContext.Users.Remove(_companyContext.Users.Where(usr => usr.Id == identityUser.Id).Single());
                 }
                 _companyContext.SaveChanges();
-                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier);
+                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier && x.is_active);
             }
             else
             {
-                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier);
+                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier && x.is_active);
             }
         }
     }
