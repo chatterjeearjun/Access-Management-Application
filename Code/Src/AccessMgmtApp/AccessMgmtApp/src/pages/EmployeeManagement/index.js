@@ -21,7 +21,6 @@ import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import { FaUserEdit } from "react-icons/fa";
-import { TiUserDelete } from "react-icons/ti";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import InputMask from "react-input-mask";
 import Loading from "react-fullscreen-loading";
@@ -120,6 +119,7 @@ const EmployeeManagement = () => {
       dataField: "emp_role",
       text: "Role",
       sort: true,
+      formatter: (cellContent, user) => <>{JSON.parse(user.emp_role)[0].Key}</>,
     },
     {
       dataField: "emp_email",
@@ -228,6 +228,7 @@ const EmployeeManagement = () => {
   };
   const handleUserClick = (arg) => {
     const user = arg;
+    debugger;
     setUserList({
       employeeid: user.employee_identifier,
       companyid: user.company_identifier,
@@ -237,7 +238,7 @@ const EmployeeManagement = () => {
       phone: user.emp_office_phone,
       mobile: user.emp_mobile_number,
       designation: user.emp_designation,
-      role: user.emp_role,
+      role: JSON.parse(user.emp_role)[0].Value,
       group: user.emp_group,
       email: user.emp_email,
       startdate: user.emp_joining_date.split("T")[0],
@@ -253,7 +254,8 @@ const EmployeeManagement = () => {
     setPhone(user.emp_mobile_number);
     toggle();
   };
-
+  console.log(rolesList, "RolesList");
+  console.log(userList, "usersList");
   const handleDeleteUser = () => {
     dispatch(onDeleteUser(deleteRow));
   };
@@ -842,29 +844,35 @@ const EmployeeManagement = () => {
                                             ) : (
                                               ""
                                             )}
-                                            <Row>
-                                              <Col xs={12}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    name="empphoto"
-                                                    label="Employee Photo"
-                                                    inputClass="form-control"
-                                                    type="file"
-                                                    placeholder="choose employee photo"
-                                                    errormessage="please provide valid file"
-                                                    validate={{
-                                                      required: { value: true },
-                                                    }}
-                                                    onChange={(e) =>
-                                                      setSelectedProfileFile(
-                                                        e.target.files[0]
-                                                      )
-                                                    }
-                                                    value={""}
-                                                  />
-                                                </div>
-                                              </Col>
-                                            </Row>
+                                            {!isEdit ? (
+                                              <Row>
+                                                <Col xs={12}>
+                                                  <div className="mb-3">
+                                                    <AvField
+                                                      name="empphoto"
+                                                      label="Employee Photo"
+                                                      inputClass="form-control"
+                                                      type="file"
+                                                      placeholder="choose employee photo"
+                                                      errormessage="please provide valid file"
+                                                      validate={{
+                                                        required: {
+                                                          value: true,
+                                                        },
+                                                      }}
+                                                      onChange={(e) =>
+                                                        setSelectedProfileFile(
+                                                          e.target.files[0]
+                                                        )
+                                                      }
+                                                      value={""}
+                                                    />
+                                                  </div>
+                                                </Col>
+                                              </Row>
+                                            ) : (
+                                              ""
+                                            )}
                                           </Col>
                                         </Row>
                                         <Row>

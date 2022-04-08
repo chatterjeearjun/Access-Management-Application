@@ -25,7 +25,6 @@ import "react-toastify/dist/ReactToastify.css";
 import InputMask from "react-input-mask";
 import SweetAlert from "react-bootstrap-sweetalert";
 import { FaUserEdit } from "react-icons/fa";
-import { TiUserDelete } from "react-icons/ti";
 import {
   getApprovers as onGetApprovers,
   addNewApprover as onAddNewApprover,

@@ -173,7 +173,6 @@ export async function postEmployee(url, data) {
   }
 }
 export async function postforlogin(url, data, config = {}) {
-  debugger;
   return axiosApi
     .post(url, { ...data }, { ...config })
     .then((response) => response.data);

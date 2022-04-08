@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import MetaTags from "react-meta-tags";
 import { withRouter, Link } from "react-router-dom";
 import {
@@ -46,6 +46,7 @@ import Loading from "react-fullscreen-loading";
 import { getAssetsAssociation } from "../../helpers/fakebackend_helper";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
 
 const AssetsManagement = (props) => {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ const AssetsManagement = (props) => {
   const [selectedOwner, setSelectedOwner] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [typeaheadList, setTypeaheadList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   //const [isLoader, setIsLoader] = useState(false);
   // Array options
@@ -214,10 +216,6 @@ const AssetsManagement = (props) => {
       dispatch(onGetUsers());
     }
   }, [dispatch, owners]);
-
-  useEffect(() => {
-    setOwnersList(owners);
-  }, [owners]);
 
   const toggle = () => {
     setModal(!modal);
@@ -390,6 +388,21 @@ const AssetsManagement = (props) => {
   //     };
   //   }
   // }
+  const filterBy = () => true;
+  const handleSearch = (query) => {
+    setTypeaheadList([]);
+    setIsLoading(true);
+    const list = owners?.filter((item) => item.emp_email.includes(query));
+    debugger;
+    if (list.length > 0) {
+      setTypeaheadList(list);
+      setIsLoading(false);
+    } else {
+      setTypeaheadList([]);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <React.Fragment>
       <Loading
@@ -605,46 +618,37 @@ const AssetsManagement = (props) => {
 
                                               <Col xs={6}>
                                                 <div className="mb-3">
-                                                  {/* <AvField
-                                                    name="owner"
-                                                    label="Asset Owner"
-                                                    placeholder="Asset Owner"
-                                                    type="datalist"
-                                                    errorMessage="please provide valid asset ower"
-                                                    validate={{
-                                                      required: { value: true },
-                                                    }}
-                                                    value={
-                                                      assetList.owner || ""
-                                                    }
-                                                  /> */}
                                                   <Label
                                                     htmlFor="owners"
                                                     className="form-Label"
                                                   >
                                                     Asset Owner
                                                   </Label>
-                                                  <Input
-                                                    className="form-control"
-                                                    list="ownersDatalist"
-                                                    id="owners"
-                                                    placeholder="Type to search owner..."
-                                                    autoComplete="new-password"
-                                                    onChange={ownerchange}
-                                                    value={assetList.owner}
+                                                  <AsyncTypeahead
+                                                    inputProps={{
+                                                      required: true,
+                                                      "aria-errormessage":
+                                                        "Please select asset owner",
+                                                    }}
+                                                    filterBy={filterBy}
+                                                    id="ownersearch"
+                                                    isLoading={isLoading}
+                                                    labelKey="emp_email"
+                                                    minLength={3}
+                                                    onSearch={handleSearch}
+                                                    options={typeaheadList}
+                                                    placeholder="Search for a Asset Owner..."
+                                                    renderMenuItemChildren={(
+                                                      option,
+                                                      props
+                                                    ) => (
+                                                      <Fragment>
+                                                        <span>
+                                                          {option.emp_email}
+                                                        </span>
+                                                      </Fragment>
+                                                    )}
                                                   />
-                                                  <datalist
-                                                    id="ownersDatalist"
-                                                    autoComplete="off"
-                                                  >
-                                                    {ownersList.map((owner) => (
-                                                      <option
-                                                        value={owner.emp_email}
-                                                        key={owner.id}
-                                                        name="owner"
-                                                      />
-                                                    ))}
-                                                  </datalist>
                                                 </div>
                                               </Col>
                                             </Row>
