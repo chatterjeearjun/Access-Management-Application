@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    [Migration("20220407201405_v19")]
-    partial class v19
+    [Migration("20220408091034_v08")]
+    partial class v08
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -566,6 +566,9 @@ namespace AccessMgmtBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("created_date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("emp_approval_overdue")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("emp_bc_document1")

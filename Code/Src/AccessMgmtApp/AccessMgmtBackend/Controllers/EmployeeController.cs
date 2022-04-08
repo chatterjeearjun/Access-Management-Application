@@ -207,7 +207,10 @@ namespace AccessMgmtBackend.Controllers
                 UploadedFile employeeResponse = await PostUploadFile(value.emp_cert_document2, value.company_identifier);
                 employee.emp_cert_document2 = employeeResponse?.file_identifier.ToString();
             }
-
+            if (value.emp_approval_overdue != null && value.emp_approval_overdue < DateTime.UtcNow)
+            {
+                employee.emp_approval_overdue = DateTime.UtcNow.AddDays(7);
+            }
             PropertyCopier<CreateEmployee, Employee>.Copy(value, employee);
             _companyContext.Employees.Add(employee);
             if (!string.IsNullOrEmpty(employee.emp_role))
@@ -292,6 +295,10 @@ namespace AccessMgmtBackend.Controllers
                 employeeNew.emp_bc_document2 = employeeStore.emp_bc_document2;
                 employeeNew.emp_cert_document1 = employeeStore.emp_cert_document1;
                 employeeNew.emp_cert_document2 = employeeStore.emp_cert_document2;
+                if (value.emp_approval_overdue != null && value.emp_approval_overdue < DateTime.UtcNow)
+                {
+                    employeeNew.emp_approval_overdue = DateTime.UtcNow.AddDays(7);
+                }
                 PropertyCopier<UpdateEmployee, Employee>.Copy(value, employeeNew);
                 _companyContext.Entry<Employee>(employeeStore).CurrentValues.SetValues(employeeNew);
                 //Added logic for asset addition/updation

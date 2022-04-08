@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace AccessMgmtBackend.Migrations
 {
-    public partial class v19 : Migration
+    public partial class v08 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -76,6 +77,12 @@ namespace AccessMgmtBackend.Migrations
                 name: "is_approved",
                 table: "ac_group",
                 type: "bit",
+                nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "emp_approval_overdue",
+                table: "ac_employees",
+                type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<bool>(
@@ -180,6 +187,10 @@ namespace AccessMgmtBackend.Migrations
             migrationBuilder.DropColumn(
                 name: "is_approved",
                 table: "ac_group");
+
+            migrationBuilder.DropColumn(
+                name: "emp_approval_overdue",
+                table: "ac_employees");
 
             migrationBuilder.DropColumn(
                 name: "is_approved",

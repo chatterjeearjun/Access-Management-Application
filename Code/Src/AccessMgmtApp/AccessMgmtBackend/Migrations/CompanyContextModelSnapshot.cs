@@ -566,6 +566,9 @@ namespace AccessMgmtBackend.Migrations
                     b.Property<DateTime?>("created_date")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("emp_approval_overdue")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("emp_bc_document1")
                         .HasColumnType("nvarchar(max)");
 
