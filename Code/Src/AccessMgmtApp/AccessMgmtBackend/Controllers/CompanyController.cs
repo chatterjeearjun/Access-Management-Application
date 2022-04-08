@@ -22,14 +22,14 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<Company> Get()
         {
-            return _companyContext.Companies;
+            return _companyContext.Companies.Where(x=>x.is_active);
         }
 
         // GET api/<CompanyController>/''
         [HttpGet("{guid}")]
         public Company Get(string guid)
         {
-            return _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid));
+            return _companyContext.Companies.FirstOrDefault(s => s.company_identifier == new Guid(guid) && s.is_active);
         }
 
         // POST api/<CompanyController>
@@ -59,6 +59,7 @@ namespace AccessMgmtBackend.Controllers
                 companyNew.created_date = company.created_date;
                 companyNew.modified_date = DateTime.UtcNow;
                 companyNew.modified_by = "Application";
+                companyNew.is_active=true;
                 PropertyCopier<UpdateCompany, Company>.Copy(value, companyNew);
                 _companyContext.Entry<Company>(company).CurrentValues.SetValues(companyNew);
                 _companyContext.SaveChanges();
@@ -77,13 +78,16 @@ namespace AccessMgmtBackend.Controllers
             var student = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
             if (student != null)
             {
-                _companyContext.Companies.Remove(student);
+                student.is_active = false;
+                student.modified_date = DateTime.UtcNow;
+                student.modified_by = "Application";
+                _companyContext.Companies.Update(student);
                 _companyContext.SaveChanges();
-                return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
             else
             {
-                return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
         }
     }

@@ -14,5 +14,6 @@ namespace AccessMgmtBackend.Models.ApproverModels
         public string approver_mobile_number { get; set; }
         public string approver_role { get; set; }
         public bool is_active { get; set; }
+        public bool? is_approved { get; set; }
     }
 }

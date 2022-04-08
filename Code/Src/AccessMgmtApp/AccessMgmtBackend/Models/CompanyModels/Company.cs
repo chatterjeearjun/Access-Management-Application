@@ -22,6 +22,7 @@ namespace AccessMgmtBackend.Models
         public DateTime? company_activation_date { get; set; }
         public DateTime? company_deactivation_date { get; set; }
         public bool is_active { get; set; }
+        public bool? is_approved { get; set; }
         public DateTime? created_date { get; set; }
         public string? created_by { get; set; }
         public DateTime? modified_date { get; set; }

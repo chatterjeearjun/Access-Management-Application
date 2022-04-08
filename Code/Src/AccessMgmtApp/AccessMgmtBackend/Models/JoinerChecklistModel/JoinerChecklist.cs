@@ -22,6 +22,7 @@ namespace AccessMgmtBackend.Models
         public bool? home_address { get; set; }
         public bool? nominee_details { get; set; }
         public bool? mobile_number { get; set; }
+        public bool? is_active { get;set; }
         public DateTime? created_date { get; set; }
         public string? created_by { get; set; }
         public DateTime? modified_date { get; set; }

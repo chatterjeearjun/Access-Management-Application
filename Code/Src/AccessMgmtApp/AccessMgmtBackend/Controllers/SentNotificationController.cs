@@ -21,7 +21,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet]
         public IEnumerable<SentNotification> GetByCompany(string companyId)
         {
-            return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId).ToList();
+            return _companyContext.SentNotifications.Where(x => x.company_identifier == companyId && x.is_active).ToList();
         }
 
         // GET api/<SentNotificationController>/5
@@ -58,6 +58,7 @@ namespace AccessMgmtBackend.Controllers
                 notificationNew.created_date = notification.created_date;
                 notificationNew.modified_date = DateTime.UtcNow;
                 notificationNew.modified_by = "Application";
+                notificationNew.is_active=true;
                 PropertyCopier<UpdateSentNotification, SentNotification>.Copy(value, notificationNew);
                 _companyContext.Entry<SentNotification>(notification).CurrentValues.SetValues(notificationNew);
                 _companyContext.SaveChanges();
@@ -73,15 +74,19 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<SentNotification> Delete([FromBody] DeleteSentNotification value)
         {
-            var notification = _companyContext.SentNotifications.FirstOrDefault(s => s.notification_sent_identifier == value.notification_sent_identifier);
+            var notification = _companyContext.SentNotifications.FirstOrDefault(s => 
+            s.notification_sent_identifier == value.notification_sent_identifier && s.is_active);
             if (notification != null)
             {
-                _companyContext.SentNotifications.Remove(notification);
+                notification.is_active = false;
+                notification.modified_date = DateTime.UtcNow;
+                notification.modified_by = "Application";
+                _companyContext.SentNotifications.Update(notification);
                 _companyContext.SaveChanges();
-                return _companyContext.SentNotifications.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.SentNotifications.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
             else {
-                return _companyContext.SentNotifications.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.SentNotifications.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
         }
     }

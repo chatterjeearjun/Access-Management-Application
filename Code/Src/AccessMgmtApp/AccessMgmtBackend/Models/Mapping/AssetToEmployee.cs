@@ -12,6 +12,7 @@
         public string asset_identifier { get; set; }
         public string employee_identifier { get; set; }
         public bool is_active { get; set; }
+        public bool? is_approved { get; set; }
         public DateTime? created_date { get; set; }
         public string? created_by { get; set; }
         public DateTime? modified_date { get; set; }

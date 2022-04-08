@@ -21,7 +21,7 @@ namespace AccessMgmtBackend.Controllers
         [HttpGet("{guid}")]
         public NotificationType Get(string guid)
         {
-             return _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == new Guid(guid));
+             return _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == new Guid(guid) && s.is_active);
         }
 
         // GET api/<NotificationTypeController>/5
@@ -58,6 +58,7 @@ namespace AccessMgmtBackend.Controllers
                 notificationNew.created_date = notification.created_date;
                 notificationNew.modified_date = DateTime.UtcNow;
                 notificationNew.modified_by = "Application";
+                notificationNew.is_active=true;
                 PropertyCopier<UpdateNotificationType, NotificationType>.Copy(value, notificationNew);
                 _companyContext.Entry<NotificationType>(notification).CurrentValues.SetValues(notificationNew);
                 _companyContext.SaveChanges();
@@ -73,16 +74,19 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<NotificationType> Delete([FromBody] DeleteNotificationType value)
         {
-            var notification = _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == value.notification_identifier);
+            var notification = _companyContext.NotificationTypes.FirstOrDefault(s => s.notification_identifier == value.notification_identifier && s.is_active);
             if (notification != null)
             {
-                _companyContext.NotificationTypes.Remove(notification);
+                notification.is_active = false;
+                notification.modified_date = DateTime.UtcNow;
+                notification.modified_by = "Application";
+                _companyContext.NotificationTypes.Update(notification);
                 _companyContext.SaveChanges();
-                return _companyContext.NotificationTypes.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.NotificationTypes.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
             else
             {
-                return _companyContext.NotificationTypes.Where(x => x.company_identifier == value.company_identifier);
+                return _companyContext.NotificationTypes.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
         }
     }

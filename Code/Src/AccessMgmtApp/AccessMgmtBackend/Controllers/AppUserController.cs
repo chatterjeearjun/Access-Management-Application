@@ -23,7 +23,7 @@ namespace AccessMgmtBackend.Controllers
         {
             if (!string.IsNullOrEmpty(companyId))
             {
-                return _companyContext.AppUsers.Where(x => x.company_identifier == companyId).ToList();
+                return _companyContext.AppUsers.Where(x => x.company_identifier == companyId && x.is_active).ToList();
             }
             else
             {
@@ -114,6 +114,7 @@ namespace AccessMgmtBackend.Controllers
                 appUser.created_date = appusers.created_date;
                 appUser.modified_date = DateTime.UtcNow;
                 appUser.modified_by = "Application";
+                appUser.is_active = true;
                 appUser.user_identifier = appusers.user_identifier;
                 PropertyCopier<UpdateAppUser, AppUser>.Copy(value, appUser);
                 _companyContext.Entry<AppUser>(appusers).CurrentValues.SetValues(appUser);
@@ -151,14 +152,19 @@ namespace AccessMgmtBackend.Controllers
         [HttpDelete]
         public IEnumerable<AppUser> Delete([FromBody] DeleteAppUser deleteAppuser)
         {
-            var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier);
+            var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier && s.is_active);
             if (appuser != null)
             {
-                _companyContext.AssetToUsers.RemoveRange(_companyContext.AssetToUsers.Where(x =>
-                x.company_identifier == deleteAppuser.company_identifier && x.user_identifier == deleteAppuser.user_identifier.ToString()));
-                _companyContext.RoleToUsers.RemoveRange(_companyContext.RoleToUsers.Where
-                    (x => x.company_identifier == appuser.company_identifier && x.user_identifier == appuser.user_identifier.ToString()));
-                _companyContext.AppUsers.Remove(appuser);
+                _companyContext.AssetToUsers.UpdateRange(_companyContext.AssetToUsers.Where(x =>
+                x.company_identifier == deleteAppuser.company_identifier && x.user_identifier == deleteAppuser.user_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                _companyContext.RoleToUsers.UpdateRange(_companyContext.RoleToUsers.Where
+                    (x => x.company_identifier == appuser.company_identifier && x.user_identifier == appuser.user_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
+                appuser.is_active = false;
+                appuser.modified_date = DateTime.UtcNow;
+                appuser.modified_by = "Application";
+                _companyContext.AppUsers.Update(appuser);
                 var identityUser = _companyContext.Users.FirstOrDefault(s => s.UserName == appuser.user_name);
                 if (identityUser != null)
                 {
@@ -169,11 +175,11 @@ namespace AccessMgmtBackend.Controllers
                     _companyContext.Users.Remove(_companyContext.Users.Where(usr => usr.Id == identityUser.Id).Single());
                 }
                 _companyContext.SaveChanges();
-                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier);
+                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier && x.is_active);
             }
             else
             {
-                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier);
+                return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier && x.is_active);
             }
         }
     }

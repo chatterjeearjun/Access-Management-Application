@@ -11,5 +11,6 @@ namespace AccessMgmtBackend.Models
         public DateTime? sent_date { get; set; }
         public string notification_sent_to { get; set; }
         public bool is_active { get; set; }
+        public bool? is_approved { get; set; }
     }
 }

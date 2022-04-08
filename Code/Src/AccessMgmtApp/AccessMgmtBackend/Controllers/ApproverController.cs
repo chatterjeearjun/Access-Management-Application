@@ -23,7 +23,7 @@ namespace AccessMgmtBackend.Controllers
         public IEnumerable<ViewApprover> GetByCompany(string companyId)
         {
             List<ViewApprover> viewApprovers = new List<ViewApprover>();
-            var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == companyId).ToList();
+            var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == companyId && x.is_active).ToList();
             foreach (var i in listOfApprovers)
             {
                 ViewApprover viewApprover = new ViewApprover();
@@ -51,7 +51,7 @@ namespace AccessMgmtBackend.Controllers
         public ViewApprover Get(string guid)
         {
             ViewApprover viewApprover = new ViewApprover();
-            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == new Guid(guid));
+            var approver = _companyContext.Approvers.FirstOrDefault(x => x.approver_identifier == new Guid(guid));
             if (approver != null)
             {
                 approver.approver_role = String.Join(",",
@@ -130,6 +130,7 @@ namespace AccessMgmtBackend.Controllers
                 approverNew.created_date = approver.created_date;
                 approverNew.modified_date = DateTime.UtcNow;
                 approverNew.modified_by = "Application";
+                approverNew.is_active = true;
                 PropertyCopier<UpdateApprover, Approver>.Copy(value, approverNew);
                 _companyContext.Entry<Approver>(approver).CurrentValues.SetValues(approverNew);
                 _companyContext.ApproverToRoles.RemoveRange(_companyContext.ApproverToRoles.Where
@@ -177,14 +178,18 @@ namespace AccessMgmtBackend.Controllers
         public IEnumerable<ViewApprover> Delete([FromBody] DeleteApprover deleteApprover)
         {
             List<ViewApprover> viewApprovers = new List<ViewApprover>();
-            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == deleteApprover.approver_identifier);
+            var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == deleteApprover.approver_identifier && s.is_active);
             if (approver != null)
             {
-                _companyContext.Approvers.Remove(approver);
-                _companyContext.ApproverToRoles.RemoveRange(_companyContext.ApproverToRoles.Where
-                    (x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()));
+                approver.is_active = false;
+                approver.modified_date = DateTime.UtcNow;
+                approver.modified_by = "Application";
+                _companyContext.Approvers.Update(approver);
+                _companyContext.ApproverToRoles.UpdateRange(_companyContext.ApproverToRoles.Where
+                    (x => x.company_identifier == approver.company_identifier && x.approver_identifier == approver.approver_identifier.ToString()).ToList()
+                   .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
                 _companyContext.SaveChanges();
-                var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier).ToList();
+                var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier && x.is_active).ToList();
 
                 foreach (var i in listOfApprovers)
                 {
@@ -209,7 +214,7 @@ namespace AccessMgmtBackend.Controllers
             }
             else
             {
-                var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier).ToList();
+                var listOfApprovers = _companyContext.Approvers.Where(x => x.company_identifier == deleteApprover.company_identifier && x.is_active).ToList();
 
                 foreach (var i in listOfApprovers)
                 {

@@ -34,7 +34,9 @@
         public string? associated_assets { get; set; }
         public DateTime? emp_cert_review_date { get; set; }
         public string? emp_profile_picture { get; set; }
+        public DateTime? emp_approval_overdue { get; set; }
         public bool is_active { get; set; }
+        public bool? is_approved { get; set; }
         public DateTime? created_date { get; set; }
         public string? created_by { get; set; }
         public DateTime? modified_date { get; set; }
