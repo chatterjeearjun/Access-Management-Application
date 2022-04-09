@@ -13,6 +13,10 @@ import CountUp from "react-countup";
 /** import Mini Widget data */
 import { WidgetsData } from "../../common/data/dashboard";
 import WalletBalance from "./WalletBalance";
+import ApprovalsPie from "./ApprovalsPie";
+import ApprovedVsTotalUsers from "./ApprovedVsTotalUsers";
+import OverdueVsTotalUsers from "./OverdueVsTotalUsers";
+import ApprovalStatusList from "./ApprovalStatusList";
 import InvestedOverview from "./InvestedOverview";
 import MarketOverview from "./MarketOverview";
 import Locations from "./Locations";
@@ -83,8 +87,21 @@ const Dashboard = () => {
             {(WidgetsData || []).map((widget, key) => (
               <Col xl={3} md={6} key={key}>
                 <Card className="card-h-100">
-                  <CardBody>
-                    <Row className="align-items-center">
+                  <CardBody
+                    style={
+                      widget.id === 1 || widget.id === 2
+                        ? { paddingTop: "2rem" }
+                        : {}
+                    }
+                  >
+                    <Row
+                      className="align-items-center"
+                      style={
+                        widget.id === 1 || widget.id === 2
+                          ? { marginBottom: "1rem" }
+                          : {}
+                      }
+                    >
                       <Col xs={6}>
                         <span className="text-muted mb-3 lh-1 d-block text-truncate">
                           {widget.title}
@@ -101,15 +118,19 @@ const Dashboard = () => {
                           </span>
                         </h4>
                       </Col>
-                      <Col xs={6}>
-                        <ReactApexChart
-                          options={options}
-                          series={[{ data: [...widget["series"]] }]}
-                          type="line"
-                          className="apex-charts"
-                          dir="ltr"
-                        />
-                      </Col>
+                      {widget.id !== 1 && widget.id !== 2 ? (
+                        <Col xs={6}>
+                          <ReactApexChart
+                            options={options}
+                            series={[{ data: [...widget["series"]] }]}
+                            type="line"
+                            className="apex-charts"
+                            dir="ltr"
+                          />
+                        </Col>
+                      ) : (
+                        ""
+                      )}
                     </Row>
                     <div className="text-nowrap">
                       <span
@@ -123,7 +144,7 @@ const Dashboard = () => {
                         {widget.rank}
                       </span>
                       <span className="ms-1 text-muted font-size-13">
-                        Since last week
+                        Since last month
                       </span>
                     </div>
                   </CardBody>
@@ -132,6 +153,14 @@ const Dashboard = () => {
             ))}
           </Row>
           <Row>
+            <ApprovalsPie />
+            <ApprovedVsTotalUsers />
+            <OverdueVsTotalUsers />
+          </Row>
+          <Row>
+            <ApprovalStatusList />
+          </Row>
+          {/* <Row>
             <WalletBalance />
             <Col>
               <Row>
@@ -148,7 +177,7 @@ const Dashboard = () => {
             <Trading />
             <Transactions />
             <RecentActivity />
-          </Row>
+          </Row> */}
         </Container>
       </div>
     </React.Fragment>

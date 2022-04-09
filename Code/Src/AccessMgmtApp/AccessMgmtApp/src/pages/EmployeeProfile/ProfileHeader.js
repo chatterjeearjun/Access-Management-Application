@@ -14,7 +14,7 @@ import classnames from "classnames";
 import OverviewTab from "./Overview";
 import AssetsToEmp from "./AssetsToEmp";
 import EmpAttachments from "./Attachments";
-
+import { FcEditImage } from "react-icons/fc";
 const EmployeeProfileHeader = (props) => {
   const [employeeData, setEmployeeData] = useState([]);
   const [activeTab, toggleTab] = useState("1");
@@ -38,9 +38,16 @@ const EmployeeProfileHeader = (props) => {
                           src={`${employeeData.emp_profile_picture}`}
                           alt="no profile pic"
                           className="img-fluid rounded-circle shadow-4"
-                          style={{ borderRadius: "50% !important" }}
+                          style={{ objectFit: "cover" }}
                         />
                       </div>
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm d-flex justify-content-center align-items-center"
+                      >
+                        <i className="mdi mdi-pencil font-size-14"></i>
+                        <span>Change Photo</span>
+                      </button>
                     </div>
                     <div className="flex-grow-1">
                       <div>
