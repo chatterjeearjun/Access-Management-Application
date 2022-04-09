@@ -251,6 +251,149 @@ namespace AccessMgmtBackend.Migrations
 
                 dbContext.SaveChanges();
             }
+
+            if (!dbContext.RoleToUsers.Any())
+            {
+                dbContext.RoleToUsers.Add(new RoleToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0279ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A820209",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.RoleToUsers.Add(new RoleToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0278ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A820209",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.RoleToUsers.Add(new RoleToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0277ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D988A850200",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.RoleToUsers.Add(new RoleToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0272ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D988A850200",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.RoleToUsers.Add(new RoleToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0271ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-9D228A850201",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+
+                dbContext.SaveChanges();
+            }
+
+            if (!dbContext.GroupToUsers.Any())
+            {
+                dbContext.GroupToUsers.Add(new GroupToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0279ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",                   
+                    group_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850290",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.GroupToUsers.Add(new GroupToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0278ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    group_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850228",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.GroupToUsers.Add(new GroupToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0277ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    group_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850228",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.GroupToUsers.Add(new GroupToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0272ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    group_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850201",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.GroupToUsers.Add(new GroupToUser
+                {
+                    id = 0,
+                    user_identifier = "6c0271ec-fea1-4fa8-bb1f-5d428a850222",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    group_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850201",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+
+                dbContext.SaveChanges();
+            }
+
         }
     }
 }
