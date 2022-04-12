@@ -56,13 +56,6 @@ namespace AccessMgmtBackend.Migrations
                 IdentityResult roleResult = roleManager.
                 CreateAsync(role).Result;
             }
-            if (!roleManager.RoleExistsAsync("6c0276ec-fea1-4fa8-bb1f-5d988a850200").Result)
-            {
-                IdentityRole role = new IdentityRole();
-                role.Name = "6c0276ec-fea1-4fa8-bb1f-5d988a850200";
-                IdentityResult roleResult = roleManager.
-                CreateAsync(role).Result;
-            }
             if (!roleManager.RoleExistsAsync("6c0276ec-fea1-4fa8-bb1f-5d428a820209").Result)
             {
                 IdentityRole role = new IdentityRole();

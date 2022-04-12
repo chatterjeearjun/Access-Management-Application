@@ -27,6 +27,8 @@
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Approver> Approvers { get; set; }
         public DbSet<UploadedFile> UploadedFiles { get; set; }
+        public DbSet<CommonDocument> CommonDocuments { get; set; }
+        public DbSet<AdditionalDocument> AdditionalDocuments { get; set; }
         public DbSet<AssetToEmployee> AssetToEmployees { get; set; }
         public DbSet<AssetToRole> AssetToRoles { get; set; }
         public DbSet<AssetToUser> AssetToUsers { get; set; }
@@ -36,7 +38,8 @@
         public DbSet<GroupToUser> GroupToUsers { get; set; }
         public DbSet<RoleToUser> RoleToUsers { get; set; }
         public DbSet<EmployeeToGroup> EmployeeToGroups { get; set; }
-        
+        public DbSet<RoleToDocument> RoleToDocuments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add your own configuration here
@@ -51,6 +54,8 @@
             modelBuilder.Entity<Role>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<SentNotification>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<UploadedFile>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            modelBuilder.Entity<CommonDocument>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            modelBuilder.Entity<AdditionalDocument>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<AppUser>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         }
     }
