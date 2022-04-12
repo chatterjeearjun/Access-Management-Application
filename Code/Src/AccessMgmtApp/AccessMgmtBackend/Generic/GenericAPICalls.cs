@@ -32,6 +32,19 @@ namespace AccessMgmtBackend.Generic
 
         }
 
+        public async Task<HttpResponseMessage> AppUserPostByEmail(string requestURI, string email)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //POST Method                
+                HttpResponseMessage response = await client.PostAsJsonAsync(requestURI, email);
+                return response;
+            }
+
+        }
         public async Task<HttpResponseMessage> FileUploadPostEndpoint(string requestURI, FileModel file)
         {
 

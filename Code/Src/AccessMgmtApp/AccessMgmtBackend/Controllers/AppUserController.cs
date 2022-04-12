@@ -2,6 +2,7 @@
 using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,12 +33,54 @@ namespace AccessMgmtBackend.Controllers
         }
 
         // GET api/<AppUserController>/5
+        [Route("GetByEmail")]
+        [HttpGet]
+        public IActionResult GetByEmail(string email)
+        {
+            var appUser = _companyContext.AppUsers.FirstOrDefault(s => s.user_name == email);
+            if (appUser != null)
+            {
+                appUser.user_description_attachment = !string.IsNullOrEmpty(appUser.user_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                           (s => s.file_identifier.ToString() == appUser.user_description_attachment)?.blob_file_name : String.Empty;
+            }
+
+            return appUser == null ?BadRequest("Not Found"): Ok(appUser.user_identifier.ToString());
+        }
+
+        // GET api/<AppUserController>/5
         [HttpGet("{guid}")]
         public AppUser Get(string guid)
         {
             var appUser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == new Guid(guid));
             if (appUser != null)
             {
+                var listRoles = new List<KeyValuePair<string, string>>();
+                var rolesToUsers = _companyContext.RoleToUsers.Where
+                         (x => x.company_identifier == appUser.company_identifier && x.user_identifier == appUser.user_identifier.ToString() && x.is_active == true).ToList();
+                foreach (var roleDetail in rolesToUsers)
+                {
+                    var roleName = _companyContext.CompanyRoles.FirstOrDefault
+                             (x => x.company_identifier == appUser.company_identifier && x.role_identifier.ToString() == roleDetail.role_identifier.ToString())
+                             ?.role_name;
+
+                    if (!string.IsNullOrEmpty(roleName)) listRoles.Add(new KeyValuePair<string, string>(roleName, roleDetail.role_identifier));
+                }
+                appUser.user_role = JsonConvert.SerializeObject(listRoles);
+
+                var listGroups = new List<KeyValuePair<string, string>>();
+                var groupToUsers = _companyContext.GroupToUsers.Where
+                         (x => x.company_identifier == appUser.company_identifier && x.user_identifier == appUser.user_identifier.ToString() && x.is_active == true).ToList();
+                foreach (var groupDetail in groupToUsers)
+                {
+                    var groupName = _companyContext.Groups.FirstOrDefault
+                             (x => x.company_identifier == appUser.company_identifier && x.group_identifier.ToString() == groupDetail.group_identifier.ToString())
+                             ?.group_name;
+
+                    if (!string.IsNullOrEmpty(groupName)) listGroups.Add(new KeyValuePair<string, string>(groupName, groupDetail.group_identifier));
+                }
+                appUser.user_group = JsonConvert.SerializeObject(listGroups);
+
+
                 appUser.user_description_attachment = !string.IsNullOrEmpty(appUser.user_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
                            (s => s.file_identifier.ToString() == appUser.user_description_attachment)?.blob_file_name : String.Empty;
             }

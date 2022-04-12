@@ -57,7 +57,7 @@ namespace AccessMgmtBackend.Controllers
                             company_identifier = model.CompanyIdentifier,
                             user_name = model.Email,
                             user_description = model.user_description,
-                            user_description_attachment = model.user_description_attachment,
+                            //user_description_attachment = model.user_description_attachment,
                             is_nda_required = model.is_nda_required,
                             is_bc_required = model.is_bc_required,
                             is_certification_required = model.is_certification_required,
@@ -70,7 +70,7 @@ namespace AccessMgmtBackend.Controllers
                         if (response.Result.IsSuccessStatusCode)
                         {
                             AppUser userResponse = await response.Result.Content.ReadAsAsync<AppUser>();
-                            Console.WriteLine("Id:{0}\tName:{1}", userResponse.id, userResponse.is_approved);
+                            Console.WriteLine("Id:{0}\tActive:{1}", userResponse.id, userResponse.is_active);
                         }
                         else
                         {
@@ -95,6 +95,8 @@ namespace AccessMgmtBackend.Controllers
                 var user = await this.userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
+                    GenericAPICalls request = new GenericAPICalls();
+                    string userResponse = string.Empty;
                     var passwordCheck = await this.signInManager.CheckPasswordSignInAsync(user, model.Password, false);
                     if (passwordCheck.Succeeded)
                     {
@@ -113,18 +115,35 @@ namespace AccessMgmtBackend.Controllers
                             expires: DateTime.UtcNow.AddHours(3),
                             signingCredentials: credentials
                             );
-
+                        var response = request.GetEndpoint("api/AppUser/GetByEmail?email=" + user.Email);
+                        if (response.Result.IsSuccessStatusCode)
+                        {
+                           userResponse = await response.Result.Content.ReadAsAsync<string>();
+                        }
+                        else
+                        {
+                            return Unauthorized("User Not Found");
+                        }
                         return Ok(new
                         {
+                            useridentier = userResponse,
                             token = new JwtSecurityTokenHandler().WriteToken(token),
                             expiration = token.ValidTo
                         });
+                    }
+                    else if (passwordCheck.IsLockedOut)
+                    {
+                        return Unauthorized("Account Locked");
+                    }
+                    else if (!passwordCheck.Succeeded)
+                    {
+                        return Unauthorized("Wrong Credential");
                     }
 
                 }
                 else
                 {
-                    return Unauthorized();
+                    return Unauthorized("User Not Found");
                 }
             }
 
