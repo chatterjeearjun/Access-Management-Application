@@ -20,6 +20,135 @@ namespace AccessMgmtBackend.Controllers
             _roleManager = roleManager;
         }
 
+        [Route("AddNewDocument")]
+        [HttpPost]
+        public IActionResult AddNewDocument(string companyId, List<string> documentName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(companyId) && documentName != null && documentName.Count > 0)
+                {
+                    foreach (var document in documentName)
+                    {
+                        var isExist = _companyContext.AdditionalDocuments.FirstOrDefault(x => x.company_identifier == companyId
+                        && x.document_name == document.Trim() && x.is_active) != null ? true : false;
+                        if (!isExist)
+                        {
+                            AdditionalDocument additionalDocument = new AdditionalDocument();
+                            additionalDocument.company_identifier = companyId;
+                            additionalDocument.document_category = "Additional Document";
+                            additionalDocument.document_name = document;
+                            additionalDocument.created_date = DateTime.UtcNow;
+                            additionalDocument.created_by = "Application";
+                            additionalDocument.is_active = true;
+                            _companyContext.AdditionalDocuments.Add(additionalDocument);
+                        }
+                    }
+                    _companyContext.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Invalid Request");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("ERROR");
+            }
+        }
+
+        [Route("AttachRequiredDocument")]
+        [HttpPost]
+        public IActionResult AttachRequiredDocument(string companyId, string roleId, List<string> documentId)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(companyId) && !string.IsNullOrEmpty(roleId) && documentId != null && documentId.Count > 0)
+                {
+                    var associatedRole = _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == companyId && x.role_identifier.ToString() == roleId && x.is_active);
+                    if (associatedRole != null)
+                    {
+                        foreach (var document in documentId)
+                        {
+                            var associatedCommonDocument = _companyContext.CommonDocuments.FirstOrDefault(x => x.document_identifier.ToString() == document && x.is_active);
+                            var associatedAdditionalDocument = _companyContext.AdditionalDocuments.FirstOrDefault(x => x.document_identifier.ToString() == document && x.is_active);
+                            if (associatedCommonDocument != null || associatedAdditionalDocument != null)
+                            {
+                                _companyContext.RoleToDocuments.Add(new RoleToDocument
+                                {
+                                    id = 0,
+                                    company_identifier = companyId,
+                                    role_identifier = roleId,
+                                    document_identifier = document,
+                                    is_active = true,
+                                    is_approved = true,
+                                    created_date = DateTime.UtcNow,
+                                    created_by = "Application"
+                                });
+                            }
+                            else
+                            {
+                                return BadRequest("No documents record found");
+                            }
+                        }
+                        _companyContext.SaveChanges();
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest("No matching record found");
+                    }
+                }
+                else
+                {
+                    return BadRequest("Invalid Request");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("ERROR");
+            }
+        }
+
+        [Route("DetachRequiredDocument")]
+        [HttpPost]
+        public IActionResult DetachRequiredDocument(string companyId, string roleId, List<string> documentId)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(companyId) && !string.IsNullOrEmpty(roleId) && documentId != null && documentId.Count > 0)
+                {
+                    foreach (var document in documentId)
+                    {
+                        var roleToDocument = _companyContext.RoleToDocuments.FirstOrDefault(x => x.role_identifier == roleId
+                         && x.document_identifier == document && x.company_identifier == companyId);
+                        if (roleToDocument != null)
+                        {
+                            _companyContext.RoleToDocuments.Remove(roleToDocument);
+                        }
+                        else
+                        {
+                            return BadRequest("No documents record found");
+                        }
+                    }
+                    _companyContext.SaveChanges();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Invalid Request");
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("ERROR");
+            }
+        }
+
         // GET: api/<RoleController>
         [HttpGet]
         public IEnumerable<Role> GetByCompany(string companyId)

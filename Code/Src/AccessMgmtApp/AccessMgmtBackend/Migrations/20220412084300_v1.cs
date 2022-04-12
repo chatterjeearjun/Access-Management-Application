@@ -10,6 +10,27 @@ namespace AccessMgmtBackend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ac_additional_document",
+                columns: table => new
+                {
+                    document_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    document_category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    document_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_additional_document", x => x.document_identifier);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ac_approver_role",
                 columns: table => new
                 {
@@ -19,6 +40,7 @@ namespace AccessMgmtBackend.Migrations
                     approver_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -44,6 +66,7 @@ namespace AccessMgmtBackend.Migrations
                     approver_mobile_number = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     approver_role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -64,6 +87,7 @@ namespace AccessMgmtBackend.Migrations
                     asset_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     employee_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -84,6 +108,7 @@ namespace AccessMgmtBackend.Migrations
                     asset_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -104,6 +129,7 @@ namespace AccessMgmtBackend.Migrations
                     asset_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     user_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -131,6 +157,7 @@ namespace AccessMgmtBackend.Migrations
                     asset_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     asset_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     certification_required = table.Column<bool>(type: "bit", nullable: true),
@@ -144,6 +171,26 @@ namespace AccessMgmtBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ac_assets", x => x.asset_identifier);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ac_common_document",
+                columns: table => new
+                {
+                    document_identifier = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    document_category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    document_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_common_document", x => x.document_identifier);
                 });
 
             migrationBuilder.CreateTable(
@@ -164,6 +211,7 @@ namespace AccessMgmtBackend.Migrations
                     company_activation_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     company_deactivation_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -184,6 +232,7 @@ namespace AccessMgmtBackend.Migrations
                     employee_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     group_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -204,6 +253,7 @@ namespace AccessMgmtBackend.Migrations
                     employee_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -244,7 +294,9 @@ namespace AccessMgmtBackend.Migrations
                     associated_assets = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_cert_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     emp_profile_picture = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    emp_approval_overdue = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -267,6 +319,7 @@ namespace AccessMgmtBackend.Migrations
                     group_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     group_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
@@ -292,6 +345,7 @@ namespace AccessMgmtBackend.Migrations
                     group_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -312,6 +366,7 @@ namespace AccessMgmtBackend.Migrations
                     group_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     user_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -340,6 +395,7 @@ namespace AccessMgmtBackend.Migrations
                     home_address = table.Column<bool>(type: "bit", nullable: true),
                     nominee_details = table.Column<bool>(type: "bit", nullable: true),
                     mobile_number = table.Column<bool>(type: "bit", nullable: true),
+                    is_active = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -361,7 +417,8 @@ namespace AccessMgmtBackend.Migrations
                     notification_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     notification_body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    is_active = table.Column<bool>(type: "bit", nullable: true),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     is_manual = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -386,6 +443,7 @@ namespace AccessMgmtBackend.Migrations
                     sent_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     notification_sent_to = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -408,6 +466,7 @@ namespace AccessMgmtBackend.Migrations
                     role_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     role_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
@@ -424,6 +483,27 @@ namespace AccessMgmtBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ac_role_document",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    document_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_role_document", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ac_role_user",
                 columns: table => new
                 {
@@ -433,6 +513,7 @@ namespace AccessMgmtBackend.Migrations
                     role_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     user_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -456,6 +537,7 @@ namespace AccessMgmtBackend.Migrations
                     friendly_file_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     blob_file_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -478,12 +560,14 @@ namespace AccessMgmtBackend.Migrations
                     user_description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     user_description_attachment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
                     is_nda_required = table.Column<bool>(type: "bit", nullable: true),
                     is_bc_required = table.Column<bool>(type: "bit", nullable: true),
                     is_certification_required = table.Column<bool>(type: "bit", nullable: true),
                     associated_assets = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     user_role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     user_group = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    user_profile_picture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -684,6 +768,9 @@ namespace AccessMgmtBackend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "ac_additional_document");
+
+            migrationBuilder.DropTable(
                 name: "ac_approver_role");
 
             migrationBuilder.DropTable(
@@ -700,6 +787,9 @@ namespace AccessMgmtBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "ac_assets");
+
+            migrationBuilder.DropTable(
+                name: "ac_common_document");
 
             migrationBuilder.DropTable(
                 name: "ac_companies");
@@ -733,6 +823,9 @@ namespace AccessMgmtBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "ac_role");
+
+            migrationBuilder.DropTable(
+                name: "ac_role_document");
 
             migrationBuilder.DropTable(
                 name: "ac_role_user");

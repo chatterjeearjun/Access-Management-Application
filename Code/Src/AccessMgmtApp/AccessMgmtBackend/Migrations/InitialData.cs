@@ -65,7 +65,7 @@ namespace AccessMgmtBackend.Migrations
                     id = 0,
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
                     approver_identifier = new Guid("6c0276ec-fea1-4fa8-bb1f-5d428a850299"),
-                    approver_role = "Team Lead",
+                    approver_role = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
                     approver_first_name = "Arjun",
                     approver_last_name = "Chatterjee",
                     approver_email = "arjun.chatterjee@gmail.com",
@@ -133,7 +133,7 @@ namespace AccessMgmtBackend.Migrations
                     id = 0,
                     role_identifier = new Guid("6c0276ec-fea1-4fa8-bb1f-5d428a820209"),
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_name = "Administrator",
+                    role_name = "Manager",
                     is_active = true,
                     is_approved=true,
                     created_date = Convert.ToDateTime("2022-03-07"),
@@ -144,22 +144,9 @@ namespace AccessMgmtBackend.Migrations
                 dbContext.CompanyRoles.Add(new Role
                 {
                     id = 0,
-                    role_identifier = new Guid("6c0276ec-fea1-4fa8-bb1f-5d988a850200"),
-                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_name = "HR Manager",
-                    is_active = true,
-                    is_approved = true,
-                    created_date = Convert.ToDateTime("2022-03-07"),
-                    created_by = "Application",
-                    modified_date = Convert.ToDateTime("2022-03-07"),
-                    modified_by = "Application"
-                });
-                dbContext.CompanyRoles.Add(new Role
-                {
-                    id = 0,
                     role_identifier = new Guid("6c0276ec-fea1-4fa8-bb1f-9d228a850201"),
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_name = "Approver",
+                    role_name = "Developer",
                     is_active = true,
                     is_approved = true,
                     created_date = Convert.ToDateTime("2022-03-07"),
@@ -179,7 +166,7 @@ namespace AccessMgmtBackend.Migrations
                     user_identifier = new Guid("6c0279ec-fea1-4fa8-bb1f-5d428a850222"),
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
                     user_name = "achatterjee@localhost",
-                    user_role = "6C0276EC-FEA1-4FA8-BB1F-5D428A820209",
+                    user_role = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
                     user_group = "6C0276EC-FEA1-4FA8-BB1F-5D428A850290",
                     is_active = true,
                     is_approved = true,
@@ -194,38 +181,8 @@ namespace AccessMgmtBackend.Migrations
                     user_identifier = new Guid("6c0278ec-fea1-4fa8-bb1f-5d428a850222"),
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
                     user_name = "achatterjee1@localhost",
-                    user_role = "6C0276EC-FEA1-4FA8-BB1F-5D428A820209",
+                    user_role = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
                     user_group = "6C0276EC-FEA1-4FA8-BB1F-5D428A850228",
-                    is_active = true,
-                    is_approved = true,
-                    created_date = Convert.ToDateTime("2022-03-07"),
-                    created_by = "Application",
-                    modified_date = Convert.ToDateTime("2022-03-07"),
-                    modified_by = "Application"
-                });
-                dbContext.AppUsers.Add(new AppUser
-                {
-                    id = 0,
-                    user_identifier = new Guid("6c0277ec-fea1-4fa8-bb1f-5d428a850222"),
-                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    user_name = "achatterjee2@localhost",
-                    user_role = "6C0276EC-FEA1-4FA8-BB1F-5D988A850200",
-                    user_group = "6C0276EC-FEA1-4FA8-BB1F-5D428A850228",
-                    is_active = true,
-                    is_approved = true,
-                    created_date = Convert.ToDateTime("2022-03-07"),
-                    created_by = "Application",
-                    modified_date = Convert.ToDateTime("2022-03-07"),
-                    modified_by = "Application"
-                });
-                dbContext.AppUsers.Add(new AppUser
-                {
-                    id = 0,
-                    user_identifier = new Guid("6c0272ec-fea1-4fa8-bb1f-5d428a850222"),
-                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    user_name = "achatterjee3@localhost",
-                    user_role = "6C0276EC-FEA1-4FA8-BB1F-5D988A850200",
-                    user_group = "6C0276EC-FEA1-4FA8-BB1F-5D428A850201",
                     is_active = true,
                     is_approved = true,
                     created_date = Convert.ToDateTime("2022-03-07"),
@@ -239,7 +196,7 @@ namespace AccessMgmtBackend.Migrations
                     user_identifier = new Guid("6c0271ec-fea1-4fa8-bb1f-5d428a850222"),
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
                     user_name = "nrao@localhost",
-                    user_role = "6C0276EC-FEA1-4FA8-BB1F-9D228A850201",
+                    user_role = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
                     user_group = "6C0276EC-FEA1-4FA8-BB1F-5D428A850201",
                     is_active = true,
                     is_approved = true,
@@ -259,7 +216,7 @@ namespace AccessMgmtBackend.Migrations
                     id = 0,
                     user_identifier = "6c0279ec-fea1-4fa8-bb1f-5d428a850222",
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A820209",
+                    role_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
                     is_active = true,
                     is_approved = true,
                     created_date = Convert.ToDateTime("2022-03-07"),
@@ -272,33 +229,7 @@ namespace AccessMgmtBackend.Migrations
                     id = 0,
                     user_identifier = "6c0278ec-fea1-4fa8-bb1f-5d428a850222",
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A820209",
-                    is_active = true,
-                    is_approved = true,
-                    created_date = Convert.ToDateTime("2022-03-07"),
-                    created_by = "Application",
-                    modified_date = Convert.ToDateTime("2022-03-07"),
-                    modified_by = "Application"
-                });
-                dbContext.RoleToUsers.Add(new RoleToUser
-                {
-                    id = 0,
-                    user_identifier = "6c0277ec-fea1-4fa8-bb1f-5d428a850222",
-                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D988A850200",
-                    is_active = true,
-                    is_approved = true,
-                    created_date = Convert.ToDateTime("2022-03-07"),
-                    created_by = "Application",
-                    modified_date = Convert.ToDateTime("2022-03-07"),
-                    modified_by = "Application"
-                });
-                dbContext.RoleToUsers.Add(new RoleToUser
-                {
-                    id = 0,
-                    user_identifier = "6c0272ec-fea1-4fa8-bb1f-5d428a850222",
-                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D988A850200",
+                    role_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
                     is_active = true,
                     is_approved = true,
                     created_date = Convert.ToDateTime("2022-03-07"),
@@ -311,7 +242,7 @@ namespace AccessMgmtBackend.Migrations
                     id = 0,
                     user_identifier = "6c0271ec-fea1-4fa8-bb1f-5d428a850222",
                     company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
-                    role_identifier = "6C0276EC-FEA1-4FA8-BB1F-9D228A850201",
+                    role_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
                     is_active = true,
                     is_approved = true,
                     created_date = Convert.ToDateTime("2022-03-07"),
@@ -393,7 +324,91 @@ namespace AccessMgmtBackend.Migrations
 
                 dbContext.SaveChanges();
             }
-
+            if (!dbContext.CommonDocuments.Any())
+            {
+                dbContext.CommonDocuments.Add(new CommonDocument
+                {
+                    id = 0,
+                    document_identifier = new Guid("6c0276ec-fea1-4fa7-bb9f-5d428a850300"),
+                    document_category = "Common Document",
+                    document_name = "Background Check",                    
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.CommonDocuments.Add(new CommonDocument
+                {
+                    id = 0,
+                    document_identifier = new Guid("6c0277ec-fea1-4fa7-bb9f-5d428a850900"),
+                    document_category = "Common Document",
+                    document_name = "NDA Document",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.SaveChanges();
+            }
+            if (!dbContext.RoleToDocuments.Any())
+            {
+                dbContext.RoleToDocuments.Add(new RoleToDocument
+                {
+                    id = 0,
+                    document_identifier = "6c0276ec-fea1-4fa7-bb9f-5d428a850300",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.RoleToDocuments.Add(new RoleToDocument
+                {
+                    id = 0,
+                    document_identifier = "6c0277ec-fea1-4fa7-bb9f-5d428a850900",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a820209",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.RoleToDocuments.Add(new RoleToDocument
+                {
+                    id = 0,
+                    document_identifier = "6c0276ec-fea1-4fa7-bb9f-5d428a850300",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6c0276ec-fea1-4fa8-bb1f-9d228a850201",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.RoleToDocuments.Add(new RoleToDocument
+                {
+                    id = 0,
+                    document_identifier = "6c0277ec-fea1-4fa7-bb9f-5d428a850900",
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    role_identifier = "6c0276ec-fea1-4fa8-bb1f-9d228a850201",
+                    is_active = true,
+                    is_approved = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                
+                dbContext.SaveChanges();
+            }
         }
     }
 }
