@@ -32,7 +32,7 @@ namespace AccessMgmtBackend.Controllers
             }
         }
 
-        [Route("AddNewDocument")]
+        [Route("UpdateCompanyDocument")]
         [HttpPost]
         public IEnumerable<AdditionalDocument> UpdateCompanyDocument(string companyId, List<KeyValuePair<string, bool>> documentAssociation)
         {
