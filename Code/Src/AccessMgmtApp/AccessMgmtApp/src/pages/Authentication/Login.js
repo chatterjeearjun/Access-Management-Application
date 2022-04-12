@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import MetaTags from "react-meta-tags";
-import React from "react";
+import React, { useState } from "react";
 
 import { Row, Col, Alert, Container } from "reactstrap";
 
@@ -12,19 +12,12 @@ import { withRouter, Link } from "react-router-dom";
 // availity-reactstrap-validation
 import { AvForm, AvField } from "availity-reactstrap-validation";
 
-//Social Media Imports
-import { GoogleLogin } from "react-google-login";
-// import TwitterLogin from "react-twitter-auth"
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
 // actions
-import { loginUser, socialLogin } from "../../store/actions";
+import { loginUser } from "../../store/actions";
 
 // import images
 import logo from "../../assets/images/logo-sm.svg";
 
-//Import config
-import { facebook, google } from "../../config";
 import CarouselPage from "../AuthenticationInner/CarouselPage";
 
 const Login = (props) => {
@@ -33,44 +26,16 @@ const Login = (props) => {
   const { error } = useSelector((state) => ({
     error: state.Login.error,
   }));
-
+  const [remember, setRemember] = useState(false);
   // handleValidSubmit
   const handleValidSubmit = (event, values) => {
+    debugger;
     dispatch(loginUser(values, props.history));
   };
 
-  const signIn = (res, type) => {
-    if (type === "google" && res) {
-      const postData = {
-        name: res.profileObj.name,
-        email: res.profileObj.email,
-        token: res.tokenObj.access_token,
-        idToken: res.tokenId,
-      };
-      dispatch(socialLogin(postData, props.history, type));
-    } else if (type === "facebook" && res) {
-      const postData = {
-        name: res.name,
-        email: res.email,
-        token: res.accessToken,
-        idToken: res.tokenId,
-      };
-      dispatch(socialLogin(postData, props.history, type));
-    }
+  const onRemeberChange = (e) => {
+    setRemember(e.target.checked);
   };
-
-  //handleGoogleLoginResponse
-  // const googleResponse = (response) => {
-  //   signIn(response, "google");
-  // };
-
-  // //handleTwitterLoginResponse
-  // // const twitterResponse = e => {}
-
-  // //handleFacebookLoginResponse
-  // const facebookResponse = (response) => {
-  //   signIn(response, "facebook");
-  // };
 
   return (
     <React.Fragment>
@@ -108,17 +73,40 @@ const Login = (props) => {
                           <AvField
                             name="email"
                             label="Email"
-                            value="admin@crossleaf.com"
+                            value={localStorage.getItem("isRemember")}
                             className="form-control"
                             placeholder="Enter email"
-                            type="email"
+                            type="text"
                             required
+                            autoComplete="off"
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <AvField
+                            label="Password"
+                            name="password"
+                            value=""
+                            type="password"
+                            className="form-control"
+                            required
+                            placeholder="Enter Password"
+                            autoComplete="off"
                           />
                         </div>
                         <div className="mb-3">
                           <div className="d-flex align-items-start">
                             <div className="flex-grow-1">
-                              <label className="form-label">Password</label>
+                              <div className="mb-3">
+                                <AvField
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  id="remember-check"
+                                  value={remember}
+                                  onChange={onRemeberChange}
+                                  name="remember"
+                                  label="Remember me"
+                                />
+                              </div>
                             </div>
                             <div className="flex-shrink-0">
                               <div className="">
@@ -131,34 +119,6 @@ const Login = (props) => {
                               </div>
                             </div>
                           </div>
-
-                          <div className="mb-3">
-                            <AvField
-                              name="password"
-                              value="123456"
-                              type="password"
-                              className="form-control"
-                              required
-                              placeholder="Enter Password"
-                            />
-                          </div>
-                        </div>
-                        <div className="row mb-4">
-                          <div className="col">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="remember-check"
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="remember-check"
-                              >
-                                Remember me
-                              </label>
-                            </div>
-                          </div>
                         </div>
                         <div className="mb-3">
                           <button
@@ -169,59 +129,6 @@ const Login = (props) => {
                           </button>
                         </div>
                       </AvForm>
-
-                      {/* <div className="mt-4 text-center">
-                        <h5 className="font-size-14 mb-3">Sign in with</h5>
-
-                        <ul className="list-inline">
-                          <li className="list-inline-item">
-                            <FacebookLogin
-                              appId={facebook.APP_ID}
-                              autoLoad={false}
-                              callback={facebookResponse}
-                              render={(renderProps) => (
-                                <Link
-                                  to="#"
-                                  className="social-list-item bg-primary text-white border-primary"
-                                  onClick={renderProps.onClick}
-                                >
-                                  <i className="mdi mdi-facebook" />
-                                </Link>
-                              )}
-                            />
-                          </li>
-
-                          <li className="list-inline-item">
-                            <GoogleLogin
-                              clientId={google.CLIENT_ID}
-                              render={(renderProps) => (
-                                <Link
-                                  to="#"
-                                  className="social-list-item bg-danger text-white border-danger"
-                                  onClick={renderProps.onClick}
-                                >
-                                  <i className="mdi mdi-google" />
-                                </Link>
-                              )}
-                              onSuccess={googleResponse}
-                              onFailure={() => {}}
-                            />
-                          </li>
-                        </ul>
-                      </div>
-
-                      <div className="mt-5 text-center">
-                        <p className="text-muted mb-0">
-                          Don't have an account ?{" "}
-                          <Link
-                            to="/register"
-                            className="text-primary fw-semibold"
-                          >
-                            {" "}
-                            Signup now{" "}
-                          </Link>{" "}
-                        </p>
-                      </div> */}
                     </div>
                     <div className="mt-4 mt-md-5 text-center">
                       <p className="mb-0">

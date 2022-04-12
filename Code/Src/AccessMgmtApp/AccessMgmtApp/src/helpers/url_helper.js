@@ -2,6 +2,7 @@
 export const POST_FAKE_REGISTER = "/post-fake-register";
 
 //LOGIN
+export const ADMIN_LOGIN = "/api/Account/login";
 export const POST_FAKE_LOGIN = "/post-fake-login";
 export const POST_FAKE_JWT_LOGIN = "/post-jwt-login";
 export const POST_FAKE_PASSWORD_FORGET = "/fake-forget-pwd";
