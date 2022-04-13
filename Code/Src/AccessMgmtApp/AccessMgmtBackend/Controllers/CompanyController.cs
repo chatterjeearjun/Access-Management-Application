@@ -43,7 +43,7 @@ namespace AccessMgmtBackend.Controllers
                     foreach (var docAssociation in documentAssociation)
                     {
                         var addDoc = _companyContext.AdditionalDocuments.FirstOrDefault(x => x.company_identifier == companyId
-                        && x.document_name == docAssociation.Key.Trim());
+                        && x.document_identifier.ToString() == docAssociation.Key.Trim());
                         if (addDoc != null)
                         {
                             addDoc.modified_date = DateTime.UtcNow;
