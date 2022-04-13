@@ -352,6 +352,37 @@ namespace AccessMgmtBackend.Migrations
                 });
                 dbContext.SaveChanges();
             }
+            if (!dbContext.AdditionalDocuments.Any())
+            {
+                dbContext.AdditionalDocuments.Add(new AdditionalDocument
+                {
+                    id = 0,
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    document_identifier = new Guid("6c0276ec-fea1-4fa7-bb9f-5d428a850300"),
+                    document_category = "Additional Document",
+                    document_name = "Background Check",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.AdditionalDocuments.Add(new AdditionalDocument
+                {
+                    id = 0,
+                    company_identifier = "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+                    document_identifier = new Guid("6c0277ec-fea1-4fa7-bb9f-5d428a850900"),
+                    document_category = "Additional Document",
+                    document_name = "NDA Document",
+                    is_active = true,
+                    created_date = Convert.ToDateTime("2022-03-07"),
+                    created_by = "Application",
+                    modified_date = Convert.ToDateTime("2022-03-07"),
+                    modified_by = "Application"
+                });
+                dbContext.SaveChanges();
+            }
+
             if (!dbContext.RoleToDocuments.Any())
             {
                 dbContext.RoleToDocuments.Add(new RoleToDocument

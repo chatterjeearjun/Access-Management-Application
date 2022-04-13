@@ -19,7 +19,21 @@ namespace AccessMgmtBackend.Controllers
             _companyContext = companyContext;
             _roleManager = roleManager;
         }
-               
+
+        [Route("GetRoleDocument")]
+        [HttpGet]
+        public IEnumerable<AdditionalDocument> GetRoleDocument(string roleId,string companyId)
+        {
+            if (!string.IsNullOrEmpty(roleId))
+            {
+                return _companyContext.AdditionalDocuments.Where(x => x.company_identifier== companyId &&  
+                _companyContext.RoleToDocuments.Where(y=>y.role_identifier== roleId).Select(z => z.document_identifier).ToList().Contains(x.document_identifier.ToString()));
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         [Route("AttachRequiredDocument")]
         [HttpPost]

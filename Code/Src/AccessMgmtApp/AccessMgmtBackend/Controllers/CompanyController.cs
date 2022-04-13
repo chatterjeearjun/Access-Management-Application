@@ -19,7 +19,7 @@ namespace AccessMgmtBackend.Controllers
         }
 
         [Route("GetCompanyDocument")]
-        [HttpPost]
+        [HttpGet]
         public IEnumerable<AdditionalDocument> GetCompanyDocument(string companyId)
         {
             if (!string.IsNullOrEmpty(companyId))
