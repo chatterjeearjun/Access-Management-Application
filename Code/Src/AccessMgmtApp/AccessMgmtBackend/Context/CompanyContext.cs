@@ -39,7 +39,7 @@
         public DbSet<RoleToUser> RoleToUsers { get; set; }
         public DbSet<EmployeeToGroup> EmployeeToGroups { get; set; }
         public DbSet<RoleToDocument> RoleToDocuments { get; set; }
-
+        public DbSet<EmployeeToDocument> EmployeeToDocuments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add your own configuration here

@@ -223,6 +223,29 @@ namespace AccessMgmtBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ac_employee_document",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    company_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    employee_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    document_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    document_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    file_identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    is_active = table.Column<bool>(type: "bit", nullable: false),
+                    is_approved = table.Column<bool>(type: "bit", nullable: true),
+                    created_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    created_by = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    modified_date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    modified_by = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ac_employee_document", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ac_employee_group",
                 columns: table => new
                 {
@@ -283,16 +306,7 @@ namespace AccessMgmtBackend.Migrations
                     emp_dob = table.Column<DateTime>(type: "datetime2", nullable: true),
                     emp_joining_date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     emp_relieving_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    emp_nda_document1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_nda_document2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_nda_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    emp_bc_document1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_bc_document2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_bc_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    emp_cert_document1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_cert_document2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     associated_assets = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    emp_cert_review_date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     emp_profile_picture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     emp_approval_overdue = table.Column<DateTime>(type: "datetime2", nullable: true),
                     is_active = table.Column<bool>(type: "bit", nullable: false),
@@ -793,6 +807,9 @@ namespace AccessMgmtBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "ac_companies");
+
+            migrationBuilder.DropTable(
+                name: "ac_employee_document");
 
             migrationBuilder.DropTable(
                 name: "ac_employee_group");

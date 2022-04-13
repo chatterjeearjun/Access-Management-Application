@@ -80,26 +80,28 @@ namespace AccessMgmtBackend.Controllers
             {
                 var listOfMappings = _companyContext.AssetToEmployees.Where(x => x.company_identifier == companyId && x.asset_identifier == assetId && x.is_active == true)?
                     .Select(x=>x.employee_identifier)?.Distinct()?.ToList();
-                if(listOfMappings != null && listOfMappings.Count>0)
+                var listEmployeeDocs = _companyContext.EmployeeToDocuments.Where(x => x.company_identifier == companyId && x.is_active).ToList();
+                if (listOfMappings != null && listOfMappings.Count>0)
                 {
                     listEmployees = _companyContext.Employees.ToList().Where(x => listOfMappings.Any(y=>y.ToString()==x.employee_identifier.ToString()) && x.is_active).ToList();
                 }
                 foreach (var employee in listEmployees)
                 {
+                    List<EmployeeDocument> documents = new List<EmployeeDocument>();
                     employee.emp_profile_picture = !string.IsNullOrEmpty(employee.emp_profile_picture) ? _companyContext.UploadedFiles.FirstOrDefault
                        (s => s.file_identifier.ToString() == employee.emp_profile_picture)?.blob_file_name : String.Empty;
-                    employee.emp_nda_document1 = !string.IsNullOrEmpty(employee.emp_nda_document1) ? _companyContext.UploadedFiles.FirstOrDefault
-                           (s => s.file_identifier.ToString() == employee.emp_nda_document1)?.blob_file_name : String.Empty;
-                    employee.emp_nda_document2 = !string.IsNullOrEmpty(employee.emp_nda_document2) ? _companyContext.UploadedFiles.FirstOrDefault
-                           (s => s.file_identifier.ToString() == employee.emp_nda_document2)?.blob_file_name : String.Empty;
-                    employee.emp_bc_document1 = !string.IsNullOrEmpty(employee.emp_bc_document1) ? _companyContext.UploadedFiles.FirstOrDefault
-                           (s => s.file_identifier.ToString() == employee.emp_bc_document1)?.blob_file_name : String.Empty;
-                    employee.emp_bc_document2 = !string.IsNullOrEmpty(employee.emp_bc_document2) ? _companyContext.UploadedFiles.FirstOrDefault
-                           (s => s.file_identifier.ToString() == employee.emp_bc_document2)?.blob_file_name : String.Empty;
-                    employee.emp_cert_document1 = !string.IsNullOrEmpty(employee.emp_cert_document1) ? _companyContext.UploadedFiles.FirstOrDefault
-                           (s => s.file_identifier.ToString() == employee.emp_cert_document1)?.blob_file_name : String.Empty;
-                    employee.emp_cert_document2 = !string.IsNullOrEmpty(employee.emp_cert_document2) ? _companyContext.UploadedFiles.FirstOrDefault
-                           (s => s.file_identifier.ToString() == employee.emp_cert_document2)?.blob_file_name : String.Empty;
+                    var employeeDoc = listEmployeeDocs.Where(x => x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                    foreach (var docs in employeeDoc)
+                    {
+                        string path = _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == docs.file_identifier)?.blob_file_name;
+                        documents.Add(new EmployeeDocument
+                        {
+                            DocumentId = docs.document_identifier,
+                            DocumentName = docs.document_name,
+                            DocumentPath = path
+                        });
+                    }
+                    employee.emp_documents = documents;
                     employee.emp_role = String.Join(",",
                         _companyContext.EmployeeToRoles.Where
                         (x => x.company_identifier == companyId && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).
