@@ -14,7 +14,13 @@
         public int ExpiredEmployees { get; set; }
         public int ExpiredAssets { get; set; }
         public IEnumerable<Employee> TopPendingEmployees { get; set; }
-
+        public int MonthlyEmployeeAdded { get; set; }
+        public int YearlyEmployeeAdded { get; set; }
+        public int PendingEmployees { get; set; }
+        public int RejectedEmployees { get; set; }
+        public int ApprovedEmployeePercentage { get; set; }
+        public int AuditCompletedPercentage { get; set; }
+        public int TicketClosurePercentage { get; set; }
 
     }
 }
