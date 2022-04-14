@@ -30,6 +30,9 @@ import assetsManagement from "./AssetsManagement/reducer";
 //EmployeeProfile
 import employeeProfileReducer from "./EmployeeProfile/reducer";
 
+//EmployeeProfile
+import docsManagement from "./ReuiredDocuments/reducer";
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -44,6 +47,7 @@ const rootReducer = combineReducers({
   compGroups,
   assetsManagement,
   employeeProfileReducer,
+  docsManagement,
 });
 
 export default rootReducer;

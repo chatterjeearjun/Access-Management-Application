@@ -119,7 +119,9 @@ const EmployeeManagement = () => {
       dataField: "emp_role",
       text: "Role",
       sort: true,
-      formatter: (cellContent, user) => <>{JSON.parse(user.emp_role)[0].Key}</>,
+      formatter: (cellContent, user) => (
+        <>{JSON.parse(user?.emp_role)[0]?.Key}</>
+      ),
     },
     {
       dataField: "emp_email",

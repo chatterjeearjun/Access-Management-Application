@@ -13,6 +13,8 @@ import {
   postRole,
   postEmployee,
   isapproverDuplicate,
+  postForAddingDocs,
+  getForDocs,
 } from "./api_helper";
 import * as url from "./url_helper";
 
@@ -378,6 +380,19 @@ export const approverDuplicateCheck = (aprproverEmail) =>
 
 //Employee Profile
 export const getEmployeeProfile = (id) => get(url.GET_EMP_PROFILE, id);
+
+export const getDocs = () =>
+  getForDocs(url.GET_DOCS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+
+export const addNewDoc = (doc) =>
+  postForAddingDocs(url.ADD_DOCS, doc, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+
+export const updateDoc = (doc) =>
+  postForAddingDocs(
+    url.UPDATE_DOCS,
+    doc,
+    "6c0276ec-fea1-4fa8-bb1f-5d428a850222"
+  );
 
 export {
   getLoggedInUser,

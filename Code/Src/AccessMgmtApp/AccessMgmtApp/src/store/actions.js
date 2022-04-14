@@ -26,3 +26,6 @@ export * from "./AssetsManagement/actions";
 
 //Employee Profile
 export * from "././EmployeeProfile/actions";
+
+//Docs
+export * from "././ReuiredDocuments/actions";

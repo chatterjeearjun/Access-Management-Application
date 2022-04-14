@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //pass new generated access token here
-const token = `Bearer ${JSON.parse(localStorage.setItem("authUser")).token}`;
+const token = `Bearer ${JSON.parse(localStorage.getItem("authUser")).token}`;
 
 //apply base url for axios
 const API_URL = "https://localhost:5001";
@@ -26,6 +26,62 @@ export async function get(url, id) {
         headers: {
           "Content-Type": "application/json",
         },
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error, "get error");
+  }
+}
+
+export async function getForDocs(url, id) {
+  try {
+    const response = await fetch(
+      `${API_URL}${url}${id !== null && id !== undefined ? id : ""}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error, "get error");
+  }
+}
+export async function postForAddingDocs(url, doc, id) {
+  try {
+    const response = await fetch(
+      `${API_URL}${url}${id !== null && id !== undefined ? id : ""}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify(doc),
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error, "get error");
+  }
+}
+export async function postForUpdatingDocs(url, doc, id) {
+  try {
+    const response = await fetch(
+      `${API_URL}${url}${id !== null && id !== undefined ? id : ""}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify(doc),
       }
     );
     const data = await response.json();

@@ -13,6 +13,7 @@ import contactsSaga from "./contacts/saga";
 import compGroupsSaga from "./GroupsManagement/saga";
 import assetsSaga from "./AssetsManagement/saga";
 import employeeProfileSaga from "./EmployeeProfile/saga";
+import docsSaga from "./ReuiredDocuments/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -29,5 +30,6 @@ export default function* rootSaga() {
     fork(compGroupsSaga),
     fork(assetsSaga),
     fork(employeeProfileSaga),
+    fork(docsSaga),
   ]);
 }

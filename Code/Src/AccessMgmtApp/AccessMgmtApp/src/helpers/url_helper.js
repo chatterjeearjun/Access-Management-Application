@@ -150,3 +150,6 @@ export const ASSET_TO_EMP = (asssetid, compid) => {
 };
 
 export const GET_EMP_PROFILE = "/api/Employee/";
+export const GET_DOCS = "/api/Company/GetCompanyDocument?companyId=";
+export const ADD_DOCS = "/api/Company/AddNewCompanyDocument?companyId=";
+export const UPDATE_DOCS = "/api/Company/UpdateCompanyDocument?companyId=";
