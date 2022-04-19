@@ -3,6 +3,7 @@ using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -134,6 +135,18 @@ namespace AccessMgmtBackend.Controllers
                 var listOfRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId && x.is_active).ToList();
                 foreach (var i in listOfRoles)
                 {
+                    var listDocuments = new List<KeyValuePair<string, string>>();
+                    var rolesToDocuments = _companyContext.RoleToDocuments.Where
+                             (x => x.company_identifier == i.company_identifier && x.role_identifier == i.role_identifier.ToString() && x.is_active == true).ToList();
+                    foreach (var roleDetail in rolesToDocuments)
+                    {
+                        var docName = _companyContext.AdditionalDocuments.FirstOrDefault
+                                 (x => x.company_identifier == i.company_identifier && x.document_identifier.ToString() == roleDetail.document_identifier.ToString())
+                                 ?.document_name;
+
+                        if (!string.IsNullOrEmpty(docName)) listDocuments.Add(new KeyValuePair<string, string>(docName, roleDetail.document_identifier));
+                    }
+                    i.associated_documents = JsonConvert.SerializeObject(listDocuments);
                     i.associated_groups = String.Join(",",
                     _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.role_identifier == i.role_identifier.ToString() && x.is_active == true).
                     Select(x => x.group_identifier));
@@ -156,8 +169,18 @@ namespace AccessMgmtBackend.Controllers
             var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
             if (role != null)
             {
-                role.role_description_attachment = !string.IsNullOrEmpty(role.role_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
-                        (s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : String.Empty;
+                var listDocuments = new List<KeyValuePair<string, string>>();
+                var rolesToDocuments = _companyContext.RoleToDocuments.Where
+                         (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active == true).ToList();
+                foreach (var roleDetail in rolesToDocuments)
+                {
+                    var docName = _companyContext.AdditionalDocuments.FirstOrDefault
+                             (x => x.company_identifier == role.company_identifier && x.document_identifier.ToString() == roleDetail.document_identifier.ToString())
+                             ?.document_name;
+
+                    if (!string.IsNullOrEmpty(docName)) listDocuments.Add(new KeyValuePair<string, string>(docName, roleDetail.document_identifier));
+                }
+                role.associated_documents = JsonConvert.SerializeObject(listDocuments);
                 role.associated_groups = String.Join(",",
                  _companyContext.GroupToRoles.Where(x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active == true).
                  Select(x => x.group_identifier));
@@ -176,25 +199,6 @@ namespace AccessMgmtBackend.Controllers
             role.created_date = DateTime.UtcNow;
             role.created_by = "Application";
             role.is_active = true;
-
-            if (value.role_description_attachment != null)
-            {
-                // Add user to AppUser table
-                GenericAPICalls request = new GenericAPICalls();
-                var file = new FileModel
-                {
-                    File = value.role_description_attachment,
-                    upload_category = "Role",
-                    company_identifier = value.company_identifier,
-                    user_identifier = ""
-                };
-                var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
-                if (response.Result.IsSuccessStatusCode)
-                {
-                    UploadedFile userResponse = await response.Result.Content.ReadAsAsync<UploadedFile>();
-                    role.role_description_attachment = userResponse?.file_identifier.ToString();
-                }
-            }
 
             PropertyCopier<CreateRole, Role>.Copy(value, role);
             _companyContext.CompanyRoles.Add(role);
@@ -240,11 +244,50 @@ namespace AccessMgmtBackend.Controllers
                 identityRole.Name = role.role_identifier.ToString();
                 IdentityResult roleResult = _roleManager.
                 CreateAsync(identityRole).Result;
+            }            
+
+            var newrole = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name && s.company_identifier == value.company_identifier && s.is_active);
+            if (!string.IsNullOrEmpty(newrole.company_identifier) && !string.IsNullOrEmpty(newrole.role_identifier.ToString()) && value.RoleDocumentMapping != null && value.RoleDocumentMapping.Count > 0)
+            {
+                var associatedRole = _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newrole.company_identifier && x.role_identifier.ToString() 
+                == newrole.role_identifier.ToString() && x.is_active);
+                if (associatedRole != null)
+                {
+                    foreach (var document in value.RoleDocumentMapping)
+                    {
+                        var associatedAdditionalDocument = _companyContext.AdditionalDocuments.FirstOrDefault(x => x.document_identifier.ToString() == document && x.is_active);
+                        if (associatedAdditionalDocument != null)
+                        {
+                            _companyContext.RoleToDocuments.Add(new RoleToDocument
+                            {
+                                id = 0,
+                                company_identifier = newrole.company_identifier,
+                                role_identifier = newrole.role_identifier.ToString(),
+                                document_identifier = document,
+                                is_active = true,
+                                is_approved = true,
+                                created_date = DateTime.UtcNow,
+                                created_by = "Application"
+                            });
+                        }
+                    }
+                    _companyContext.SaveChanges();
+                }
             }
 
-            var newrole = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name);
-            newrole.role_description_attachment = !string.IsNullOrEmpty(newrole.role_description_attachment) ?
-                _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : string.Empty;
+            var listDocuments = new List<KeyValuePair<string, string>>();
+            var rolesToDocuments = _companyContext.RoleToDocuments.Where
+                     (x => x.company_identifier == newrole.company_identifier && x.role_identifier == newrole.role_identifier.ToString() && x.is_active == true).ToList();
+            foreach (var roleDetail in rolesToDocuments)
+            {
+                var docName = _companyContext.AdditionalDocuments.FirstOrDefault
+                         (x => x.company_identifier == newrole.company_identifier && x.document_identifier.ToString() == roleDetail.document_identifier.ToString())
+                         ?.document_name;
+
+                if (!string.IsNullOrEmpty(docName)) listDocuments.Add(new KeyValuePair<string, string>(docName, roleDetail.document_identifier));
+            }
+            newrole.associated_documents = JsonConvert.SerializeObject(listDocuments);
+
             return newrole;
         }
 
@@ -270,7 +313,35 @@ namespace AccessMgmtBackend.Controllers
                     (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
                 _companyContext.GroupToRoles.RemoveRange(_companyContext.GroupToRoles.Where
                     (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
-
+                _companyContext.RoleToDocuments.RemoveRange(_companyContext.RoleToDocuments.Where
+                    (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
+                if (!string.IsNullOrEmpty(roleNew.company_identifier) && !string.IsNullOrEmpty(roleNew.role_identifier.ToString()) && value.RoleActiveDocumentMapping != null && value.RoleActiveDocumentMapping.Count > 0)
+                {
+                    var associatedRole = _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == roleNew.company_identifier && x.role_identifier.ToString()
+                    == roleNew.role_identifier.ToString() && x.is_active);
+                    if (associatedRole != null)
+                    {
+                        foreach (var document in value.RoleActiveDocumentMapping)
+                        {
+                            var associatedAdditionalDocument = _companyContext.AdditionalDocuments.FirstOrDefault(x => x.document_identifier.ToString() == document && x.is_active);
+                            if (associatedAdditionalDocument != null)
+                            {
+                                _companyContext.RoleToDocuments.Add(new RoleToDocument
+                                {
+                                    id = 0,
+                                    company_identifier = roleNew.company_identifier,
+                                    role_identifier = roleNew.role_identifier.ToString(),
+                                    document_identifier = document,
+                                    is_active = true,
+                                    is_approved = true,
+                                    created_date = DateTime.UtcNow,
+                                    created_by = "Application"
+                                });
+                            }
+                        }
+                        _companyContext.SaveChanges();
+                    }
+                }
                 if (!string.IsNullOrEmpty(roleNew.associated_assets))
                 {
                     string[] assets = roleNew.associated_assets.Split(',');
