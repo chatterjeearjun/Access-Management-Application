@@ -135,6 +135,8 @@ namespace AccessMgmtBackend.Controllers
                 var listOfRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == companyId && x.is_active).ToList();
                 foreach (var i in listOfRoles)
                 {
+                    i.role_description_attachment = !string.IsNullOrEmpty(i.role_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                        (s => s.file_identifier.ToString() == i.role_description_attachment)?.blob_file_name : String.Empty;
                     var listDocuments = new List<KeyValuePair<string, string>>();
                     var rolesToDocuments = _companyContext.RoleToDocuments.Where
                              (x => x.company_identifier == i.company_identifier && x.role_identifier == i.role_identifier.ToString() && x.is_active == true).ToList();
@@ -169,6 +171,8 @@ namespace AccessMgmtBackend.Controllers
             var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == new Guid(guid));
             if (role != null)
             {
+                role.role_description_attachment = !string.IsNullOrEmpty(role.role_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                        (s => s.file_identifier.ToString() == role.role_description_attachment)?.blob_file_name : String.Empty;
                 var listDocuments = new List<KeyValuePair<string, string>>();
                 var rolesToDocuments = _companyContext.RoleToDocuments.Where
                          (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString() && x.is_active == true).ToList();
@@ -247,13 +251,14 @@ namespace AccessMgmtBackend.Controllers
             }            
 
             var newrole = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_name == value.role_name && s.company_identifier == value.company_identifier && s.is_active);
-            if (!string.IsNullOrEmpty(newrole.company_identifier) && !string.IsNullOrEmpty(newrole.role_identifier.ToString()) && value.RoleDocumentMapping != null && value.RoleDocumentMapping.Count > 0)
+            if (!string.IsNullOrEmpty(newrole.company_identifier) && !string.IsNullOrEmpty(newrole.role_identifier.ToString()) && !string.IsNullOrEmpty(value.role_document_mapping))
             {
                 var associatedRole = _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == newrole.company_identifier && x.role_identifier.ToString() 
                 == newrole.role_identifier.ToString() && x.is_active);
                 if (associatedRole != null)
                 {
-                    foreach (var document in value.RoleDocumentMapping)
+                    string[] documents = value.role_document_mapping.Split(',');
+                    foreach (var document in documents)
                     {
                         var associatedAdditionalDocument = _companyContext.AdditionalDocuments.FirstOrDefault(x => x.document_identifier.ToString() == document && x.is_active);
                         if (associatedAdditionalDocument != null)
@@ -293,7 +298,7 @@ namespace AccessMgmtBackend.Controllers
 
         // PUT api/<RoleController>/5
         [HttpPut]
-        public Role Put([FromBody] UpdateRole value)
+        public Role Put([FromForm] UpdateRole value)
         {
             var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier.ToString() == value.role_identifier);
             if (role != null)
@@ -315,13 +320,14 @@ namespace AccessMgmtBackend.Controllers
                     (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
                 _companyContext.RoleToDocuments.RemoveRange(_companyContext.RoleToDocuments.Where
                     (x => x.company_identifier == role.company_identifier && x.role_identifier == role.role_identifier.ToString()));
-                if (!string.IsNullOrEmpty(roleNew.company_identifier) && !string.IsNullOrEmpty(roleNew.role_identifier.ToString()) && value.RoleActiveDocumentMapping != null && value.RoleActiveDocumentMapping.Count > 0)
+                if (!string.IsNullOrEmpty(roleNew.company_identifier) && !string.IsNullOrEmpty(roleNew.role_identifier.ToString()) && !string.IsNullOrEmpty(value.role_document_mapping))
                 {
                     var associatedRole = _companyContext.CompanyRoles.FirstOrDefault(x => x.company_identifier == roleNew.company_identifier && x.role_identifier.ToString()
                     == roleNew.role_identifier.ToString() && x.is_active);
                     if (associatedRole != null)
                     {
-                        foreach (var document in value.RoleActiveDocumentMapping)
+                        string[] documents = value.role_document_mapping.Split(',');
+                        foreach (var document in documents)
                         {
                             var associatedAdditionalDocument = _companyContext.AdditionalDocuments.FirstOrDefault(x => x.document_identifier.ToString() == document && x.is_active);
                             if (associatedAdditionalDocument != null)

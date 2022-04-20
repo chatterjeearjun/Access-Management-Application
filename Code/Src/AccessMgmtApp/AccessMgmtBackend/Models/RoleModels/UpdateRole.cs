@@ -10,7 +10,8 @@
         public string? role_description { get; set; }
         public bool is_active { get; set; }
         public bool? is_approved { get; set; }
-        public List<string>? RoleActiveDocumentMapping { get; set; }
+        public IFormFile? role_description_attachment { get; set; }
+        public string? role_document_mapping { get; set; }
         public string? associated_assets { get; set; }
         public string? associated_groups { get; set; }
     }
