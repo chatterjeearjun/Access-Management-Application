@@ -91,7 +91,7 @@ namespace AccessMgmtBackend.Controllers
                         }
                     }
                     _companyContext.SaveChanges();
-                    return _companyContext.AdditionalDocuments.Where(x => x.company_identifier == companyId && x.is_active);
+                    return _companyContext.AdditionalDocuments.Where(x => x.company_identifier == companyId);
                 }
                 else
                 {
