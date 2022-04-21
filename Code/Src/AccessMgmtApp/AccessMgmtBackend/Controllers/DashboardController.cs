@@ -18,13 +18,15 @@ namespace AccessMgmtBackend.Controllers
 
         // GET: api/<DashboardController>
         [HttpGet]
-        public DashboardView GetByCompany(string companyId)
+        public DashboardView GetByCompany(string companyId, string startDate, string endDate)
         {
             DashboardView dashboardView = new DashboardView();
+            DateTime start = !string.IsNullOrEmpty(startDate) ? Convert.ToDateTime(startDate) : DateTime.UtcNow.AddMonths(-1);
+            DateTime end = !string.IsNullOrEmpty(endDate) ? Convert.ToDateTime(endDate) : DateTime.UtcNow;
 
             if (!string.IsNullOrEmpty(companyId))
             {
-                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId).ToList();
+                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
                 if (listEmployees != null && listEmployees.Count > 0)
                 {
                     dashboardView.TotalEmployees = listEmployees.Where(x => x.is_active).Count();
@@ -53,7 +55,7 @@ namespace AccessMgmtBackend.Controllers
                     dashboardView.TicketClosurePercentage = 0;//Needs to be developed
 
                 }
-                var listAssets = _companyContext.Assets.Where(x => x.company_identifier == companyId).ToList();
+                var listAssets = _companyContext.Assets.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
                 if (listAssets != null && listAssets.Count > 0)
                 {
                     dashboardView.TotalAssets = listAssets.Where(x => x.is_active).Count();
@@ -70,18 +72,18 @@ namespace AccessMgmtBackend.Controllers
                         dashboardView.MonthlyAssetCountChanges = difference + " Decreased";
                     }
                 }
-                var approverRoles = _companyContext.ApproverToRoles.Where(x => x.company_identifier == companyId).ToList();
-                var assetEmployees = _companyContext.AssetToEmployees.Where(x => x.company_identifier == companyId).ToList();
-                var assetRoles = _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId).ToList();
-                var assetUsers = _companyContext.AssetToUsers.Where(x => x.company_identifier == companyId).ToList();
-                var employeeGroups = _companyContext.EmployeeToGroups.Where(x => x.company_identifier == companyId).ToList();
-                var employeeRoles = _companyContext.EmployeeToRoles.Where(x => x.company_identifier == companyId).ToList();
-                var groupRoles = _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId).ToList();
-                var groupUsers = _companyContext.GroupToUsers.Where(x => x.company_identifier == companyId).ToList();
-                var roleToUsers = _companyContext.RoleToUsers.Where(x => x.company_identifier == companyId).ToList();
-                
-                
-                dashboardView.ApprovedApprovals = approverRoles.Where(x=>x.is_approved == true).Count()+
+                var approverRoles = _companyContext.ApproverToRoles.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var assetEmployees = _companyContext.AssetToEmployees.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var assetRoles = _companyContext.AssetToRoles.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var assetUsers = _companyContext.AssetToUsers.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var employeeGroups = _companyContext.EmployeeToGroups.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var employeeRoles = _companyContext.EmployeeToRoles.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var groupRoles = _companyContext.GroupToRoles.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var groupUsers = _companyContext.GroupToUsers.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+                var roleToUsers = _companyContext.RoleToUsers.Where(x => x.company_identifier == companyId && x.created_date >= start && x.created_date <= end).ToList();
+
+
+                dashboardView.ApprovedApprovals = approverRoles.Where(x => x.is_approved == true).Count() +
                     assetEmployees.Where(x => x.is_approved == true).Count() +
                     assetRoles.Where(x => x.is_approved == true).Count() +
                     assetUsers.Where(x => x.is_approved == true).Count() +

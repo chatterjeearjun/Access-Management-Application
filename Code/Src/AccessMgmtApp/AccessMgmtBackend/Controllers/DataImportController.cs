@@ -7,6 +7,7 @@ using ExcelDataReader;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Data;
 using System.Net;
 
@@ -24,7 +25,7 @@ namespace AccessMgmtBackend.Controllers
 
         [Route("ImportEmployees")]
         [HttpPost]
-        public string ImportEmployees([FromForm] FileModel file)
+        public IEnumerable<Employee> ImportEmployees([FromForm] FileModel file)
         {
             try
             {
@@ -162,7 +163,57 @@ namespace AccessMgmtBackend.Controllers
                         message = "Invalid File.";
                 }
 
-                return message;
+                var listEmployees = _companyContext.Employees.Where(x => x.company_identifier == file.company_identifier && x.is_active).ToList();
+                var listEmployeeDocs = _companyContext.EmployeeToDocuments.Where(x => x.company_identifier == file.company_identifier && x.is_active).ToList();
+                foreach (var employee in listEmployees)
+                {
+                    List<EmployeeDocument> documents = new List<EmployeeDocument>();
+                    employee.emp_profile_picture = !string.IsNullOrEmpty(employee.emp_profile_picture) ? _companyContext.UploadedFiles.FirstOrDefault
+                       (s => s.file_identifier.ToString() == employee.emp_profile_picture)?.blob_file_name : String.Empty;
+                    var employeeDoc = listEmployeeDocs.Where(x => x.employee_identifier == employee.employee_identifier.ToString()).ToList();
+                    foreach (var docs in employeeDoc)
+                    {
+                        string path = _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == docs.file_identifier)?.blob_file_name;
+                        documents.Add(new EmployeeDocument
+                        {
+                            DocumentId = docs.document_identifier,
+                            DocumentName = docs.document_name,
+                            DocumentPath = path
+                        });
+                    }
+                    employee.emp_documents = documents;
+                    var listRoles = new List<KeyValuePair<string, string>>();
+                    var employeesToRoles = _companyContext.EmployeeToRoles.Where
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
+                    foreach (var roleDetail in employeesToRoles)
+                    {
+                        var roleName = _companyContext.CompanyRoles.FirstOrDefault
+                                 (x => x.company_identifier == employee.company_identifier && x.role_identifier.ToString() == roleDetail.role_identifier.ToString())
+                                 ?.role_name;
+
+                        if (!string.IsNullOrEmpty(roleName)) listRoles.Add(new KeyValuePair<string, string>(roleName, roleDetail.role_identifier));
+                    }
+                    employee.emp_role = JsonConvert.SerializeObject(listRoles);
+
+                    employee.emp_group = String.Join(",",
+                       _companyContext.EmployeeToGroups.Where
+                       (x => x.company_identifier == file.company_identifier && x.employee_identifier == employee.employee_identifier.ToString()).
+                       Select(x => x.group_identifier));
+
+                    var list = new List<KeyValuePair<string, string>>();
+                    var assetToEmployees = _companyContext.AssetToEmployees.Where
+                             (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
+                    foreach (var assetDetail in assetToEmployees)
+                    {
+                        var assetName = _companyContext.Assets.FirstOrDefault
+                                 (x => x.company_identifier == employee.company_identifier && x.asset_identifier.ToString() == assetDetail.asset_identifier.ToString())
+                                 ?.asset_name;
+
+                        if (!string.IsNullOrEmpty(assetName)) list.Add(new KeyValuePair<string, string>(assetName, assetDetail.asset_identifier));
+                    }
+                    employee.associated_assets = JsonConvert.SerializeObject(list);
+                }
+                return listEmployees;
                 #endregion
             }
             catch (Exception)
