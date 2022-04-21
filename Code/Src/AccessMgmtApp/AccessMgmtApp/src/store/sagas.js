@@ -14,6 +14,7 @@ import compGroupsSaga from "./GroupsManagement/saga";
 import assetsSaga from "./AssetsManagement/saga";
 import employeeProfileSaga from "./EmployeeProfile/saga";
 import docsSaga from "./ReuiredDocuments/saga";
+import dashboardSaga from "./Dashboard/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -31,5 +32,6 @@ export default function* rootSaga() {
     fork(assetsSaga),
     fork(employeeProfileSaga),
     fork(docsSaga),
+    fork(dashboardSaga),
   ]);
 }

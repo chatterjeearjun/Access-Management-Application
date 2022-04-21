@@ -1,21 +1,39 @@
-const WidgetsData = [
+const WidgetsData = (data) => [
   {
     id: 1,
     title: "Number of Users",
-    price: 200,
-    rank: "+10 Users",
+    price: data?.totalEmployees,
+    rank: `${
+      data?.monthlyEmployeeCountChanges?.split(" ")[1] === "Decreased"
+        ? "-"
+        : "+"
+    } ${data?.monthlyEmployeeCountChanges}`,
     isDoller: false,
-    statusColor: "success",
+    statusColor: `${
+      data?.monthlyEmployeeCountChanges?.split(" ")[1] === "Decreased"
+        ? "danger"
+        : "success"
+    }`,
     series: [2, 10, 18, 22, 36, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15],
+    expiry: `${data?.expiredEmployees} User(s) Expired`,
   },
   {
     id: 2,
     title: "Number of Assets",
-    price: 600,
-    rank: "-29 Assets",
+    price: data?.totalAssets,
+    rank: `${
+      data?.monthlyAssetCountChanges?.split(" ")[1] === "Decreased" || null
+        ? "-"
+        : "+"
+    } ${data?.monthlyAssetCountChanges}`,
     isDoller: false,
-    statusColor: "danger",
+    statusColor: `${
+      data?.monthlyAssetCountChanges?.split(" ")[1] === "Decreased" || null
+        ? "danger"
+        : "success"
+    }`,
     series: [15, 42, 47, 2, 14, 19, 65, 75, 47, 15, 42, 47, 2, 14, 12],
+    expiry: `${data?.expiredAssets} Asset(s) Expired`,
   },
   {
     id: 3,
@@ -36,32 +54,6 @@ const WidgetsData = [
     postFix: "",
     statusColor: "success",
     series: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14, 2, 47, 42, 15],
-  },
-  {
-    id: 5,
-    title: "User Expired Till Now",
-    price: 10,
-    rank: "-20 Expired",
-    isDoller: false,
-    postFix: "",
-    statusColor: "danger",
-    series: [
-      1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1,
-      0, 0, 0, 1, 1,
-    ],
-  },
-  {
-    id: 6,
-    title: "Assets Expired Till Now",
-    price: 8,
-    rank: "-8 Expired",
-    isDoller: false,
-    postFix: "",
-    statusColor: "danger",
-    series: [
-      0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0,
-      0, 0, 0, 0, 1,
-    ],
   },
 ];
 

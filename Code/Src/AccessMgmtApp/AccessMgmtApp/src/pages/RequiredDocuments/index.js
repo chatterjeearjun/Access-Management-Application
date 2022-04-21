@@ -24,7 +24,7 @@ const RequiredDocuments = () => {
 
   const [docsList, setDocsList] = useState([]),
     [isNewDocument, setIsNewDocument] = useState(),
-    [actionResult, setActionResult] = useState(false),
+    [actionResult, setActionResult] = useState(""),
     [docChips, setDocChips] = useState([]),
     [selectedCheckboxes, setSelectedCheckboxes] = useState({
       docsSelected: [],
@@ -36,10 +36,9 @@ const RequiredDocuments = () => {
     if (docs && !docs.length) {
       dispatch(onGetDocs());
     }
-  }, [dispatch, docs]);
+  }, []);
 
   useEffect(() => {
-    debugger;
     setDocsList(docs);
     setActionResult(result);
   }, [docs, result]);
@@ -73,19 +72,19 @@ const RequiredDocuments = () => {
       autoClose: 2000,
       toastId: "009",
     });
-    setTimeout(() => {
-      setActionResult(false);
-    }, 3000);
   } else if (actionResult === "Update Doc Success") {
     toast("Updated Required Documents Successfully !", {
       position: toast.POSITION.TOP_RIGHT,
       autoClose: 2000,
       toastId: "099",
     });
-    setTimeout(() => {
-      setActionResult(false);
-    }, 3000);
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      setActionResult("");
+    }, 3000);
+  });
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -137,54 +136,33 @@ const RequiredDocuments = () => {
                             Default Documents
                           </h3>
                           <div className="d-flex">
-                            <div
-                              className="form-check"
-                              style={{ marginRight: "1.5rem" }}
-                            >
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="nda"
-                                defaultChecked
-                                disabled={true}
-                              />
-                              <label className="form-check-label" htmlFor="nda">
-                                NDA Documents
-                              </label>
-                            </div>
-                            <div
-                              className="form-check"
-                              style={{ marginRight: "1.5rem" }}
-                            >
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="bc"
-                                defaultChecked
-                                disabled={true}
-                              />
-                              <label className="form-check-label" htmlFor="bc">
-                                Background Check Documents
-                              </label>
-                            </div>
-                            <div
-                              className="form-check"
-                              style={{ marginRight: "1.5rem" }}
-                            >
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="Certificates"
-                                defaultChecked
-                                disabled={true}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="Certificates"
-                              >
-                                Certificates
-                              </label>
-                            </div>
+                            {docsList?.map(
+                              (doc) =>
+                                doc.id < 4 && (
+                                  <Col xs={2}>
+                                    <div>
+                                      <div className="form-check mb-3">
+                                        <input
+                                          className="form-check-input"
+                                          type="checkbox"
+                                          key={doc.document_identifier}
+                                          value={doc.document_identifier}
+                                          id={"doc" + doc.id}
+                                          disabled={true}
+                                          onChange={handleCheckboxChange}
+                                          defaultChecked={doc.is_active}
+                                        />
+                                        <label
+                                          className="form-check-label"
+                                          htmlFor={"doc" + doc.id}
+                                        >
+                                          {doc.document_name}
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </Col>
+                                )
+                            )}
                           </div>
                         </div>
                       </Col>
@@ -194,30 +172,33 @@ const RequiredDocuments = () => {
                         <i className="mdi mdi-arrow-right text-primary me-1"></i>{" "}
                         Additional Documents
                       </h3>
-                      {docsList?.map((doc) => (
-                        <Col xs={3}>
-                          <div>
-                            <div className="form-check mb-3">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                key={doc.document_identifier}
-                                value={doc.document_identifier}
-                                id={"doc" + doc.id}
-                                disabled={false}
-                                onChange={handleCheckboxChange}
-                                defaultChecked={doc.is_active}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor={"doc" + doc.id}
-                              >
-                                {doc.document_name}
-                              </label>
-                            </div>
-                          </div>
-                        </Col>
-                      ))}
+                      {docsList?.map(
+                        (doc) =>
+                          doc.id > 3 && (
+                            <Col xs={3}>
+                              <div>
+                                <div className="form-check mb-3">
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    key={doc.document_identifier}
+                                    value={doc.document_identifier}
+                                    id={"doc" + doc.id}
+                                    disabled={false}
+                                    onChange={handleCheckboxChange}
+                                    defaultChecked={doc.is_active}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor={"doc" + doc.id}
+                                  >
+                                    {doc.document_name}
+                                  </label>
+                                </div>
+                              </div>
+                            </Col>
+                          )
+                      )}
                     </Row>
                     <Row className="mt-5">
                       <Col xs={2}>

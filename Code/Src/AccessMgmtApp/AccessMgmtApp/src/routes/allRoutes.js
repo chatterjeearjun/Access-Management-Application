@@ -25,6 +25,9 @@ import RequiredDocuments from "../pages/RequiredDocuments/index";
 //Groups
 import GroupsManagement from "../pages/GroupsManagement/index";
 
+//BulkUploads
+import EmployeeBulkUpload from "../pages/BulkUpload/index";
+
 // Calendar
 import Calendar from "../pages/Calendar/index";
 
@@ -149,11 +152,15 @@ const userRoutes = [
 
   //roles
   { path: "/groupsmanagement", component: GroupsManagement },
+
   //Required Documents
   { path: "/requireddocuments", component: RequiredDocuments },
 
   //profile
   { path: "/profile", component: userProfile },
+
+  //BulkUploads
+  { path: "/employeebulkupload", component: EmployeeBulkUpload },
 
   //Calendar
   { path: "/apps-calendar", component: Calendar },

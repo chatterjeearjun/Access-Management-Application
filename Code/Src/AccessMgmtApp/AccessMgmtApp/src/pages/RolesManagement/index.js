@@ -32,6 +32,7 @@ import {
   deleteRole as onDeleteRole,
   getAssets as onGetAssets,
   getCompGroups as onGetCompGroups,
+  getDocs as onGetDocs,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
 
@@ -52,15 +53,22 @@ const RolesManagement = (props) => {
   const { groups } = useSelector((state) => ({
     groups: state.compGroups.groups,
   }));
+  const { docs } = useSelector((state) => ({
+    docs: state.docsManagement.docs,
+  }));
 
   const [roleList, setRoleList] = useState([]);
   const [assetList, setAssetList] = useState([]);
   const [assetsSelected, setAssetSelected] = useState([]);
   const [groupSelected, setGroupsSelected] = useState([]);
   const [groupList, setGroupList] = useState([]);
+  const [docsList, setDocsList] = useState([]);
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [file, setFile] = useState();
+  const [file, setFile] = useState(),
+    [selectedDocsReq, setSelectedDocsReq] = useState({
+      docsSelected: [],
+    });
   const { SearchBar } = Search;
 
   const pageOptions = {
@@ -135,7 +143,7 @@ const RolesManagement = (props) => {
       dispatch(onGetRoles());
       setIsEdit(false);
     }
-  }, [dispatch, roles]);
+  }, []);
 
   useEffect(() => {
     setRoleList(roles);
@@ -147,7 +155,7 @@ const RolesManagement = (props) => {
     if (assets && !assets.length) {
       dispatch(onGetAssets());
     }
-  }, [dispatch, assets]);
+  }, []);
 
   useEffect(() => {
     setAssetList(assets);
@@ -158,11 +166,22 @@ const RolesManagement = (props) => {
     if (groups && !groups.length) {
       dispatch(onGetCompGroups());
     }
-  }, [dispatch, groups]);
+  }, []);
 
   useEffect(() => {
     setGroupList(groups);
   }, [groups]);
+
+  //Docs
+  useEffect(() => {
+    if (docs && !docs.length) {
+      dispatch(onGetDocs());
+    }
+  }, []);
+
+  useEffect(() => {
+    setDocsList(docs);
+  }, [docs]);
 
   const toggle = () => {
     setModal(!modal);
@@ -176,6 +195,7 @@ const RolesManagement = (props) => {
 
   const handleRoleClick = (arg) => {
     const role = arg;
+    debugger;
     setRoleList({
       roleid: role.role_identifier,
       rolename: role.role_name,
@@ -183,10 +203,7 @@ const RolesManagement = (props) => {
       roledesc: role.role_description,
       roledescattachment: role.role_description_attachment,
       isactive: role.is_active,
-      nda: role.is_nda_required === true ? "Required" : "Not Required",
-      bc: role.is_bc_required === true ? "Required" : "Not Required",
-      certificates:
-        role.is_certification_required === true ? "Required" : "Not Required",
+      documentsSelected: JSON.parse(role.associated_documents),
       associatedassets: role.associated_assets?.split(","),
     });
     setIsEdit(true);
@@ -226,10 +243,7 @@ const RolesManagement = (props) => {
         role_description: values["description"],
         role_description_attachment: roleList.roledescattachment,
         is_active: roleList.isactive,
-        is_nda_required: values["nda"] === "Required" ? true : false,
-        is_bc_required: values["bc"] === "Required" ? true : false,
-        is_certification_required:
-          values["certificates"] === "Required" ? true : false,
+        RoleDocumentMapping: selectedDocsReq.docsSelected.toString(),
         associated_assets: assetsSelected.toString(),
       };
       // update role
@@ -237,16 +251,12 @@ const RolesManagement = (props) => {
       setIsEdit(false);
     } else {
       const newRole = {
-        company_identifier: JSON.parse(localStorage.getItem("authUser"))
-          .companyID,
+        company_identifier: "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
         role_name: values["name"],
         role_description: values["description"],
         role_description_attachment: file,
         is_active: true,
-        is_nda_required: values["nda"] === "Required" ? true : false,
-        is_bc_required: values["bc"] === "Required" ? true : false,
-        is_certification_required:
-          values["certificates"] === "Required" ? true : false,
+        RoleDocumentMapping: selectedDocsReq.docsSelected,
         associated_assets: assetsSelected.toString(),
       };
       console.log(newRole, "newrole");
@@ -269,6 +279,21 @@ const RolesManagement = (props) => {
       key: assetList[i].asset_identifier,
     };
   }
+
+  const handleDocReqChange = (e) => {
+    debugger;
+    const { value, selectedIndex } = e.target;
+    const { docsSelected: docs } = selectedDocsReq;
+    if (selectedIndex === 1) {
+      setSelectedDocsReq({
+        docsSelected: [...docs, value],
+      });
+    } else {
+      setSelectedDocsReq({
+        docsSelected: docs.filter((doc) => doc !== value.split("Not*")[1]),
+      });
+    }
+  };
 
   return (
     <React.Fragment>
@@ -410,14 +435,13 @@ const RolesManagement = (props) => {
                                                       name="roleattach"
                                                       label="Job Description Attachment"
                                                       type="text"
-                                                      //mask="99/99/9999"
                                                       disabled={true}
                                                       errorMessage="please provide valid file"
-                                                      validate={{
-                                                        required: {
-                                                          value: true,
-                                                        },
-                                                      }}
+                                                      // validate={{
+                                                      //   required: {
+                                                      //     value: true,
+                                                      //   },
+                                                      // }}
                                                       value={
                                                         roleList.roledescattachment ||
                                                         ""
@@ -446,79 +470,74 @@ const RolesManagement = (props) => {
                                                   </div>
                                                 )}
                                               </Col>
-                                              <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    type="select"
-                                                    name="nda"
-                                                    className="form-select"
-                                                    label="Is NDA Required?"
-                                                    errorMessage="please select NDA required or not"
-                                                    multiple={false}
-                                                    required
-                                                    value={roleList.nda || ""}
-                                                  >
-                                                    <option>
-                                                      select Is NDA Required?
-                                                    </option>
-                                                    <option>Required</option>
-                                                    <option>
-                                                      Not Required
-                                                    </option>
-                                                  </AvField>
-                                                </div>
-                                              </Col>
-                                            </Row>
-                                            <Row>
-                                              <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    type="select"
-                                                    name="bc"
-                                                    className="form-select"
-                                                    label="Is Background Check Required?"
-                                                    errorMessage="please select Background Check required or not"
-                                                    multiple={false}
-                                                    required
-                                                    value={roleList.bc || ""}
-                                                  >
-                                                    <option>
-                                                      select Is Background Check
-                                                      Required?
-                                                    </option>
-                                                    <option>Required</option>
-                                                    <option>
-                                                      Not Required
-                                                    </option>
-                                                  </AvField>
-                                                </div>
-                                              </Col>
-                                              <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    type="select"
-                                                    name="certificates"
-                                                    className="form-select"
-                                                    label="Is Certificates Required?"
-                                                    errorMessage="please select Certificates required or not"
-                                                    multiple={false}
-                                                    required
-                                                    value={
-                                                      roleList.certificates ||
+                                              {docsList.length > 0
+                                                ? docsList?.map((doc) =>
+                                                    doc.is_active ? (
+                                                      <Col xs={6}>
+                                                        <div className="mb-3">
+                                                          <AvField
+                                                            type="select"
+                                                            name={
+                                                              "docu" + doc.id
+                                                            }
+                                                            className="form-select"
+                                                            label={
+                                                              "Is " +
+                                                              doc.document_name +
+                                                              " Required"
+                                                            }
+                                                            errorMessage={
+                                                              "please select " +
+                                                              doc.document_name +
+                                                              " required or not"
+                                                            }
+                                                            multiple={false}
+                                                            required
+                                                            onChange={
+                                                              handleDocReqChange
+                                                            }
+                                                            value={
+                                                              roleList.documentsSelected?.filter(
+                                                                (docvalue) =>
+                                                                  docvalue.Value ===
+                                                                  doc.document_identifier
+                                                              ).length > 0
+                                                                ? doc.document_identifier
+                                                                : "Not*" +
+                                                                    doc.document_identifier ||
+                                                                  ""
+                                                            }
+                                                          >
+                                                            <option>
+                                                              select Is{" "}
+                                                              {
+                                                                doc.document_name
+                                                              }{" "}
+                                                              Required?
+                                                            </option>
+                                                            <option
+                                                              value={
+                                                                doc.document_identifier
+                                                              }
+                                                            >
+                                                              Required
+                                                            </option>
+                                                            <option
+                                                              value={
+                                                                "Not*" +
+                                                                doc.document_identifier
+                                                              }
+                                                            >
+                                                              Not Required
+                                                            </option>
+                                                          </AvField>
+                                                        </div>
+                                                      </Col>
+                                                    ) : (
                                                       ""
-                                                    }
-                                                  >
-                                                    <option>
-                                                      select Is Certificates
-                                                      Required?
-                                                    </option>
-                                                    <option>Required</option>
-                                                    <option>
-                                                      Not Required
-                                                    </option>
-                                                  </AvField>
-                                                </div>
-                                              </Col>
+                                                    )
+                                                  )
+                                                : ""}
                                             </Row>
                                             <Row>
                                               <Col xs={6}>

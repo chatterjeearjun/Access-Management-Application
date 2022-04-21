@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MetaTags from "react-meta-tags";
 
 import ReactApexChart from "react-apexcharts";
@@ -6,24 +6,41 @@ import ReactApexChart from "react-apexcharts";
 //import Breadcrumbs
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 
-import { Card, CardBody, Col, Container, Row } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  FormGroup,
+  Label,
+  InputGroup,
+} from "reactstrap";
 
 import CountUp from "react-countup";
 
 /** import Mini Widget data */
 import { WidgetsData } from "../../common/data/dashboard";
 import WalletBalance from "./WalletBalance";
-import ApprovalsPie from "./ApprovalsPie";
-import ApprovedVsTotalUsers from "./ApprovedVsTotalUsers";
-import OverdueVsTotalUsers from "./OverdueVsTotalUsers";
+import TicketsPie from "./TicketsPie";
+import AuditsPie from "./AuditsPie";
+import UsersApproval from "./UsersApproval";
 import ApprovalStatusList from "./ApprovalStatusList";
-import InvestedOverview from "./InvestedOverview";
+import SystemHealth from "./SystemHealth";
 import MarketOverview from "./MarketOverview";
 import Locations from "./Locations";
 import Trading from "./Trading";
 import Transactions from "./Transactions";
 import RecentActivity from "./RecentActivity";
 import NewSlider from "./NewSlider";
+import { getDashboardData as ongetDashData } from "../../store/actions";
+//redux
+import { useSelector, useDispatch } from "react-redux";
+import "react-datepicker/dist/react-datepicker.css";
+//Import Flatepicker
+import "flatpickr/dist/themes/material_blue.css";
+import Flatpickr from "react-flatpickr";
+import moment from "moment";
 
 const options = {
   chart: {
@@ -71,8 +88,38 @@ const options = {
     },
   },
 };
-
 const Dashboard = () => {
+  const [data, setData] = useState([]),
+    [dateRange, setDateRange] = useState([
+      moment(new Date()).subtract(1, "months").format("YYYY-MM-DD"),
+      moment(new Date()).format("YYYY-MM-DD"),
+    ]);
+
+  const dispatch = useDispatch();
+
+  const { dData } = useSelector((state) => ({
+    dData: state.dashboardManagement.dashboard,
+  }));
+
+  useEffect(() => {
+    if (dData && !dData.length) {
+      dispatch(ongetDashData());
+    }
+  }, []);
+
+  useEffect(() => {
+    setData(dData);
+  }, [dData]);
+  const DatesRange = (selectedDates) => {
+    setDateRange(
+      selectedDates.map((date) => moment(date).format("YYYY-MM-DD"))
+    );
+  };
+  console.log(
+    moment(new Date()).subtract(1, "months").format("YYYY-MM-DD"),
+    moment(new Date()).format("YYYY-MM-DD"),
+    "dates"
+  );
   return (
     <React.Fragment>
       <div className="page-content">
@@ -82,9 +129,31 @@ const Dashboard = () => {
         <Container fluid>
           {/* Render Breadcrumbs */}
           <Breadcrumbs title="Dashboard" breadcrumbItem="Dashboard" />
-
+          <Row className="justify-content-end">
+            <Col xs={2}>
+              <FormGroup className="mb-4">
+                <Label>Date Range</Label>
+                <InputGroup>
+                  <Flatpickr
+                    className="form-control d-block"
+                    placeholder="Date Range to show data on dashboard"
+                    options={{
+                      mode: "range",
+                      dateFormat: "Y-m-d",
+                      maxDate: new Date(),
+                      onChange: (selectedDates) => {
+                        DatesRange(selectedDates);
+                      },
+                      defaultDate: dateRange,
+                      animate: true,
+                    }}
+                  />
+                </InputGroup>
+              </FormGroup>
+            </Col>
+          </Row>
           <Row>
-            {(WidgetsData || []).map((widget, key) => (
+            {(WidgetsData(data) || []).map((widget, key) => (
               <Col xl={3} md={6} key={key}>
                 <Card className="card-h-100">
                   <CardBody
@@ -112,7 +181,7 @@ const Dashboard = () => {
                             <CountUp
                               start={0}
                               end={widget.price}
-                              duration={12}
+                              duration={2}
                             />
                             {widget.postFix}
                           </span>
@@ -143,6 +212,13 @@ const Dashboard = () => {
                       >
                         {widget.rank}
                       </span>
+                      {widget?.id === 1 || widget?.id === 2 ? (
+                        <span className="badge badge-soft-danger text-danger mx-2">
+                          {widget.expiry}
+                        </span>
+                      ) : (
+                        ""
+                      )}
                       <span className="ms-1 text-muted font-size-13">
                         Since last month
                       </span>
@@ -153,12 +229,13 @@ const Dashboard = () => {
             ))}
           </Row>
           <Row>
-            <ApprovalsPie />
-            <ApprovedVsTotalUsers />
-            <OverdueVsTotalUsers />
+            <UsersApproval data={dData} dateRange={dateRange} />
+            <TicketsPie data={dData} />
+            <AuditsPie data={dData} />
+            <SystemHealth data={dData} />
           </Row>
           <Row>
-            <ApprovalStatusList />
+            <ApprovalStatusList data={dData} />
           </Row>
           {/* <Row>
             <WalletBalance />

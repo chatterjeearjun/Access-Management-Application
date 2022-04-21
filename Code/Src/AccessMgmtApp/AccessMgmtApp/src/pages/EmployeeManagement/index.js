@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter, Link, useLocation } from "react-router-dom";
 import {
   Card,
   CardBody,
@@ -39,6 +39,8 @@ import {
 } from "../../store/actions";
 import { isEmpty } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
+import { FcUpload, FcDownload } from "react-icons/fc";
 
 const EmployeeManagement = () => {
   const dispatch = useDispatch();
@@ -73,7 +75,8 @@ const EmployeeManagement = () => {
     [isLoading, setIsLoading] = useState(false),
     [phone, setPhone] = useState(""),
     [deleteAlert, setDeleteAlert] = useState(false),
-    [deleteRow, setDeleteRow] = useState(false);
+    [deleteRow, setDeleteRow] = useState(false),
+    [selectedFileError, setSelectedFileError] = useState(false);
   const { SearchBar } = Search;
 
   const pageOptions = {
@@ -171,16 +174,83 @@ const EmployeeManagement = () => {
     },
   ];
 
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+  const params = [useQuery().get("date"), useQuery().get("type")];
+
   useEffect(() => {
     if (users && !users.length) {
       dispatch(onGetUsers());
       setIsEdit(false);
     }
-  }, [dispatch, users]);
+  }, []);
 
   useEffect(() => {
-    setUserList(users);
     setIsEdit(false);
+    if (
+      users &&
+      params[0] &&
+      (params[1] === "uAdded" ||
+        params[1] === "uApproved" ||
+        params[1] === "uRejected" ||
+        params[1] === "uPending" ||
+        params[1] === "uOverdue")
+    ) {
+      if (params[1] === "uAdded") {
+        const filteredUsers = users?.filter(
+          (user) =>
+            moment(user.created_date).format("YYYY-MM-DD") >=
+              params[0]?.split(",")[0] &&
+            moment(user.created_date).format("YYYY-MM-DD") <=
+              params[0]?.split(",")[1]
+        );
+        setUserList(filteredUsers);
+      } else if (params[1] === "uApproved") {
+        const filteredUsers = users?.filter(
+          (user) =>
+            moment(user.created_date).format("YYYY-MM-DD") >=
+              params[0]?.split(",")[0] &&
+            moment(user.created_date).format("YYYY-MM-DD") <=
+              params[0]?.split(",")[1] &&
+            user.is_approved === true
+        );
+        debugger;
+        setUserList(filteredUsers);
+      } else if (params[1] === "uRejected") {
+        const filteredUsers = users?.filter(
+          (user) =>
+            moment(user.created_date).format("YYYY-MM-DD") >=
+              params[0]?.split(",")[0] &&
+            moment(user.created_date).format("YYYY-MM-DD") <=
+              params[0]?.split(",")[1] &&
+            user.is_approved === false
+        );
+        setUserList(filteredUsers);
+      } else if (params[1] === "uPending") {
+        const filteredUsers = users?.filter(
+          (user) =>
+            moment(user.created_date).format("YYYY-MM-DD") >=
+              params[0]?.split(",")[0] &&
+            moment(user.created_date).format("YYYY-MM-DD") <=
+              params[0]?.split(",")[1] &&
+            user.is_approved === null
+        );
+        setUserList(filteredUsers);
+      } else if (params[1] === "uOverdue") {
+        const filteredUsers = users?.filter(
+          (user) =>
+            moment(user.created_date).format("YYYY-MM-DD") >=
+              params[0]?.split(",")[0] &&
+            moment(user.created_date).format("YYYY-MM-DD") <=
+              params[0]?.split(",")[1] &&
+            moment(user.emp_approval_overdue) > params[0]?.split(",")[1]
+        );
+        setUserList(filteredUsers);
+      }
+    } else setUserList(users);
   }, [users]);
 
   //Roles
@@ -188,7 +258,7 @@ const EmployeeManagement = () => {
     if (roles && !roles.length) {
       dispatch(onGetRoles());
     }
-  }, [dispatch, roles]);
+  }, []);
 
   useEffect(() => {
     setRolesList(roles);
@@ -199,7 +269,7 @@ const EmployeeManagement = () => {
     if (groups && !groups.length) {
       dispatch(onGetGroups());
     }
-  }, [dispatch, groups]);
+  }, []);
 
   useEffect(() => {
     setGroupsList(groups);
@@ -210,7 +280,7 @@ const EmployeeManagement = () => {
     if (assets && !assets.length) {
       dispatch(onGetAssets());
     }
-  }, [dispatch, assets]);
+  }, []);
 
   useEffect(() => {
     setAssetList(assets);
@@ -256,8 +326,7 @@ const EmployeeManagement = () => {
     setPhone(user.emp_mobile_number);
     toggle();
   };
-  console.log(rolesList, "RolesList");
-  console.log(userList, "usersList");
+
   const handleDeleteUser = () => {
     dispatch(onDeleteUser(deleteRow));
   };
@@ -385,10 +454,11 @@ const EmployeeManagement = () => {
   }
 
   const handleRoleChange = (e) => {
+    debugger;
     const final = rolesList.filter(
       (role) => role.role_identifier === e.target.value
     );
-    setDocsRequired(final[0]);
+    setDocsRequired(JSON.parse(final[0].associated_documents));
   };
 
   useEffect(() => {}, [docsRequired]);
@@ -427,6 +497,18 @@ const EmployeeManagement = () => {
         }}
         show={deleteAlert}
       />
+      <SweetAlert
+        title="Select only .XLS or .XLSX files"
+        custom
+        showConfirm
+        confirmBtnBsStyle="primary"
+        confirmBtnText="Ok"
+        customIcon={""}
+        onConfirm={() => {
+          setSelectedFileError(false);
+        }}
+        show={selectedFileError}
+      />
       <Loading
         loading={isLoading}
         background="#ffffffcc"
@@ -448,12 +530,12 @@ const EmployeeManagement = () => {
                     pagination={paginationFactory(pageOptions)}
                     keyField="id"
                     columns={userListColumns}
-                    data={users}
+                    data={userList}
                   >
                     {({ paginationProps, paginationTableProps }) => (
                       <ToolkitProvider
                         keyField="id"
-                        data={users}
+                        data={userList}
                         columns={userListColumns}
                         search
                         //filter={filterFactory()}
@@ -465,9 +547,12 @@ const EmployeeManagement = () => {
                                 <div className="col-md-6">
                                   <div className="mb-3">
                                     <h5 className="card-title">
-                                      Current Employees{" "}
+                                      {params[1] != null
+                                        ? params[1].slice(1)
+                                        : "Current"}{" "}
+                                      Employees{" "}
                                       <span className="text-muted fw-normal ms-2">
-                                        ({users.length})
+                                        ({userList.length})
                                       </span>
                                     </h5>
                                   </div>
@@ -483,6 +568,15 @@ const EmployeeManagement = () => {
                                       >
                                         <i className="bx bx-plus me-1"></i> Add
                                         Employee
+                                      </Link>
+                                    </div>
+                                    <div>
+                                      <Link
+                                        to="/EmployeeBulkUpload"
+                                        className="btn btn-light"
+                                      >
+                                        <FcUpload className="me-1" />
+                                        Bulk Employee Upload
                                       </Link>
                                     </div>
                                   </div>
@@ -511,6 +605,7 @@ const EmployeeManagement = () => {
                                     bordered={false}
                                     striped={false}
                                     responsive
+                                    noDataIndication="No Users Found"
                                   />
 
                                   <Modal
@@ -751,37 +846,49 @@ const EmployeeManagement = () => {
                                               </Col>
                                             </Row>
                                             {!isEdit &&
-                                            docsRequired?.is_nda_required !=
-                                              null &&
-                                            docsRequired?.is_nda_required ? (
-                                              <Row>
-                                                <Col xs={12}>
-                                                  <div className="mb-3">
-                                                    <AvField
-                                                      name="ndafile"
-                                                      label="NDA Required Files"
-                                                      inputClass="form-control"
-                                                      type="file"
-                                                      placeholder="choose NDA Required Files"
-                                                      errormessage="please provide valid file"
-                                                      validate={{
-                                                        required: {
-                                                          value: true,
-                                                        },
-                                                      }}
-                                                      onChange={(e) => {
-                                                        setSelectedNdaFile(
-                                                          e.target.files[0]
-                                                        );
-                                                      }}
-                                                      value={""}
-                                                    />
-                                                  </div>
-                                                </Col>
-                                              </Row>
-                                            ) : (
-                                              ""
-                                            )}
+                                              docsRequired?.length > 0 &&
+                                              docsRequired?.map((document) => (
+                                                <Row>
+                                                  <Col xs={12}>
+                                                    <div className="mb-3">
+                                                      <AvField
+                                                        name={
+                                                          document?.Key?.split(
+                                                            " "
+                                                          )[0]
+                                                        }
+                                                        label={
+                                                          document?.Key +
+                                                          " Required Files"
+                                                        }
+                                                        inputClass="form-control"
+                                                        type="file"
+                                                        placeholder={
+                                                          "choose " +
+                                                          document?.Key +
+                                                          " NDA Required Files"
+                                                        }
+                                                        errormessage={
+                                                          "please provide valid " +
+                                                          document?.Key +
+                                                          " file"
+                                                        }
+                                                        validate={{
+                                                          required: {
+                                                            value: true,
+                                                          },
+                                                        }}
+                                                        onChange={(e) => {
+                                                          setSelectedNdaFile(
+                                                            e.target.files[0]
+                                                          );
+                                                        }}
+                                                        value={""}
+                                                      />
+                                                    </div>
+                                                  </Col>
+                                                </Row>
+                                              ))}
                                             {!isEdit &&
                                             docsRequired?.is_bc_required !=
                                               null &&

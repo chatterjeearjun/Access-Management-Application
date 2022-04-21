@@ -32,6 +32,7 @@ import employeeProfileReducer from "./EmployeeProfile/reducer";
 
 //EmployeeProfile
 import docsManagement from "./ReuiredDocuments/reducer";
+import dashboardManagement from "./Dashboard/reducer";
 
 const rootReducer = combineReducers({
   // public
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
   assetsManagement,
   employeeProfileReducer,
   docsManagement,
+  dashboardManagement,
 });
 
 export default rootReducer;

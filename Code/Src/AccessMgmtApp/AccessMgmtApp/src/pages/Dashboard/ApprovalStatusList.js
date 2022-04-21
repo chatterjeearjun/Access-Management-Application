@@ -39,7 +39,7 @@ const ApprovalStatusList = () => {
                       toggle("1");
                     }}
                   >
-                    Users Not Approved
+                    Users Overdue
                   </NavLink>
                 </NavItem>
                 <NavItem>
@@ -50,7 +50,7 @@ const ApprovalStatusList = () => {
                       toggle("2");
                     }}
                   >
-                    Users Approval Overdue
+                    Audits Overdue
                   </NavLink>
                 </NavItem>
                 <NavItem>

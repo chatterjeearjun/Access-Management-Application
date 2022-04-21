@@ -29,3 +29,4 @@ export * from "././EmployeeProfile/actions";
 
 //Docs
 export * from "././ReuiredDocuments/actions";
+export * from "././Dashboard/actions";
