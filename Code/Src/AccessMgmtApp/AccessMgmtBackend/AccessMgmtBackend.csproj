@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.11.0" />
+    <PackageReference Include="EFCore.BulkExtensions" Version="6.4.4" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.2" />
