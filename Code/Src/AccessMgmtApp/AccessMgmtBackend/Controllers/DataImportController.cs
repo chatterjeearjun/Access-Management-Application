@@ -77,11 +77,11 @@ namespace AccessMgmtBackend.Controllers
                                     employee.emp_email = row[6].ToString();
                                     employee.emp_office_phone = row[7].ToString();
                                     employee.emp_mobile_number = row[8].ToString();
-                                    employee.emp_dob = row[9] != null ? Convert.ToDateTime(row[9]) : DateTime.MinValue;
-                                    employee.emp_joining_date = row[10] != null ? Convert.ToDateTime(row[10]) : DateTime.MinValue;
-                                    employee.emp_relieving_date = row[11] != null ? Convert.ToDateTime(row[11]) : DateTime.MaxValue;
+                                    employee.emp_dob = !string.IsNullOrEmpty(Convert.ToString(row[9])) ? Convert.ToDateTime(row[9]) : DateTime.MinValue;
+                                    employee.emp_joining_date = !string.IsNullOrEmpty(Convert.ToString(row[10])) ? Convert.ToDateTime(row[10]) : DateTime.MinValue;
+                                    employee.emp_relieving_date = !string.IsNullOrEmpty(Convert.ToString(row[11])) ? Convert.ToDateTime(row[11]) : DateTime.MaxValue;
                                     employee.associated_assets = row[12].ToString();
-                                    employee.emp_approval_overdue = row[13] != null ? Convert.ToDateTime(row[13]) : DateTime.MaxValue;
+                                    employee.emp_approval_overdue = !string.IsNullOrEmpty(Convert.ToString(row[13])) ? Convert.ToDateTime(row[13]) : DateTime.MaxValue;
                                     employee.created_date = DateTime.UtcNow;
                                     employee.created_by = "Application";
                                     employee.is_active = true;
