@@ -71,9 +71,10 @@ using (var scope = scopedFactory.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    
 }
+app.UseSwagger();
+app.UseSwaggerUI();
 
 //Load the default employee records in the database.
 //InitialData.Seed();
