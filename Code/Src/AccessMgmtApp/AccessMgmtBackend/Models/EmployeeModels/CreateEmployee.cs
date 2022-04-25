@@ -16,6 +16,8 @@
         public DateTime? emp_dob { get; set; }
         public DateTime emp_joining_date { get; set; }
         public DateTime? emp_relieving_date { get; set; }
+        public string? emp_doc_configitem { get; set; }
+        public string? emp_doc_externallink { get; set; }
         public List<CreateEmployeeDocument>? emp_documents { get; set; }
         public IFormFile? emp_profile_picture { get; set; }
         public bool is_active { get; set; }
