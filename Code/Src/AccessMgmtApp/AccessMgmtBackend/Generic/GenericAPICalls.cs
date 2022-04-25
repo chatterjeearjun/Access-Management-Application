@@ -5,7 +5,7 @@ namespace AccessMgmtBackend.Generic
 {
     public class GenericAPICalls
     {
-        private static string BaseAddress = "https://localhost:5001/";
+        private static string BaseAddress = "https://accessmanagesapi.azurewebsites.net/";
         public async Task<HttpResponseMessage> GetEndpoint(string requestURI)
         {
             using (var client = new HttpClient())
