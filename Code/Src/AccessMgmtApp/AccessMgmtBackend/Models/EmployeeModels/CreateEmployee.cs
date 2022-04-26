@@ -7,7 +7,7 @@
         public string company_identifier { get; set; }
         public string? emp_role { get; set; }
         public string? emp_group { get; set; }
-        public string emp_designation { get; set; }
+        public string? emp_designation { get; set; }
         public string emp_first_name { get; set; }
         public string emp_last_name { get; set; }
         public string emp_email { get; set; }
