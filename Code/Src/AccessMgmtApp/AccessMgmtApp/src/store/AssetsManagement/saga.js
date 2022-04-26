@@ -54,7 +54,7 @@ function* fetchAssetOverview({ payload: id }) {
 function* onUpdateAsset({ payload: asset }) {
   try {
     const response = yield call(updateAsset, asset);
-    debugger;
+
     yield put(updateAssetSuccess(response));
   } catch (error) {
     yield put(updateAssetFail(error));

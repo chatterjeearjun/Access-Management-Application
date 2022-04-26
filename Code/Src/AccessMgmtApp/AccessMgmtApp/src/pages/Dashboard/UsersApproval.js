@@ -6,7 +6,6 @@ import UsersApprovalPieChart from "./UsersApprovalPieChart";
 import { Link } from "react-router-dom";
 
 const UsersApproval = (props) => {
-  console.log(props, "OverdueVsTotalUsers");
   return (
     <React.Fragment>
       <Col xl={6} md={8} lg={6} xs={12}>
@@ -33,10 +32,15 @@ const UsersApproval = (props) => {
                         style={{ color: "#00b894" }}
                       ></i>{" "}
                       <Link
-                        to={`/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uAdded`}
+                        to={`${
+                          props?.data?.monthlyEmployeeAdded !== 0
+                            ? `/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uAdded`
+                            : "#"
+                        }`}
                         className="text-dark"
                       >
-                        {props?.data?.monthlyEmployeeAdded} {" - "}users added
+                        users added{" - "}
+                        {props?.data?.monthlyEmployeeAdded}
                       </Link>
                     </p>
                   </div>
@@ -47,11 +51,15 @@ const UsersApproval = (props) => {
                         style={{ color: "#19e9c0" }}
                       ></i>{" "}
                       <Link
-                        to={`/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uApproved`}
+                        to={`${
+                          props?.data?.approvedEmployees !== 0
+                            ? `/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uApproved`
+                            : "#"
+                        }`}
                         className="text-dark"
                       >
+                        users approved {" - "}
                         {props?.data?.approvedEmployees}
-                        {" - "}users approved
                       </Link>
                     </p>
                   </div>
@@ -62,11 +70,15 @@ const UsersApproval = (props) => {
                         style={{ color: "#d63031" }}
                       ></i>{" "}
                       <Link
-                        to={`/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uRejected`}
+                        to={`${
+                          props?.data?.rejectedEmployees !== 0
+                            ? `/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uRejected`
+                            : "#"
+                        }`}
                         className="text-dark"
                       >
+                        users rejected{" - "}
                         {props?.data?.rejectedEmployees}
-                        {" - "}users rejected
                       </Link>
                     </p>
                   </div>
@@ -77,11 +89,15 @@ const UsersApproval = (props) => {
                         style={{ color: "#e17055" }}
                       ></i>{" "}
                       <Link
-                        to={`/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uPending`}
+                        to={`${
+                          props?.data?.pendingEmployees !== 0
+                            ? `/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uPending`
+                            : "#"
+                        }`}
                         className="text-dark"
                       >
+                        approval pending{" - "}
                         {props?.data?.pendingEmployees}
-                        {" - "}approval pending
                       </Link>
                     </p>
                   </div>
@@ -89,11 +105,15 @@ const UsersApproval = (props) => {
                     <p className="mb-2">
                       <i className="mdi mdi-circle align-middle font-size-10 me-2 text-primary"></i>{" "}
                       <Link
-                        to={`/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uOverdue`}
+                        to={`${
+                          props?.data?.overdueEmployees !== 0
+                            ? `/EmployeeManagement?date=${props?.dateRange[0]},${props?.dateRange[1]}&type=uOverdue`
+                            : "#"
+                        }`}
                         className="text-dark"
                       >
+                        approval over due{" - "}
                         {props?.data?.overdueEmployees}
-                        {" - "}approval over due
                       </Link>
                     </p>
                   </div>

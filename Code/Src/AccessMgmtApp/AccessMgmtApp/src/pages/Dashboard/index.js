@@ -14,25 +14,17 @@ import {
   Row,
   FormGroup,
   Label,
-  InputGroup,
 } from "reactstrap";
 
 import CountUp from "react-countup";
 
 /** import Mini Widget data */
 import { WidgetsData } from "../../common/data/dashboard";
-import WalletBalance from "./WalletBalance";
 import TicketsPie from "./TicketsPie";
 import AuditsPie from "./AuditsPie";
 import UsersApproval from "./UsersApproval";
 import ApprovalStatusList from "./ApprovalStatusList";
 import SystemHealth from "./SystemHealth";
-import MarketOverview from "./MarketOverview";
-import Locations from "./Locations";
-import Trading from "./Trading";
-import Transactions from "./Transactions";
-import RecentActivity from "./RecentActivity";
-import NewSlider from "./NewSlider";
 import { getDashboardData as ongetDashData } from "../../store/actions";
 //redux
 import { useSelector, useDispatch } from "react-redux";
@@ -41,6 +33,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "flatpickr/dist/themes/material_blue.css";
 import Flatpickr from "react-flatpickr";
 import moment from "moment";
+import { IoCalendar } from "react-icons/io5";
 
 const options = {
   chart: {
@@ -92,7 +85,7 @@ const Dashboard = () => {
   const [data, setData] = useState([]),
     [dateRange, setDateRange] = useState([
       moment(new Date()).subtract(1, "months").format("YYYY-MM-DD"),
-      moment(new Date()).format("YYYY-MM-DD"),
+      moment(new Date()).add(1, "days").format("YYYY-MM-DD"),
     ]);
 
   const dispatch = useDispatch();
@@ -103,23 +96,35 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (dData && !dData.length) {
-      dispatch(ongetDashData());
+      dispatch(
+        ongetDashData([
+          moment.utc(dateRange[0]).format(),
+          moment.utc(dateRange[1]).format(),
+        ])
+      );
     }
   }, []);
 
   useEffect(() => {
     setData(dData);
   }, [dData]);
+
   const DatesRange = (selectedDates) => {
     setDateRange(
       selectedDates.map((date) => moment(date).format("YYYY-MM-DD"))
     );
+    dispatch(
+      ongetDashData([
+        moment.utc(dateRange[0]).format(),
+        moment.utc(dateRange[1]).format(),
+      ])
+    );
   };
   console.log(
-    moment(new Date()).subtract(1, "months").format("YYYY-MM-DD"),
-    moment(new Date()).format("YYYY-MM-DD"),
-    "dates"
+    moment.utc(moment(new Date()).add(1, "days").format("YYYY-MM-DD")).format(),
+    "ksjdfhkjsdh"
   );
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -130,17 +135,28 @@ const Dashboard = () => {
           {/* Render Breadcrumbs */}
           <Breadcrumbs title="Dashboard" breadcrumbItem="Dashboard" />
           <Row className="justify-content-end">
-            <Col xs={2}>
+            <Col xs={3}>
               <FormGroup className="mb-4">
                 <Label>Date Range</Label>
-                <InputGroup>
+                <div className="input-group mb-3">
+                  <div className="input-group-prepend">
+                    <span
+                      className="input-group-text bg-primary"
+                      id="basic-addon1"
+                    >
+                      <IoCalendar
+                        style={{ fontSize: "x-large" }}
+                        className="text-white"
+                      />
+                    </span>
+                  </div>
                   <Flatpickr
                     className="form-control d-block"
                     placeholder="Date Range to show data on dashboard"
                     options={{
                       mode: "range",
                       dateFormat: "Y-m-d",
-                      maxDate: new Date(),
+                      //maxDate: new Date(),
                       onChange: (selectedDates) => {
                         DatesRange(selectedDates);
                       },
@@ -148,7 +164,7 @@ const Dashboard = () => {
                       animate: true,
                     }}
                   />
-                </InputGroup>
+                </div>
               </FormGroup>
             </Col>
           </Row>

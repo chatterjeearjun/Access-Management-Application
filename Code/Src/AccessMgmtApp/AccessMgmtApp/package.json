@@ -68,6 +68,7 @@
     "react-leaflet": "^2.7.0",
     "react-meta-tags": "^1.0.1",
     "react-modal-video": "^1.2.8",
+    "react-multi-select-component": "^4.2.5",
     "react-multiselect-dropdown-bootstrap": "^1.1.0",
     "react-perfect-scrollbar": "^1.5.8",
     "react-rangeslider": "^2.2.0",

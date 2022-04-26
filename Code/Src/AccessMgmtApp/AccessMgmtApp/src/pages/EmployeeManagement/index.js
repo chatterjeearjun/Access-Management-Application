@@ -19,7 +19,8 @@ import paginationFactory, {
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+//import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+import { MultiSelect } from "react-multi-select-component";
 import { FaUserEdit } from "react-icons/fa";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import InputMask from "react-input-mask";
@@ -46,14 +47,14 @@ const EmployeeManagement = () => {
   const dispatch = useDispatch();
 
   const { users, result } = useSelector((state) => ({
-    users: state.contacts.users,
-    result: state.contacts.result,
+    users: state.employeesManagement.users,
+    result: state.employeesManagement.result,
   }));
   const { groups } = useSelector((state) => ({
     groups: state.compGroups.groups,
   }));
   const { roles } = useSelector((state) => ({
-    roles: state.contacts.roles,
+    roles: state.rolesManagement.roles,
   }));
   const { assets } = useSelector((state) => ({
     assets: state.assetsManagement.assets,
@@ -66,17 +67,16 @@ const EmployeeManagement = () => {
     [isEdit, setIsEdit] = useState(false),
     [isEmpDuplicate, setIsEmpDuplicate] = useState(false),
     [selectedProfileFile, setSelectedProfileFile] = useState(),
-    [selectedNdaFile, setSelectedNdaFile] = useState(),
-    [selectedBcFile, setSelectedBcFile] = useState(),
-    [selectedCertificateFile, setSelectedCertificateFile] = useState(),
+    [selectedFiles, setSelectedFiles] = useState({ docsSelected: [] }),
     [assetList, setAssetList] = useState([]),
-    [assetsSelected, setAssetSelected] = useState([]),
+    [assetsSelected, setAssetsSelected] = useState([]),
     [docsRequired, setDocsRequired] = useState(),
     [isLoading, setIsLoading] = useState(false),
     [phone, setPhone] = useState(""),
     [deleteAlert, setDeleteAlert] = useState(false),
     [deleteRow, setDeleteRow] = useState(false),
-    [selectedFileError, setSelectedFileError] = useState(false);
+    [selectedFileError, setSelectedFileError] = useState(false),
+    [uploadType, setUploadType] = useState("");
   const { SearchBar } = Search;
 
   const pageOptions = {
@@ -182,6 +182,7 @@ const EmployeeManagement = () => {
   const params = [useQuery().get("date"), useQuery().get("type")];
 
   useEffect(() => {
+    setIsLoading(true);
     if (users && !users.length) {
       dispatch(onGetUsers());
       setIsEdit(false);
@@ -190,8 +191,9 @@ const EmployeeManagement = () => {
 
   useEffect(() => {
     setIsEdit(false);
+    debugger;
     if (
-      users &&
+      users.length > 0 &&
       params[0] &&
       (params[1] === "uAdded" ||
         params[1] === "uApproved" ||
@@ -217,7 +219,7 @@ const EmployeeManagement = () => {
               params[0]?.split(",")[1] &&
             user.is_approved === true
         );
-        debugger;
+
         setUserList(filteredUsers);
       } else if (params[1] === "uRejected") {
         const filteredUsers = users?.filter(
@@ -246,7 +248,8 @@ const EmployeeManagement = () => {
               params[0]?.split(",")[0] &&
             moment(user.created_date).format("YYYY-MM-DD") <=
               params[0]?.split(",")[1] &&
-            moment(user.emp_approval_overdue) > params[0]?.split(",")[1]
+            moment(user.emp_approval_overdue).format("YYYY-MM-DD") >
+              params[0]?.split(",")[1]
         );
         setUserList(filteredUsers);
       }
@@ -300,7 +303,7 @@ const EmployeeManagement = () => {
   };
   const handleUserClick = (arg) => {
     const user = arg;
-    debugger;
+
     setUserList({
       employeeid: user.employee_identifier,
       companyid: user.company_identifier,
@@ -335,7 +338,6 @@ const EmployeeManagement = () => {
    * Handling submit user on user form
    */
   const handleValidUserSubmit = (e, values) => {
-    debugger;
     if (isEdit) {
       const updateUser = {
         employee_identifier: userList.employeeid,
@@ -355,10 +357,8 @@ const EmployeeManagement = () => {
         )
           .toISOString()
           .slice(0, 19),
-        emp_bc_document1: userList.bcdoc,
-        emp_nda_document1: userList.ndadoc,
-        emp_cert_document1: userList.certdoc,
-        associated_assets: assetsSelected.toString(),
+        emp_documents: userList.emp_documents,
+        associated_assets: JSON.stringify(assetsSelected),
       };
 
       // update user
@@ -367,8 +367,7 @@ const EmployeeManagement = () => {
     } else {
       setIsLoading(true);
       const newUser = {
-        company_identifier: JSON.parse(localStorage.getItem("authUser"))
-          .companyID,
+        company_identifier: "6c0276ec-fea1-4fa8-bb1f-5d428a850222", //JSON.parse(localStorage.getItem("authUser")).companyID,
         emp_designation: values["employeetype"],
         emp_role: values["role"],
         emp_group: values["employeegroup"],
@@ -384,14 +383,12 @@ const EmployeeManagement = () => {
         )
           .toISOString()
           .slice(0, 19),
-        emp_nda_document1: selectedNdaFile ? selectedNdaFile : "",
-        emp_bc_document1: selectedBcFile ? selectedBcFile : "",
-        emp_cert_document1: selectedCertificateFile
-          ? selectedCertificateFile
+        emp_documents: selectedFiles.docsSelected
+          ? selectedFiles.docsSelected
           : "",
         emp_profile_picture: selectedProfileFile,
         is_active: true,
-        associated_assets: assetsSelected.toString(),
+        associated_assets: JSON.stringify(assetsSelected),
       };
       // save new user
       dispatch(onAddNewUser(newUser));
@@ -399,13 +396,13 @@ const EmployeeManagement = () => {
     toggle();
   };
   useEffect(() => {
-    if (result != null && result === "add user success") {
+    if ((result != null && result === "add user success") || users != null) {
       setIsLoading(false);
     }
-  }, [result, isLoading]);
+  }, [result, isLoading, users]);
 
   const handleUserClicks = () => {
-    setUserList("");
+    //setUserList([]);
     setIsEdit(false);
     setDocsRequired(null);
     toggle();
@@ -449,21 +446,26 @@ const EmployeeManagement = () => {
   for (var i = 0; i < assetList.length; i++) {
     assetlist[i] = {
       label: assetList[i].asset_name,
-      key: assetList[i].asset_identifier,
+      value: assetList[i].asset_identifier,
     };
   }
 
   const handleRoleChange = (e) => {
-    debugger;
-    const final = rolesList.filter(
-      (role) => role.role_identifier === e.target.value
-    );
-    setDocsRequired(JSON.parse(final[0].associated_documents));
+    if (e.target.value !== "") {
+      const final = rolesList?.filter(
+        (role) => role?.role_identifier === e.target.value
+      );
+      console.log(JSON.parse(final[0]?.associated_documents), "sdkfhkdjh");
+      setDocsRequired(JSON.parse(final[0]?.associated_documents));
+    } else {
+      setDocsRequired([]);
+      setUploadType("");
+    }
   };
 
   useEffect(() => {}, [docsRequired]);
   const handleInput = (e) => {
-    console.log(e.target.value, "phone");
+    // console.log(e.target.value, "phone");
     setPhone(e.target.value);
   };
 
@@ -475,6 +477,17 @@ const EmployeeManagement = () => {
       toastId: "009",
     });
   }
+  const requiredFilesChange = (e) => {
+    debugger;
+    const { files, id, name } = e.target;
+    const { docsSelected: docs } = selectedFiles;
+    setSelectedFiles({
+      docsSelected: [
+        ...docs,
+        { documentId: id, documentName: name, documentDetail: files[0] },
+      ],
+    });
+  };
 
   return (
     <React.Fragment>
@@ -758,36 +771,35 @@ const EmployeeManagement = () => {
                                                 </div>
                                               </Col>
                                             </Row>
-                                            {/* <div className="mb-3">
-                                              <label>Phone</label>
-                                              <Phone
-                                                name="phone"
-                                                value={phone}
-                                                onChange={handleInput}
-                                                validate={{
-                                                  required: { value: true },
-                                                }}
-                                              />
-                                            </div> */}
                                             <Row>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <label>Link Assets</label>
-                                                  <DropdownMultiselect
-                                                    placeholder="select asset/assets"
-                                                    buttonClass="btn-light"
-                                                    selectDeselectLabel="Select/Deselect All"
+                                                  <MultiSelect
                                                     required={true}
-                                                    value={""}
+                                                    value={assetsSelected}
                                                     options={assetlist}
+                                                    labelledBy="select asset/assets"
+                                                    placeholder="select asset/assets"
                                                     name="assets"
-                                                    handleOnChange={(
-                                                      selected
-                                                    ) => {
-                                                      setAssetSelected(
-                                                        selected
-                                                      );
+                                                    onChange={setAssetsSelected}
+                                                  />
+                                                </div>
+                                              </Col>
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <AvField
+                                                    name="startdate"
+                                                    label="Start Date"
+                                                    type="date"
+                                                    placeholder="99/99/9999"
+                                                    errormessage="please provide valid Date"
+                                                    validate={{
+                                                      required: { value: true },
                                                     }}
+                                                    value={
+                                                      userList.startdate || ""
+                                                    }
                                                   />
                                                 </div>
                                               </Col>
@@ -826,133 +838,178 @@ const EmployeeManagement = () => {
                                                 </div>
                                               </Col>
                                               <Col xs={6}>
-                                                <div className="mb-3">
-                                                  <AvField
-                                                    name="startdate"
-                                                    label="Start Date"
-                                                    type="date"
-                                                    placeholder="99/99/9999"
-                                                    // disabled={true}
-                                                    //mask="99/99/9999"
-                                                    errormessage="please provide valid Date"
-                                                    validate={{
-                                                      required: { value: true },
-                                                    }}
-                                                    value={
-                                                      userList.startdate || ""
-                                                    }
-                                                  />
-                                                </div>
+                                                {!isEdit &&
+                                                  docsRequired?.length > 0 && (
+                                                    <div>
+                                                      <h5 className="font-size-14 mb-3 mt-3">
+                                                        Choose how to provide
+                                                        documents?
+                                                      </h5>
+
+                                                      <div className="form-check form-check-inline">
+                                                        <input
+                                                          className="form-check-input"
+                                                          type="radio"
+                                                          name="uploadtype"
+                                                          id="uploadfile"
+                                                          value="uploadfile"
+                                                          required
+                                                          onChange={(e) =>
+                                                            setUploadType(
+                                                              e.target.value
+                                                            )
+                                                          }
+                                                        />
+                                                        <label
+                                                          className="form-check-label"
+                                                          htmlFor="uploadfile"
+                                                        >
+                                                          Upload File
+                                                        </label>
+                                                      </div>
+                                                      <div className="form-check form-check-inline">
+                                                        <input
+                                                          className="form-check-input"
+                                                          type="radio"
+                                                          name="uploadtype"
+                                                          id="urlinput"
+                                                          value="urlinput"
+                                                          required
+                                                          onChange={(e) =>
+                                                            setUploadType(
+                                                              e.target.value
+                                                            )
+                                                          }
+                                                        />
+                                                        <label
+                                                          className="form-check-label"
+                                                          htmlFor="urlinput"
+                                                        >
+                                                          Url of you file
+                                                        </label>
+                                                      </div>
+                                                      <div className="form-check form-check-inline">
+                                                        <input
+                                                          className="form-check-input"
+                                                          type="radio"
+                                                          name="uploadtype"
+                                                          id="alreadyuploaded"
+                                                          value="alreadyuploaded"
+                                                          required
+                                                          onChange={(e) =>
+                                                            setUploadType(
+                                                              e.target.value
+                                                            )
+                                                          }
+                                                        />
+                                                        <label
+                                                          className="form-check-label"
+                                                          htmlFor="alreadyuploaded"
+                                                        >
+                                                          Already with Company
+                                                        </label>
+                                                      </div>
+                                                    </div>
+                                                  )}{" "}
                                               </Col>
                                             </Row>
-                                            {!isEdit &&
-                                              docsRequired?.length > 0 &&
-                                              docsRequired?.map((document) => (
-                                                <Row>
-                                                  <Col xs={12}>
-                                                    <div className="mb-3">
-                                                      <AvField
-                                                        name={
-                                                          document?.Key?.split(
-                                                            " "
-                                                          )[0]
-                                                        }
-                                                        label={
-                                                          document?.Key +
-                                                          " Required Files"
-                                                        }
-                                                        inputClass="form-control"
-                                                        type="file"
-                                                        placeholder={
-                                                          "choose " +
-                                                          document?.Key +
-                                                          " NDA Required Files"
-                                                        }
-                                                        errormessage={
-                                                          "please provide valid " +
-                                                          document?.Key +
-                                                          " file"
-                                                        }
-                                                        validate={{
-                                                          required: {
-                                                            value: true,
-                                                          },
-                                                        }}
-                                                        onChange={(e) => {
-                                                          setSelectedNdaFile(
-                                                            e.target.files[0]
-                                                          );
-                                                        }}
-                                                        value={""}
-                                                      />
-                                                    </div>
-                                                  </Col>
-                                                </Row>
-                                              ))}
-                                            {!isEdit &&
-                                            docsRequired?.is_bc_required !=
-                                              null &&
-                                            docsRequired?.is_bc_required ? (
-                                              <Row>
-                                                <Col xs={12}>
-                                                  <div className="mb-3">
-                                                    <AvField
-                                                      name="bcfile"
-                                                      label="BC Required Files"
-                                                      inputClass="form-control"
-                                                      type="file"
-                                                      placeholder="choose BC Required Files"
-                                                      errormessage="please provide valid file"
-                                                      validate={{
-                                                        required: {
-                                                          value: true,
-                                                        },
-                                                      }}
-                                                      onChange={(e) =>
-                                                        setSelectedBcFile(
-                                                          e.target.files[0]
-                                                        )
-                                                      }
-                                                      value={""}
-                                                    />
-                                                  </div>
-                                                </Col>
-                                              </Row>
-                                            ) : (
-                                              ""
-                                            )}
-                                            {!isEdit &&
-                                            docsRequired?.is_certification_required !=
-                                              null &&
-                                            docsRequired?.is_certification_required ? (
-                                              <Row>
-                                                <Col xs={12}>
-                                                  <div className="mb-3">
-                                                    <AvField
-                                                      name="certificatefile"
-                                                      label="Certificate Required Files"
-                                                      inputClass="form-control"
-                                                      type="file"
-                                                      placeholder="choose Certificate Required Files"
-                                                      errormessage="please provide valid file"
-                                                      validate={{
-                                                        required: {
-                                                          value: true,
-                                                        },
-                                                      }}
-                                                      onChange={(e) =>
-                                                        setSelectedCertificateFile(
-                                                          e.target.files[0]
-                                                        )
-                                                      }
-                                                      value={""}
-                                                    />
-                                                  </div>
-                                                </Col>
-                                              </Row>
-                                            ) : (
-                                              ""
-                                            )}
+
+                                            <Row>
+                                              {!isEdit &&
+                                              uploadType === "uploadfile" &&
+                                              docsRequired?.length > 0
+                                                ? docsRequired?.map(
+                                                    (document) => (
+                                                      <Col xs={6}>
+                                                        <div className="mb-3">
+                                                          <AvField
+                                                            name={
+                                                              document?.Key?.split(
+                                                                " "
+                                                              )[0]
+                                                            }
+                                                            label={
+                                                              document?.Key +
+                                                              " Required Files"
+                                                            }
+                                                            inputClass="form-control"
+                                                            type="file"
+                                                            placeholder={
+                                                              "choose " +
+                                                              document?.Key +
+                                                              " Required Files"
+                                                            }
+                                                            errormessage={
+                                                              "please provide valid " +
+                                                              document?.Key +
+                                                              " file"
+                                                            }
+                                                            validate={{
+                                                              required: {
+                                                                value: true,
+                                                              },
+                                                            }}
+                                                            id={document?.Value}
+                                                            onChange={
+                                                              requiredFilesChange
+                                                            }
+                                                            value={""}
+                                                          />
+                                                        </div>
+                                                      </Col>
+                                                    )
+                                                  )
+                                                : ""}
+                                            </Row>
+                                            <Row>
+                                              {!isEdit &&
+                                              uploadType === "urlinput" &&
+                                              docsRequired?.length > 0
+                                                ? docsRequired?.map(
+                                                    (document) => (
+                                                      <Col xs={6}>
+                                                        <div className="mb-3">
+                                                          <AvField
+                                                            name={
+                                                              document?.Key?.split(
+                                                                " "
+                                                              )[0]
+                                                            }
+                                                            label={
+                                                              document?.Key +
+                                                              " Required Files URL"
+                                                            }
+                                                            inputClass="form-control"
+                                                            type="url"
+                                                            placeholder={
+                                                              "provide " +
+                                                              document?.Key +
+                                                              " Required Files URL"
+                                                            }
+                                                            errormessage={
+                                                              "please provide valid " +
+                                                              document?.Key +
+                                                              " url"
+                                                            }
+                                                            validate={{
+                                                              required: {
+                                                                value: true,
+                                                              },
+                                                            }}
+                                                            onChange={(e) => {
+                                                              setSelectedFiles(
+                                                                e.target
+                                                                  .files[0]
+                                                              );
+                                                            }}
+                                                            value={""}
+                                                          />
+                                                        </div>
+                                                      </Col>
+                                                    )
+                                                  )
+                                                : ""}
+                                            </Row>
                                             {!isEdit ? (
                                               <Row>
                                                 <Col xs={12}>

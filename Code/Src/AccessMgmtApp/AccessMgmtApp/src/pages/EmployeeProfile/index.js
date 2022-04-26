@@ -7,7 +7,7 @@ import ProfileHeader from "./ProfileHeader";
 
 const EmployeeProfile = () => {
   //apply base url for axios
-  const API_URL = "https://localhost:5001";
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
   const id = window.location.search.slice(1);
 
   const [employeeData, setEmployeeData] = useState([]);

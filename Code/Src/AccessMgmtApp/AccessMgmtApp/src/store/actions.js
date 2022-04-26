@@ -6,9 +6,6 @@ export * from "./auth/login/actions";
 export * from "./auth/forgetpwd/actions";
 export * from "./auth/profile/actions";
 
-// Users
-export * from "./contacts/actions";
-
 //Calendar
 export * from "./calendar/actions";
 
@@ -29,4 +26,15 @@ export * from "././EmployeeProfile/actions";
 
 //Docs
 export * from "././ReuiredDocuments/actions";
+
+//Dashboard
 export * from "././Dashboard/actions";
+
+//AdminManagement
+export * from "./AdminManagement/actions";
+
+//EmployeeManagement
+export * from "./EmployeeManagement/actions";
+
+//RoleManagement
+export * from "./RolesManagement/actions";

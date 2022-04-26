@@ -29,7 +29,6 @@ const Login = (props) => {
   const [remember, setRemember] = useState(false);
   // handleValidSubmit
   const handleValidSubmit = (event, values) => {
-    debugger;
     dispatch(loginUser(values, props.history));
   };
 

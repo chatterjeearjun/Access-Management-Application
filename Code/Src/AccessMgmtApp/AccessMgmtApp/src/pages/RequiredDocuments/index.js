@@ -32,7 +32,6 @@ const RequiredDocuments = () => {
     [showSaveBtn, setShowSaveBtn] = useState(false);
 
   useEffect(() => {
-    debugger;
     if (docs && !docs.length) {
       dispatch(onGetDocs());
     }
@@ -89,7 +88,7 @@ const RequiredDocuments = () => {
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
     const { docsSelected: docs } = selectedCheckboxes;
-    debugger;
+
     if (checked) {
       setShowSaveBtn(true);
       setSelectedCheckboxes({

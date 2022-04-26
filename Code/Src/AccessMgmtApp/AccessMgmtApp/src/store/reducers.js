@@ -18,9 +18,6 @@ import chat from "./chat/reducer";
 //invoices
 import invoices from "./invoices/reducer";
 
-//contacts
-import contacts from "./contacts/reducer";
-
 //compGroups
 import compGroups from "./GroupsManagement/reducer";
 
@@ -32,7 +29,14 @@ import employeeProfileReducer from "./EmployeeProfile/reducer";
 
 //EmployeeProfile
 import docsManagement from "./ReuiredDocuments/reducer";
+
 import dashboardManagement from "./Dashboard/reducer";
+
+import rolesManagement from "./RolesManagement/reducer";
+
+import employeesManagement from "./EmployeeManagement/reducer";
+
+import adminTeam from "./AdminManagement/reducer";
 
 const rootReducer = combineReducers({
   // public
@@ -44,12 +48,14 @@ const rootReducer = combineReducers({
   calendar,
   chat,
   invoices,
-  contacts,
   compGroups,
   assetsManagement,
   employeeProfileReducer,
   docsManagement,
   dashboardManagement,
+  rolesManagement,
+  employeesManagement,
+  adminTeam,
 });
 
 export default rootReducer;

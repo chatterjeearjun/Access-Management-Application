@@ -8,7 +8,6 @@ const ApexRadial = (dData) => {
       dData?.data?.ticketClosurePercentage) /
       3
   );
-  console.log(dData?.data, "ApexRadial");
   const radialchartColors = ["#d63031", "#e17055", "#34c38f"];
   const series = [finalpercent];
   const options = {

@@ -145,7 +145,6 @@ export const APPROVER_DUPLICATE_CHECK = (approverEmail, compid) =>
   `/DuplicateCheck?ApproverEmail=${approverEmail}&CompanyIdentifier=${compid}`;
 
 export const ASSET_TO_EMP = (asssetid, compid) => {
-  debugger;
   return `/api/Card/AssetToEmployees?companyId=${compid}&assetId=${asssetid}`;
 };
 
@@ -153,6 +152,10 @@ export const GET_EMP_PROFILE = "/api/Employee/";
 export const GET_DOCS = "/api/Company/GetCompanyDocument?companyId=";
 export const ADD_DOCS = "/api/Company/AddNewCompanyDocument?companyId=";
 export const UPDATE_DOCS = "/api/Company/UpdateCompanyDocument?companyId=";
-export const DASHBOARD = "/api/Dashboard?companyId=";
+export const DASHBOARD = (compid, sdate, edate) => {
+  return `/api/Dashboard?companyId=${compid}&startDate=${sdate}&endDate=${edate}`;
+};
 export const BULK_UPLOAD_TEMPLATE =
   "https://accessmanagement.blob.core.windows.net/accessmanagement/6C0276EC-FEA1-4FA8-BB1F-5D428A850222/Employee%20Bulk%20Upload/20220421T163548229.xlsx";
+
+export const BULK_UPLOAD_URL = "/api/DataImport/ImportEmployees";

@@ -9,12 +9,14 @@ import LayoutSaga from "./layout/saga";
 import calendarSaga from "./calendar/saga";
 import chatSaga from "./chat/saga";
 import invoiceSaga from "./invoices/saga";
-import contactsSaga from "./contacts/saga";
 import compGroupsSaga from "./GroupsManagement/saga";
 import assetsSaga from "./AssetsManagement/saga";
 import employeeProfileSaga from "./EmployeeProfile/saga";
 import docsSaga from "./ReuiredDocuments/saga";
 import dashboardSaga from "./Dashboard/saga";
+import rolesSaga from "./RolesManagement/sagas";
+import approversSaga from "./AdminManagement/saga";
+import employeesSaga from "./EmployeeManagement/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -27,11 +29,13 @@ export default function* rootSaga() {
     fork(calendarSaga),
     fork(chatSaga),
     fork(invoiceSaga),
-    fork(contactsSaga),
     fork(compGroupsSaga),
     fork(assetsSaga),
     fork(employeeProfileSaga),
     fork(docsSaga),
     fork(dashboardSaga),
+    fork(employeesSaga),
+    fork(approversSaga),
+    fork(rolesSaga),
   ]);
 }

@@ -43,7 +43,6 @@ const compGroups = (state = INIT_STATE, action) => {
         error: action.payload,
       };
     case UPDATE_COMPGROUP_SUCCESS:
-      debugger;
       return {
         ...state,
         groups: state.groups.map((group) =>
@@ -61,7 +60,6 @@ const compGroups = (state = INIT_STATE, action) => {
       };
 
     case DELETE_COMPGROUP_SUCCESS:
-      debugger;
       return {
         ...state,
         groups: state.groups.filter(

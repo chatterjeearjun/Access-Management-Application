@@ -45,7 +45,7 @@ const RolesManagement = (props) => {
   const dispatch = useDispatch();
 
   const { roles } = useSelector((state) => ({
-    roles: state.contacts.roles,
+    roles: state.rolesManagement.roles,
   }));
   const { assets } = useSelector((state) => ({
     assets: state.assetsManagement.assets,
@@ -195,7 +195,7 @@ const RolesManagement = (props) => {
 
   const handleRoleClick = (arg) => {
     const role = arg;
-    debugger;
+
     setRoleList({
       roleid: role.role_identifier,
       rolename: role.role_name,
@@ -209,7 +209,7 @@ const RolesManagement = (props) => {
     setIsEdit(true);
     toggle();
   };
-  console.log(roleList, "roleList");
+  // console.log(roleList, "roleList");
   const handleDeleteRole = (role) => {
     confirmAlert({
       title: "Deleting Role",
@@ -259,7 +259,7 @@ const RolesManagement = (props) => {
         RoleDocumentMapping: selectedDocsReq.docsSelected,
         associated_assets: assetsSelected.toString(),
       };
-      console.log(newRole, "newrole");
+      // console.log(newRole, "newrole");
       // save new role
       dispatch(onAddNewRole(newRole));
     }
@@ -281,7 +281,6 @@ const RolesManagement = (props) => {
   }
 
   const handleDocReqChange = (e) => {
-    debugger;
     const { value, selectedIndex } = e.target;
     const { docsSelected: docs } = selectedDocsReq;
     if (selectedIndex === 1) {

@@ -10,9 +10,9 @@ import { getDashboardData } from "../../helpers/fakebackend_helper";
 
 //DashboardDataManagement
 
-function* fetchDashboardData() {
+function* fetchDashboardData({ payload: dates }) {
   try {
-    const response = yield call(getDashboardData);
+    const response = yield call(getDashboardData, dates);
     yield put(getDashboardDataSuccess(response));
   } catch (error) {
     yield put(getDashboardDataFail(error));

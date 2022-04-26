@@ -4,13 +4,13 @@ import axios from "axios";
 const token = `Bearer ${JSON.parse(localStorage.getItem("authUser"))?.token}`;
 
 //apply base url for axios
-const API_URL = "https://localhost:5001";
+const API_URL = process.env.REACT_APP_API_BASE_URL; //"https://localhost:5001";
 
 const axiosApi = axios.create({
   baseURL: API_URL,
 });
 
-axiosApi.defaults.headers.common["Authorization"] = token;
+//axiosApi.defaults.headers.common["Authorization"] = token;
 
 axiosApi.interceptors.response.use(
   (response) => response,
@@ -31,7 +31,7 @@ export async function get(url, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "get error");
+    // console.log(error, "get error");
   }
 }
 
@@ -49,7 +49,7 @@ export async function getForDocs(url, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "get error");
+    // console.log(error, "get error");
   }
 }
 export async function postForAddingDocs(url, doc, id) {
@@ -68,7 +68,7 @@ export async function postForAddingDocs(url, doc, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "get error");
+    // console.log(error, "get error");
   }
 }
 export async function postForUpdatingDocs(url, doc, id) {
@@ -87,13 +87,12 @@ export async function postForUpdatingDocs(url, doc, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "get error");
+    // console.log(error, "get error");
   }
 }
 
 export async function getAAssociation(url, asset) {
   try {
-    debugger;
     const response = await fetch(
       `${API_URL}${url}${asset.company_identifier}/${asset.asset_identifier}`,
       {
@@ -106,7 +105,7 @@ export async function getAAssociation(url, asset) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "get error");
+    // console.log(error, "get error");
   }
 }
 
@@ -120,11 +119,11 @@ export async function post(url, data) {
         "Access-Control-Allow-Origin": "*",
       },
     });
-    debugger;
+
     const result = await response.json();
     return result;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
   }
 }
 
@@ -132,7 +131,6 @@ export async function post(url, data) {
 
 export async function postRole(url, data) {
   try {
-    debugger;
     const formData = new FormData();
     formData.append("company_identifier", data.company_identifier);
     formData.append("role_name", data.role_name);
@@ -148,11 +146,30 @@ export async function postRole(url, data) {
       method: "POST",
       body: formData,
     });
-    debugger;
+
     const result = await response.json();
     return result;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
+  }
+}
+export async function postBulkEmployeeUpload(url, data) {
+  try {
+    const formData = new FormData();
+    formData.append("company_identifier", data.company_identifier);
+    formData.append("File", data.file);
+    formData.append("upload_category", data.category);
+
+    const response = await fetch(`${API_URL}${url}`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+    return response;
+  } catch (error) {
+    // console.log(error, "post error");
   }
 }
 
@@ -183,11 +200,11 @@ export async function postAsset(url, data) {
       method: "POST",
       body: formData,
     });
-    debugger;
+
     const result = await response.json();
     return result;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
   }
 }
 
@@ -206,9 +223,9 @@ export async function postEmployee(url, data) {
     formData.append("emp_office_phone", data.emp_office_phone);
     formData.append("emp_mobile_number", data.emp_mobile_number);
     formData.append("emp_joining_date", data.emp_joining_date);
-    formData.append("emp_nda_document1", data.emp_nda_document1);
-    formData.append("emp_bc_document1", data.emp_bc_document1);
-    formData.append("emp_cert_document1", data.emp_cert_document1);
+    data?.emp_documents?.map((item) =>
+      formData.append("emp_documents", item.emp_documents)
+    );
     formData.append("emp_profile_picture", data.emp_profile_picture);
     formData.append("is_active", data.is_active);
     formData.append("associated_assets", data.associated_assets);
@@ -216,14 +233,21 @@ export async function postEmployee(url, data) {
       method: "POST",
       body: formData,
     });
-    debugger;
+
     const result = await response.json();
     return result;
   } catch (error) {
-    console.log(error, "postEmployee error");
+    // console.log(error, "postEmployee error");
   }
 }
 export async function postforlogin(url, data, config = {}) {
+  // const re = {
+  //   expiration: "2022-04-22T17:16:55Z",
+  //   token:
+  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJucmFvQGxvY2FsaG9zdCIsImp0aSI6ImFjNjk4NjY2LWVjZTItNDQ3Yy1hODFhLWE0ODk0NmFhMGY2MSIsInVuaXF1ZV9uYW1lIjoibnJhb0Bsb2NhbGhvc3QiLCJleHAiOjE2NTA2NDc4MTUsImlzcyI6ImxvY2FsaG9zdCIsImF1ZCI6ImxvY2FsaG9zdCJ9.TIkfVV170jzFPBD-Sm2OXpGLH05ID5msTXT6GOg0yns",
+  //   useridentier: "6c0271ec-fea1-4fa8-bb1f-5d428a850222",
+  // };
+  // return re;
   return axiosApi
     .post(url, { ...data }, { ...config })
     .then((response) => {
@@ -265,11 +289,11 @@ export async function put(url, formdata) {
         "Access-Control-Allow-Origin": "*",
       },
     });
-    debugger;
+
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
   }
 }
 
@@ -285,7 +309,7 @@ export async function del(url, user) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
   }
 }
 export async function delApprover(url, approver) {
@@ -300,7 +324,7 @@ export async function delApprover(url, approver) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
   }
 }
 export async function delGroup(url, group) {
@@ -315,7 +339,7 @@ export async function delGroup(url, group) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
   }
 }
 export async function isEmpDuplicate(url) {
@@ -330,7 +354,7 @@ export async function isEmpDuplicate(url) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "post error");
+    // console.log(error, "post error");
   }
 }
 export async function isapproverDuplicate(url) {
@@ -345,6 +369,6 @@ export async function isapproverDuplicate(url) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log(error, "isapproverDuplicate error");
+    // console.log(error, "isapproverDuplicate error");
   }
 }

@@ -23,7 +23,6 @@ import {
 
 function* fetchDocs() {
   try {
-    debugger;
     const response = yield call(getDocs);
     yield put(getDocsSuccess(response));
   } catch (error) {

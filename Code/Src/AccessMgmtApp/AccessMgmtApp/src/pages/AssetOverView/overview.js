@@ -9,7 +9,7 @@ const OverviewTab = (props) => {
 
   const empData = async () => {
     const res = await fetch(
-      `https://localhost:5001${ASSET_TO_EMP(
+      `${process.env.REACT_APP_API_BASE_URL}${ASSET_TO_EMP(
         assetid,
         JSON.parse(localStorage.getItem("authUser")).companyID
       )}`,

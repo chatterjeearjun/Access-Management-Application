@@ -31,7 +31,6 @@ import {
 
 function* fetchCompGroups() {
   try {
-    debugger;
     const response = yield call(getCompGroups);
     yield put(getCompGroupsSuccess(response));
   } catch (error) {
@@ -42,7 +41,7 @@ function* fetchCompGroups() {
 function* onUpdateCompGroup({ payload: group }) {
   try {
     const response = yield call(updateCompGroup, group);
-    debugger;
+
     yield put(updateCompGroupSuccess(response));
   } catch (error) {
     yield put(updateCompGroupFail(error));
@@ -53,7 +52,7 @@ function* onDeleteCompGroup({ payload: group }) {
   try {
     yield call(deleteCompGroup, group);
     const res = yield put(deleteCompGroupSuccess(group));
-    console.log(res, "result........");
+    // console.log(res, "result........");
   } catch (error) {
     yield put(deleteCompGroupFail(error));
   }

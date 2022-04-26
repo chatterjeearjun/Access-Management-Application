@@ -45,7 +45,6 @@ const assetsManagement = (state = INIT_STATE, action) => {
         error: action.payload,
       };
     case ADD_ASSET_SUCCESS:
-      debugger;
       return {
         ...state,
         assets: [...state.assets, action.payload],
@@ -58,7 +57,6 @@ const assetsManagement = (state = INIT_STATE, action) => {
         error: action.payload,
       };
     case UPDATE_ASSET_SUCCESS:
-      debugger;
       return {
         ...state,
         assets: state.assets.map((asset) =>

@@ -393,8 +393,19 @@ export const updateDoc = (doc) =>
     doc,
     "6c0276ec-fea1-4fa8-bb1f-5d428a850222"
   );
-export const getDashboardData = () =>
-  get(url.DASHBOARD, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+export const getDashboardData = (dates) =>
+  get(
+    url.DASHBOARD("6c0276ec-fea1-4fa8-bb1f-5d428a850222", dates[0], dates[1])
+  );
+
+export const bulkEmployeeUpload = (file) =>
+  get(
+    url.BULK_UPLOAD_URL(
+      "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+      file,
+      "bulkUpload"
+    )
+  );
 
 export {
   getLoggedInUser,

@@ -6,8 +6,9 @@ import {
 
 //DashboardManagement
 
-export const getDashboardData = () => ({
+export const getDashboardData = (dates) => ({
   type: GET_DASHBOARD_DATA,
+  payload: dates,
 });
 
 export const getDashboardDataSuccess = (users) => ({

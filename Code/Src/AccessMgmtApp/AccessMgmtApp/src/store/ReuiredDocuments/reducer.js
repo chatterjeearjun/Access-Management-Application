@@ -30,7 +30,6 @@ const docsManagement = (state = INIT_STATE, action) => {
         error: action.payload,
       };
     case ADD_DOC_SUCCESS:
-      debugger;
       return {
         ...state,
         docs: action.payload,
@@ -43,7 +42,6 @@ const docsManagement = (state = INIT_STATE, action) => {
         error: action.payload,
       };
     case UPDATE_DOC_SUCCESS:
-      debugger;
       return {
         ...state,
         docs: action.payload,

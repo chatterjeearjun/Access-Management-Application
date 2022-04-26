@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MetaTags from "react-meta-tags";
 import {
   Row,
@@ -16,10 +16,19 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 import { Link } from "react-router-dom";
 import { FcDownload } from "react-icons/fc";
-import { BULK_UPLOAD_TEMPLATE } from "../../helpers/url_helper";
+import {
+  BULK_UPLOAD_TEMPLATE,
+  BULK_UPLOAD_URL,
+} from "../../helpers/url_helper";
+import { postBulkEmployeeUpload } from "../../helpers/api_helper";
+import Loading from "react-fullscreen-loading";
+
 const EmployeeBulkUpload = () => {
   const [selectedFiles, setselectedFiles] = useState([]),
-    [errorMessage, setErrorMessage] = useState("");
+    [errorMessage, setErrorMessage] = useState(""),
+    [successMessage, setSuccessMessage] = useState(""),
+    [isLoading, setIsLoading] = useState(false);
+
   function handleAcceptedFiles(files) {
     files.map((file) =>
       Object.assign(file, {
@@ -55,6 +64,44 @@ const EmployeeBulkUpload = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   }
 
+  const handleSubmitFile = async () => {
+    if (selectedFiles.length === 0) {
+      setErrorMessage("Please select a file");
+    } else {
+      setIsLoading(true);
+      setErrorMessage("");
+      const data = {
+        file: selectedFiles[0],
+        category: "Bulk Upload",
+        company_identifier: "6c0276ec-fea1-4fa8-bb1f-5d428a850222",
+      };
+
+      const uploading = await postBulkEmployeeUpload(BULK_UPLOAD_URL, data);
+
+      if (uploading.status === 200) {
+        setErrorMessage("");
+        setIsLoading(false);
+        setSuccessMessage("File uploaded successfully");
+      } else {
+        setSuccessMessage("");
+        setIsLoading(false);
+        setErrorMessage(uploading.data.message);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (
+      errorMessage === "Please select a file" ||
+      errorMessage === "File uploaded successfully"
+    ) {
+      setTimeout(() => {
+        setErrorMessage("");
+        setSuccessMessage("");
+      }, 5000);
+    }
+  });
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -66,7 +113,11 @@ const EmployeeBulkUpload = () => {
             title="Employee Management"
             breadcrumbItem="Employee Bulk Upload"
           />
-
+          <Loading
+            loading={isLoading}
+            background="#ffffffcc"
+            loaderColor="#5156be"
+          />
           <Row>
             <Col className="col-12">
               <Card>
@@ -125,6 +176,11 @@ const EmployeeBulkUpload = () => {
                     {errorMessage && (
                       <div class="alert alert-danger mt-2">{errorMessage}</div>
                     )}
+                    {successMessage && (
+                      <div class="alert alert-success mt-2">
+                        {successMessage}
+                      </div>
+                    )}
                     <div className="dropzone-previews mt-3" id="file-previews">
                       {selectedFiles.map((f, i) => {
                         return (
@@ -163,7 +219,11 @@ const EmployeeBulkUpload = () => {
                   </Form>
 
                   <div className="text-center mt-4">
-                    <button type="button" className="btn btn-success">
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={handleSubmitFile}
+                    >
                       <i className="mdi mdi-upload font-size-18 me-1"></i>
                       Upload Employees
                     </button>

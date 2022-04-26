@@ -56,7 +56,7 @@ const AssetsManagement = (props) => {
     result: state.assetsManagement.result,
   }));
   const { owners } = useSelector((state) => ({
-    owners: state.contacts.users,
+    owners: state.employeesManagement.users,
   }));
   const [assetList, setAssetList] = useState([]);
   const [ownersList, setOwnersList] = useState([]);
@@ -203,7 +203,7 @@ const AssetsManagement = (props) => {
       dispatch(onGetAssets());
       setIsEdit(false);
     }
-  }, [dispatch, assets]);
+  }, []);
 
   useEffect(() => {
     setAssetList(assets);
@@ -319,8 +319,7 @@ const AssetsManagement = (props) => {
     } else {
       setIsLoading(true);
       const newAsset = {
-        company_identifier: JSON.parse(localStorage.getItem("authUser"))
-          .companyID,
+        company_identifier: "6C0276EC-FEA1-4FA8-BB1F-5D428A850222", //JSON.parse(localStorage.getItem("authUser")).companyID,
         asset_id: values["assetserialno"],
         asset_name: values["name"],
         asset_type: values["type"],
@@ -363,9 +362,8 @@ const AssetsManagement = (props) => {
     toggle();
   };
 
-  const ownerchange = (e) => {
-    debugger;
-    setSelectedOwner(e.target.value);
+  const ownerchange = (selectedOption) => {
+    setSelectedOwner(selectedOption[0]?.employee_identifier);
   };
   const [file, setFile] = useState();
 
@@ -380,7 +378,7 @@ const AssetsManagement = (props) => {
   //   setIsLoader(false);
   // }
   // if (assetList.length > 0) {
-  //   console.log(assetList, "hsdgfiuywehwkej76");
+  //   (assetList, "hsdgfiuywehwkej76");
   //   for (var i = 0; i < assetList.length; i++) {
   //     selectOptions[i] = {
   //       label: assetList[i]?.name,
@@ -390,10 +388,16 @@ const AssetsManagement = (props) => {
   // }
   const filterBy = () => true;
   const handleSearch = (query) => {
+    debugger;
     setTypeaheadList([]);
     setIsLoading(true);
-    const list = owners?.filter((item) => item.emp_email.includes(query));
-    debugger;
+    const list = owners?.filter(
+      (item) =>
+        item.emp_email.toLowerCase().includes(query.toLowerCase()) ||
+        item.emp_first_name.toLowerCase().includes(query.toLowerCase()) ||
+        item.emp_last_name.toLowerCase().includes(query.toLowerCase())
+    );
+
     if (list.length > 0) {
       setTypeaheadList(list);
       setIsLoading(false);
@@ -638,6 +642,8 @@ const AssetsManagement = (props) => {
                                                     onSearch={handleSearch}
                                                     options={typeaheadList}
                                                     placeholder="Search for a Asset Owner..."
+                                                    onChange={ownerchange}
+                                                    //onInputChange={ownerchange}
                                                     renderMenuItemChildren={(
                                                       option,
                                                       props
@@ -816,7 +822,7 @@ const AssetsManagement = (props) => {
                                                       name="status"
                                                       className="form-select"
                                                       label="Asset Current Status"
-                                                      errorMessage="please select role/designation"
+                                                      errorMessage="please select asset current status"
                                                       multiple={false}
                                                       required
                                                       value={

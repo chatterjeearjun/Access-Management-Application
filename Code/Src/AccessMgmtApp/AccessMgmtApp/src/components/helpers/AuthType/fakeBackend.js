@@ -30,7 +30,7 @@ import {
   users as members,
   wallet,
 } from "../../common/data";
-console.log(members, "members");
+members, "members";
 let users = [
   {
     uid: 1,
@@ -796,7 +796,6 @@ const fakeBackend = () => {
   });
 
   mock.onGet(url.GET_USERS).reply(() => {
-    debugger;
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (members) {

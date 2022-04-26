@@ -41,11 +41,11 @@ const AdminTeam = () => {
   const dispatch = useDispatch();
 
   let { approvers, result } = useSelector((state) => ({
-    approvers: state.contacts.approvers,
-    result: state.contacts.result,
+    approvers: state.adminTeam.approvers,
+    result: state.adminTeam.result,
   }));
   const { roles } = useSelector((state) => ({
-    roles: state.contacts.roles,
+    roles: state.rolesManagement.roles,
   }));
 
   const [approverList, setApproverList] = useState([]),
