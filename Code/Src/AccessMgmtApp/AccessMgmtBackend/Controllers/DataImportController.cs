@@ -63,25 +63,24 @@ namespace AccessMgmtBackend.Controllers
                             foreach (DataRow row in dtEmployeeRecords.Rows)
                             {
                                 bool isExistingEmployee = false;
-                                isExistingEmployee = _companyContext.Employees.Where(x=>x.company_identifier == row[0].ToString() && 
-                                x.emp_email.ToLower() == row[6].ToString().ToLower()).Count() > 0;
+                                isExistingEmployee = _companyContext.Employees.Where(x=>x.company_identifier == file.company_identifier.ToString() && 
+                                x.emp_email.ToLower() == row[4].ToString().ToLower()).Count() > 0;
+                                IEnumerable<Role> companyRoles = _companyContext.CompanyRoles.Where(x => x.company_identifier == file.company_identifier.ToString() && x.is_active).ToList();
                                 if (!isExistingEmployee)
                                 {
                                     Employee employee = new Employee();
-                                    employee.company_identifier = row[0].ToString();
-                                    employee.emp_role = row[1].ToString();
-                                    employee.emp_group = row[2].ToString();
-                                    employee.emp_designation = row[3].ToString();
-                                    employee.emp_first_name = row[4].ToString();
-                                    employee.emp_last_name = row[5].ToString();
-                                    employee.emp_email = row[6].ToString();
-                                    employee.emp_office_phone = row[7].ToString();
-                                    employee.emp_mobile_number = row[8].ToString();
-                                    employee.emp_dob = !string.IsNullOrEmpty(Convert.ToString(row[9])) ? Convert.ToDateTime(row[9]) : DateTime.MinValue;
-                                    employee.emp_joining_date = !string.IsNullOrEmpty(Convert.ToString(row[10])) ? Convert.ToDateTime(row[10]) : DateTime.MinValue;
-                                    employee.emp_relieving_date = !string.IsNullOrEmpty(Convert.ToString(row[11])) ? Convert.ToDateTime(row[11]) : DateTime.MaxValue;
-                                    employee.associated_assets = row[12].ToString();
-                                    employee.emp_approval_overdue = !string.IsNullOrEmpty(Convert.ToString(row[13])) ? Convert.ToDateTime(row[13]) : DateTime.MaxValue;
+                                    employee.company_identifier = file.company_identifier.ToString();
+                                    employee.emp_role = !string.IsNullOrEmpty(row[0].ToString())? companyRoles.FirstOrDefault(x=>x.role_name == row[0].ToString())?.role_identifier.ToString(): string.Empty;
+                                    employee.emp_group = row[1].ToString();
+                                    employee.emp_first_name = row[2].ToString();
+                                    employee.emp_last_name = row[3].ToString();
+                                    employee.emp_email = row[4].ToString();
+                                    employee.emp_office_phone = row[5].ToString();
+                                    employee.emp_mobile_number = row[6].ToString();
+                                    employee.emp_dob = !string.IsNullOrEmpty(Convert.ToString(row[7])) ? Convert.ToDateTime(row[7]) : DateTime.MinValue;
+                                    employee.emp_joining_date = !string.IsNullOrEmpty(Convert.ToString(row[8])) ? Convert.ToDateTime(row[8]) : DateTime.MinValue;
+                                    employee.emp_relieving_date = !string.IsNullOrEmpty(Convert.ToString(row[9])) ? Convert.ToDateTime(row[9]) : DateTime.MaxValue;
+                                    employee.emp_approval_overdue = !string.IsNullOrEmpty(Convert.ToString(row[10])) ? Convert.ToDateTime(row[10]) : DateTime.MaxValue;
                                     employee.created_date = DateTime.UtcNow;
                                     employee.created_by = "Application";
                                     employee.is_active = true;
