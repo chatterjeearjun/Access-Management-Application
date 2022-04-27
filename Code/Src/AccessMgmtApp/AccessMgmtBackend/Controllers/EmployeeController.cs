@@ -156,7 +156,7 @@ namespace AccessMgmtBackend.Controllers
                 File = document,
                 upload_category = "Employee",
                 company_identifier = companyId,
-                user_identifier = userIdentifier
+                user_identifier = !string.IsNullOrEmpty(userIdentifier)?userIdentifier:"NA"
             };
             var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
             if (response.Result.IsSuccessStatusCode)
