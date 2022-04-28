@@ -284,7 +284,22 @@ namespace AccessMgmtBackend.Controllers
                 created_by = "Application"
             });
             _companyContext.SaveChanges();
-            return _companyContext.Employees.FirstOrDefault(s => s.emp_email == value.emp_email);
+
+            var updatedEmployee = _companyContext.Employees.FirstOrDefault(s => s.emp_email == value.emp_email);
+            var listRoles = new List<KeyValuePair<string, string>>();
+            var employeesToRoles = _companyContext.EmployeeToRoles.Where
+                     (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
+            foreach (var roleDetail in employeesToRoles)
+            {
+                var roleName = _companyContext.CompanyRoles.FirstOrDefault
+                         (x => x.company_identifier == employee.company_identifier && x.role_identifier.ToString() == roleDetail.role_identifier.ToString())
+                         ?.role_name;
+
+                if (!string.IsNullOrEmpty(roleName)) listRoles.Add(new KeyValuePair<string, string>(roleName, roleDetail.role_identifier));
+            }
+            updatedEmployee.emp_role = JsonConvert.SerializeObject(listRoles);
+
+            return updatedEmployee;
 
         }
 
