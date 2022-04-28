@@ -271,6 +271,18 @@ namespace AccessMgmtBackend.Controllers
                     });
                 }
             }
+            _companyContext.Tickets.Add(new Ticket
+            {
+                id=0,
+                company_identifier= employee.company_identifier,
+                ticket_subject = "New Employee Created - "+employee.emp_email,
+                ticket_content = "Please approve the employee.",
+                ticket_status =1,
+                ticket_user_guid = employee.employee_identifier.ToString(),
+                ticket_agent_guid = "NA",
+                created_date = DateTime.UtcNow,
+                created_by = "Application"
+            });
             _companyContext.SaveChanges();
             return _companyContext.Employees.FirstOrDefault(s => s.emp_email == value.emp_email);
 
