@@ -436,8 +436,50 @@ namespace AccessMgmtBackend.Migrations
                     created_by = "Application",
                     modified_date = Convert.ToDateTime("2022-03-07"),
                     modified_by = "Application"
+                });               
+
+                dbContext.SaveChanges();
+            }
+
+            if (!dbContext.TicketStatus.Any())
+            {
+                dbContext.TicketStatus.Add(new TicketStatus
+                {
+                    id = 0,
+                    status_identifier = new Guid("9c0276ec-fea1-4fa8-bb1f-5d428a850228"),
+                    company_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850222",
+                    status_name = "New",
+                    status_value = 1
+
                 });
-                
+                dbContext.TicketStatus.Add(new TicketStatus
+                {
+                    id = 0,
+                    status_identifier = new Guid("9c0276ec-fea1-4fa8-bb1f-5d428a850290"),
+                    company_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850222",
+                    status_name = "In Progress",
+                    status_value = 2
+
+                });
+                dbContext.TicketStatus.Add(new TicketStatus
+                {
+                    id = 0,
+                    status_identifier = new Guid("9c0276ec-fea1-4fa8-bb1f-5d428a777990"),
+                    company_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850222",
+                    status_name = "On Hold",
+                    status_value = 2
+
+                });
+                dbContext.TicketStatus.Add(new TicketStatus
+                {
+                    id = 0,
+                    status_identifier = new Guid("9c0276ec-fea1-4fa8-bb1f-5d428a850201"),
+                    company_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850222",
+                    status_name = "Closed",
+                    status_value = 4
+
+                });
+
                 dbContext.SaveChanges();
             }
         }

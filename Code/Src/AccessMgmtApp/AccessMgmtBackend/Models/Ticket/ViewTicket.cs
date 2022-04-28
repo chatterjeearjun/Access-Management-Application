@@ -3,6 +3,7 @@
     public class ViewTicket
     {
         public string company_identifier { get; set; }
+        public string ticket_identifier { get; set; }
         public string? ticket_subject { get; set; }
         public string? ticket_content { get; set; }
         public string? ticket_html { get; set; }

@@ -40,6 +40,9 @@
         public DbSet<EmployeeToGroup> EmployeeToGroups { get; set; }
         public DbSet<RoleToDocument> RoleToDocuments { get; set; }
         public DbSet<EmployeeToDocument> EmployeeToDocuments { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketComment> TicketComments { get; set; }
+        public DbSet<TicketStatus> TicketStatus { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add your own configuration here
@@ -57,6 +60,9 @@
             modelBuilder.Entity<CommonDocument>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<AdditionalDocument>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<AppUser>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            modelBuilder.Entity<Ticket>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            modelBuilder.Entity<TicketComment>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            modelBuilder.Entity<TicketStatus>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         }
     }
 }
