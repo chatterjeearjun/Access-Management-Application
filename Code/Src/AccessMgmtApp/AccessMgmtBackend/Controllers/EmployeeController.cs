@@ -16,10 +16,12 @@ namespace AccessMgmtBackend.Controllers
     public class EmployeeController : ControllerBase
     {
         private CompanyContext _companyContext;
+        private IConfiguration configuration;
 
-        public EmployeeController(CompanyContext companyContext)
+        public EmployeeController(CompanyContext companyContext, IConfiguration iConfig)
         {
             _companyContext = companyContext;
+            configuration = iConfig;
         }
 
         /// <summary>
@@ -150,7 +152,7 @@ namespace AccessMgmtBackend.Controllers
         private async Task<UploadedFile> PostUploadFile(IFormFile document, string companyId, [Optional] string userIdentifier)
         {
             UploadedFile employeeResponse = new UploadedFile();
-            GenericAPICalls request = new GenericAPICalls();
+            GenericAPICalls request = new GenericAPICalls(configuration);
             var file = new FileModel
             {
                 File = document,

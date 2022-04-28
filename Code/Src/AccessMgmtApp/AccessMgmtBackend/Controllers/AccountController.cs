@@ -51,7 +51,7 @@ namespace AccessMgmtBackend.Controllers
                     if (result.Succeeded && !string.IsNullOrEmpty(model.user_role))
                     {
                         // Add user to AppUser table
-                        GenericAPICalls request = new GenericAPICalls();
+                        GenericAPICalls request = new GenericAPICalls(this.config);
                         var appuser = new CreateAppUser
                         {
                             company_identifier = model.CompanyIdentifier,
@@ -95,7 +95,7 @@ namespace AccessMgmtBackend.Controllers
                 var user = await this.userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
-                    GenericAPICalls request = new GenericAPICalls();
+                    GenericAPICalls request = new GenericAPICalls(this.config);
                     string userResponse = string.Empty;
                     var passwordCheck = await this.signInManager.CheckPasswordSignInAsync(user, model.Password, false);
                     if (passwordCheck.Succeeded)

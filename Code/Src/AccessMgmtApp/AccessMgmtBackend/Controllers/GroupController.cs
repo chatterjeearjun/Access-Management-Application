@@ -12,9 +12,11 @@ namespace AccessMgmtBackend.Controllers
     public class GroupController : ControllerBase
     {
         private CompanyContext _companyContext;
-        public GroupController(CompanyContext companyContext)
+        private IConfiguration configuration;
+        public GroupController(CompanyContext companyContext, IConfiguration iConfig)
         {
             _companyContext = companyContext;
+            configuration = iConfig;
         }
 
         // GET: api/<GroupController>
@@ -56,7 +58,7 @@ namespace AccessMgmtBackend.Controllers
             if (value.group_description_attachment != null)
             {
                 // Add user to AppUser table
-                GenericAPICalls request = new GenericAPICalls();
+                GenericAPICalls request = new GenericAPICalls(configuration);
                 var file = new FileModel
                 {
                     File = value.group_description_attachment,

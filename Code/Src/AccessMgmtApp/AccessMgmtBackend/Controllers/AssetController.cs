@@ -13,9 +13,11 @@ namespace AccessMgmtBackend.Controllers
     public class AssetController : ControllerBase
     {
         private CompanyContext _companyContext;
-        public AssetController(CompanyContext companyContext)
+        private IConfiguration configuration;
+        public AssetController(CompanyContext companyContext, IConfiguration iConfig)
         {
             _companyContext = companyContext;
+            configuration = iConfig;
         }
 
         // GET: api/<AssetController>/GetByCompany/{companyId}
@@ -66,7 +68,7 @@ namespace AccessMgmtBackend.Controllers
             if (value.asset_description_attachment != null)
             {
                 // Add user to AppUser table
-                GenericAPICalls request = new GenericAPICalls();
+                GenericAPICalls request = new GenericAPICalls(configuration);
                 var file = new FileModel
                 {
                     File = value.asset_description_attachment,
