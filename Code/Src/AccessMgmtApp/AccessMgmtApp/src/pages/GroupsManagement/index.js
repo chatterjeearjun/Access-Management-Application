@@ -244,8 +244,11 @@ const GroupsManagement = (props) => {
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Groups" breadcrumbItem="Group List" />
+          {/* <Breadcrumbs title="Groups" breadcrumbItem="Group List" /> */}
           <Row>
+            <Col lg={12} className="mb-2">
+              <h5>Group List</h5>
+            </Col>
             <Col lg="12">
               <Card>
                 <CardBody>

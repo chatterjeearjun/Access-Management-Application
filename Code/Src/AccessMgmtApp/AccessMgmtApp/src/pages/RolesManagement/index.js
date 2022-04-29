@@ -20,11 +20,9 @@ import paginationFactory, {
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import BootstrapTable from "react-bootstrap-table-next";
-
-import makeAnimated from "react-select/animated";
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
-import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
+import { MultiSelect } from "react-multi-select-component";
 import {
   getRoles as onGetRoles,
   addNewRole as onAddNewRole,
@@ -66,9 +64,9 @@ const RolesManagement = (props) => {
   const [modal, setModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [file, setFile] = useState(),
-    [selectedDocsReq, setSelectedDocsReq] = useState({
-      docsSelected: [],
-    });
+    [selectedDocsReq, setSelectedDocsReq] = useState([]);
+  //   docsSelected: [],
+  // });
   const { SearchBar } = Search;
 
   const pageOptions = {
@@ -243,8 +241,8 @@ const RolesManagement = (props) => {
         role_description: values["description"],
         role_description_attachment: roleList.roledescattachment,
         is_active: roleList.isactive,
-        RoleDocumentMapping: selectedDocsReq.docsSelected.toString(),
-        associated_assets: assetsSelected.toString(),
+        RoleDocumentMapping: JSON.stringify(selectedDocsReq),
+        associated_assets: JSON.stringify(assetsSelected),
       };
       // update role
       dispatch(onUpdateRole(updateRole));
@@ -256,8 +254,8 @@ const RolesManagement = (props) => {
         role_description: values["description"],
         role_description_attachment: file,
         is_active: true,
-        RoleDocumentMapping: selectedDocsReq.docsSelected,
-        associated_assets: assetsSelected.toString(),
+        RoleDocumentMapping: JSON.stringify(selectedDocsReq),
+        associated_assets: JSON.stringify(assetsSelected),
       };
       // console.log(newRole, "newrole");
       // save new role
@@ -276,23 +274,39 @@ const RolesManagement = (props) => {
   for (var i = 0; i < assetList.length; i++) {
     assetlist[i] = {
       label: assetList[i].asset_name,
-      key: assetList[i].asset_identifier,
+      value: assetList[i].asset_identifier,
     };
   }
 
-  const handleDocReqChange = (e) => {
-    const { value, selectedIndex } = e.target;
-    const { docsSelected: docs } = selectedDocsReq;
-    if (selectedIndex === 1) {
-      setSelectedDocsReq({
-        docsSelected: [...docs, value],
-      });
-    } else {
-      setSelectedDocsReq({
-        docsSelected: docs.filter((doc) => doc !== value.split("Not*")[1]),
-      });
-    }
-  };
+  let grouplist = [];
+  for (var j = 0; j < groupList.length; j++) {
+    grouplist[j] = {
+      label: groupList[j].group_name,
+      value: groupList[j].group_identifier,
+    };
+  }
+
+  let docslist = [];
+  for (var d = 0; d < docsList.length; d++) {
+    docslist[j] = {
+      label: docsList[d].document_name,
+      value: docsList[d].document_identifier,
+    };
+  }
+
+  // const handleDocReqChange = (e) => {
+  //   const { value, selectedIndex } = e.target;
+  //   const { docsSelected: docs } = selectedDocsReq;
+  //   if (selectedIndex === 1) {
+  //     setSelectedDocsReq({
+  //       docsSelected: [...docs, value],
+  //     });
+  //   } else {
+  //     setSelectedDocsReq({
+  //       docsSelected: docs.filter((doc) => doc !== value.split("Not*")[1]),
+  //     });
+  //   }
+  // };
 
   return (
     <React.Fragment>
@@ -302,8 +316,11 @@ const RolesManagement = (props) => {
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Roles" breadcrumbItem="Role List" />
+          {/* <Breadcrumbs title="Roles" breadcrumbItem="Role List" /> */}
           <Row>
+            <Col lg={12} className="mb-2">
+              <h5>Role List</h5>
+            </Col>
             <Col lg="12">
               <Card>
                 <CardBody>
@@ -469,118 +486,50 @@ const RolesManagement = (props) => {
                                                   </div>
                                                 )}
                                               </Col>
-                                              {docsList.length > 0
-                                                ? docsList?.map((doc) =>
-                                                    doc.is_active ? (
-                                                      <Col xs={6}>
-                                                        <div className="mb-3">
-                                                          <AvField
-                                                            type="select"
-                                                            name={
-                                                              "docu" + doc.id
-                                                            }
-                                                            className="form-select"
-                                                            label={
-                                                              "Is " +
-                                                              doc.document_name +
-                                                              " Required"
-                                                            }
-                                                            errorMessage={
-                                                              "please select " +
-                                                              doc.document_name +
-                                                              " required or not"
-                                                            }
-                                                            multiple={false}
-                                                            required
-                                                            onChange={
-                                                              handleDocReqChange
-                                                            }
-                                                            value={
-                                                              roleList.documentsSelected?.filter(
-                                                                (docvalue) =>
-                                                                  docvalue.Value ===
-                                                                  doc.document_identifier
-                                                              ).length > 0
-                                                                ? doc.document_identifier
-                                                                : "Not*" +
-                                                                    doc.document_identifier ||
-                                                                  ""
-                                                            }
-                                                          >
-                                                            <option>
-                                                              select Is{" "}
-                                                              {
-                                                                doc.document_name
-                                                              }{" "}
-                                                              Required?
-                                                            </option>
-                                                            <option
-                                                              value={
-                                                                doc.document_identifier
-                                                              }
-                                                            >
-                                                              Required
-                                                            </option>
-                                                            <option
-                                                              value={
-                                                                "Not*" +
-                                                                doc.document_identifier
-                                                              }
-                                                            >
-                                                              Not Required
-                                                            </option>
-                                                          </AvField>
-                                                        </div>
-                                                      </Col>
-                                                    ) : (
-                                                      ""
-                                                    )
-                                                  )
-                                                : ""}
+
+                                              <Col xs={6}>
+                                                <div className="mb-3">
+                                                  <label>
+                                                    Select Required Documents
+                                                    for this role
+                                                  </label>
+                                                  <MultiSelect
+                                                    labelledBy="select required documents"
+                                                    required={true}
+                                                    value={selectedDocsReq}
+                                                    options={docslist}
+                                                    name="docsrequired"
+                                                    onChange={
+                                                      setSelectedDocsReq
+                                                    }
+                                                  />
+                                                </div>
+                                              </Col>
                                             </Row>
                                             <Row>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <label>Link Assets</label>
-                                                  <DropdownMultiselect
-                                                    placeholder="select asset/assets"
-                                                    buttonClass="btn-light"
-                                                    selectDeselectLabel="Select/Deselect All"
+                                                  <MultiSelect
+                                                    labelledBy="select asset/assets"
                                                     required={true}
-                                                    value={""}
+                                                    value={assetsSelected}
                                                     options={assetlist}
                                                     name="assets"
-                                                    handleOnChange={(
-                                                      selected
-                                                    ) => {
-                                                      setAssetSelected(
-                                                        selected
-                                                      );
-                                                    }}
+                                                    onChange={setAssetSelected}
                                                   />
                                                 </div>
                                               </Col>
                                               <Col xs={6}>
                                                 <div className="mb-3">
                                                   <label>Link Groups</label>
-                                                  <DropdownMultiselect
-                                                    placeholder="select Group/Groups"
-                                                    buttonClass="btn-light"
-                                                    selectDeselectLabel="Select/Deselect All"
+                                                  <MultiSelect
+                                                    labelledBy="select Group/Groups"
                                                     required
-                                                    value={groupList.group_name}
-                                                    options={groupList.map(
-                                                      (group) =>
-                                                        group.group_name
-                                                    )}
+                                                    value={groupSelected}
+                                                    options={grouplist}
                                                     name="groups"
-                                                    handleOnChange={(
-                                                      selected
-                                                    ) => {
-                                                      setGroupsSelected(
-                                                        selected
-                                                      );
-                                                    }}
+                                                    onChange={setGroupsSelected}
                                                   />
                                                 </div>
                                               </Col>

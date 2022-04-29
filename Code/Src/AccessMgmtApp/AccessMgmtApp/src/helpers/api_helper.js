@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //pass new generated access token here
-const token = `Bearer ${JSON.parse(localStorage.getItem("authUser"))?.token}`;
+// const token = `Bearer ${JSON.parse(localStorage.getItem("authUser"))?.token}`;
 
 //apply base url for axios
 const API_URL = process.env.REACT_APP_API_BASE_URL; //"https://localhost:5001";
@@ -228,7 +228,12 @@ export async function postEmployee(url, data) {
     );
     formData.append("emp_profile_picture", data.emp_profile_picture);
     formData.append("is_active", data.is_active);
-    formData.append("associated_assets", data.associated_assets);
+    formData.append(
+      "associated_assets",
+      data.associated_assets
+        .replaceAll("label", "Key")
+        .replaceAll("value", "Value")
+    );
     const response = await fetch(`${API_URL}${url}`, {
       method: "POST",
       body: formData,
@@ -237,7 +242,7 @@ export async function postEmployee(url, data) {
     const result = await response.json();
     return result;
   } catch (error) {
-    // console.log(error, "postEmployee error");
+    console.log(error, "postEmployee error");
   }
 }
 export async function postforlogin(url, data, config = {}) {

@@ -120,9 +120,12 @@ const RequiredDocuments = () => {
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Documents" breadcrumbItem="Required Documents" />
+          {/* <Breadcrumbs title="Documents" breadcrumbItem="Required Documents" /> */}
           <ToastContainer />
           <Row>
+            <Col lg={12} className="mb-2">
+              <h5>Required Documents</h5>
+            </Col>
             <Col>
               <Card>
                 <CardBody>

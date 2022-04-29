@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 
 //i18n
 import { withTranslation } from "react-i18next";
+import { FaTicketAlt } from "react-icons/fa";
 
 const SidebarContent = (props) => {
   const ref = useRef();
@@ -106,11 +107,34 @@ const SidebarContent = (props) => {
               </Link>
             </li>
             <li>
+              <Link to="/#" className="has-arrow ">
+                <FeatherIcon icon="user-check" />
+                <span>{props.t("Admin Settings")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/AdminTeam">{props.t("Admin Team")}</Link>
+                </li>
+                <li>
+                  <Link to="/#">{props.t("Email Box Settings")}</Link>
+                </li>
+                <li>
+                  <Link to="/#">{props.t("Payment Settings")}</Link>
+                </li>
+                <li>
+                  <Link to="/UploadSettings">{props.t("Upload Settings")}</Link>
+                </li>
+                <li>
+                  <Link to="/#">{props.t("Azure Settings")}</Link>
+                </li>
+              </ul>
+            </li>
+            {/* <li>
               <Link to="/AdminTeam" className="">
                 <FeatherIcon icon="user-check" />
                 <span>{props.t("Admin Team")}</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/EmployeeManagement" className="">
                 <FeatherIcon icon="users" />
@@ -133,6 +157,12 @@ const SidebarContent = (props) => {
               <Link to="/GroupsManagement" className="">
                 <FeatherIcon icon="package" />
                 <span>{props.t("Groups Management")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/TicketingSystem" className="">
+                <FaTicketAlt className="svgfill" />
+                <span>{props.t("Ticketing System")}</span>
               </Link>
             </li>
             <li>

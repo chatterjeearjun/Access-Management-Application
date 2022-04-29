@@ -109,6 +109,9 @@
                     margin-right: 10px;
                     margin-top: -3px;
                 }
+                .svgfill{
+                    fill: rgba(84, 90, 109, 0.7) !important;
+                }
 
                 &:hover {
                     color: $sidebar-menu-item-hover-color;

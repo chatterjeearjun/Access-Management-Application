@@ -299,9 +299,12 @@ const AdminTeam = () => {
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Users" breadcrumbItem="Users List" />
+          {/* <Breadcrumbs title="Users" breadcrumbItem="Users List" /> */}
           <ToastContainer />
           <Row>
+            <Col lg={12} className="mb-2">
+              <h5>Users List</h5>
+            </Col>
             <Col lg="12">
               <Card>
                 <CardBody>

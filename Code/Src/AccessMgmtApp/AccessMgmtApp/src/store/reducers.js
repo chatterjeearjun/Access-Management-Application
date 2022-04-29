@@ -38,6 +38,8 @@ import employeesManagement from "./EmployeeManagement/reducer";
 
 import adminTeam from "./AdminManagement/reducer";
 
+import ticketingSystem from "./TicketingSystem/reducer";
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -56,6 +58,7 @@ const rootReducer = combineReducers({
   rolesManagement,
   employeesManagement,
   adminTeam,
+  ticketingSystem,
 });
 
 export default rootReducer;

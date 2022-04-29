@@ -28,6 +28,9 @@ import GroupsManagement from "../pages/GroupsManagement/index";
 //BulkUploads
 import EmployeeBulkUpload from "../pages/BulkUpload/index";
 
+//TicketingSystem
+import TicketingSystem from "../pages/TicketingSystem/index";
+
 // Calendar
 import Calendar from "../pages/Calendar/index";
 
@@ -161,6 +164,9 @@ const userRoutes = [
 
   //BulkUploads
   { path: "/employeebulkupload", component: EmployeeBulkUpload },
+
+  //TicketingSystem
+  { path: "/ticketingsystem", component: TicketingSystem },
 
   //Calendar
   { path: "/apps-calendar", component: Calendar },

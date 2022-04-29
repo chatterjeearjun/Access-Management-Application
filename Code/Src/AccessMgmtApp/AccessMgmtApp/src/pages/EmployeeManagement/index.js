@@ -61,6 +61,7 @@ const EmployeeManagement = () => {
   }));
 
   const [userList, setUserList] = useState([]),
+    [editUserList, setEditUserList] = useState([]),
     [groupList, setGroupsList] = useState([]),
     [rolesList, setRolesList] = useState([]),
     [modal, setModal] = useState(false),
@@ -123,7 +124,11 @@ const EmployeeManagement = () => {
       text: "Role",
       sort: true,
       formatter: (cellContent, user) => (
-        <>{JSON.parse(user?.emp_role)[0]?.Key}</>
+        <>
+          {user?.emp_role.indexOf("Key") !== -1
+            ? JSON.parse(user?.emp_role)[0]?.Key
+            : user?.emp_role}
+        </>
       ),
     },
     {
@@ -156,7 +161,7 @@ const EmployeeManagement = () => {
             <FaUserEdit
               className="font-size-18"
               id="edittooltip"
-              onClick={() => handleUserClick(user)}
+              onClick={() => handleEditEmployee(user)}
             ></FaUserEdit>
           </Link>
           <Link className="text-danger" to="#">
@@ -191,7 +196,6 @@ const EmployeeManagement = () => {
 
   useEffect(() => {
     setIsEdit(false);
-    debugger;
     if (
       users.length > 0 &&
       params[0] &&
@@ -248,7 +252,7 @@ const EmployeeManagement = () => {
               params[0]?.split(",")[0] &&
             moment(user.created_date).format("YYYY-MM-DD") <=
               params[0]?.split(",")[1] &&
-            moment(user.emp_approval_overdue).format("YYYY-MM-DD") >
+            moment(user.emp_approval_overdue).format("YYYY-MM-DD") <
               params[0]?.split(",")[1]
         );
         setUserList(filteredUsers);
@@ -301,10 +305,9 @@ const EmployeeManagement = () => {
       }, 500);
     }
   };
-  const handleUserClick = (arg) => {
+  const handleEditEmployee = (arg) => {
     const user = arg;
-
-    setUserList({
+    setEditUserList({
       employeeid: user.employee_identifier,
       companyid: user.company_identifier,
       name: user.emp_first_name + " " + user.emp_last_name,
@@ -316,14 +319,11 @@ const EmployeeManagement = () => {
       role: JSON.parse(user.emp_role)[0].Value,
       group: user.emp_group,
       email: user.emp_email,
-      startdate: user.emp_joining_date.split("T")[0],
+      startdate: moment(user.emp_joining_date).format("YYYY-MM-DD"),
       createdby: user.created_by,
-      createddate: user.created_date,
+      createddate: moment(user.created_date).format("YYYY-MM-DD"),
       modifiedby: user.modified_by,
       modifieddate: user.modified_date,
-      ndadoc: user.emp_nda_document1,
-      bcdoc: user.emp_bc_document1,
-      certdoc: user.emp_cert_document1,
     });
     setIsEdit(true);
     setPhone(user.emp_mobile_number);
@@ -350,13 +350,7 @@ const EmployeeManagement = () => {
         emp_email: values["email"],
         emp_office_phone: phone,
         emp_mobile_number: phone,
-        emp_joining_date: new Date(
-          values["startdate"].split("-")[0],
-          values["startdate"].split("-")[1],
-          values["startdate"].split("-")[2]
-        )
-          .toISOString()
-          .slice(0, 19),
+        emp_joining_date: moment.utc(values["startdate"]).format(),
         emp_documents: userList.emp_documents,
         associated_assets: JSON.stringify(assetsSelected),
       };
@@ -376,13 +370,7 @@ const EmployeeManagement = () => {
         emp_email: values["email"],
         emp_office_phone: phone,
         emp_mobile_number: phone,
-        emp_joining_date: new Date(
-          values["startdate"].split("-")[0],
-          values["startdate"].split("-")[1],
-          values["startdate"].split("-")[2]
-        )
-          .toISOString()
-          .slice(0, 19),
+        emp_joining_date: moment.utc(values["startdate"]).format(),
         emp_documents: selectedFiles.docsSelected
           ? selectedFiles.docsSelected
           : "",
@@ -401,7 +389,7 @@ const EmployeeManagement = () => {
     }
   }, [result, isLoading, users]);
 
-  const handleUserClicks = () => {
+  const handleAddNewEmployee = () => {
     //setUserList([]);
     setIsEdit(false);
     setDocsRequired(null);
@@ -478,7 +466,7 @@ const EmployeeManagement = () => {
     });
   }
   const requiredFilesChange = (e) => {
-    debugger;
+    //debugger;
     const { files, id, name } = e.target;
     const { docsSelected: docs } = selectedFiles;
     setSelectedFiles({
@@ -533,9 +521,12 @@ const EmployeeManagement = () => {
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Employees" breadcrumbItem="Employee List" />
+          {/* <Breadcrumbs title="Employees" breadcrumbItem="Employee List" /> */}
           <ToastContainer />
           <Row>
+            <Col lg={12} className="mb-2">
+              <h5>Employee List</h5>
+            </Col>
             <Col lg="12">
               <Card>
                 <CardBody>
@@ -577,7 +568,7 @@ const EmployeeManagement = () => {
                                       <Link
                                         to="#"
                                         className="btn btn-light"
-                                        onClick={handleUserClicks}
+                                        onClick={handleAddNewEmployee}
                                       >
                                         <i className="bx bx-plus me-1"></i> Add
                                         Employee
@@ -651,7 +642,9 @@ const EmployeeManagement = () => {
                                                     validate={{
                                                       required: { value: true },
                                                     }}
-                                                    value={userList.fname || ""}
+                                                    value={
+                                                      editUserList.fname || ""
+                                                    }
                                                   />
                                                 </div>
                                               </Col>
@@ -667,7 +660,9 @@ const EmployeeManagement = () => {
                                                     validate={{
                                                       required: { value: true },
                                                     }}
-                                                    value={userList.lname || ""}
+                                                    value={
+                                                      editUserList.lname || ""
+                                                    }
                                                   />
                                                 </div>
                                               </Col>
@@ -694,7 +689,9 @@ const EmployeeManagement = () => {
                                                         value: true,
                                                       },
                                                     }}
-                                                    value={userList.email || ""}
+                                                    value={
+                                                      editUserList.email || ""
+                                                    }
                                                     onChange={empEmailChange}
                                                   />
                                                 </div>
@@ -728,7 +725,8 @@ const EmployeeManagement = () => {
                                                     required
                                                     errormessage="please select employee type"
                                                     value={
-                                                      userList.designation || ""
+                                                      editUserList.designation ||
+                                                      ""
                                                     }
                                                   >
                                                     <option>
@@ -752,7 +750,9 @@ const EmployeeManagement = () => {
                                                     multiple={false}
                                                     required
                                                     errormessage="please select employee group"
-                                                    value={userList.group || ""}
+                                                    value={
+                                                      editUserList.group || ""
+                                                    }
                                                   >
                                                     <option value="">
                                                       Select Employee Group
@@ -798,7 +798,8 @@ const EmployeeManagement = () => {
                                                       required: { value: true },
                                                     }}
                                                     value={
-                                                      userList.startdate || ""
+                                                      editUserList.startdate ||
+                                                      ""
                                                     }
                                                   />
                                                 </div>
@@ -818,7 +819,9 @@ const EmployeeManagement = () => {
                                                       isEdit ? true : false
                                                     }
                                                     required
-                                                    value={userList.role || ""}
+                                                    value={
+                                                      editUserList.role || ""
+                                                    }
                                                     onChange={handleRoleChange}
                                                   >
                                                     <option value="">

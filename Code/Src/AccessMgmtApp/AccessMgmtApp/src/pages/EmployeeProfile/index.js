@@ -23,6 +23,7 @@ const EmployeeProfile = () => {
           },
         }
       );
+      debugger;
       const json = await response.json();
       setEmployeeData(json);
     };

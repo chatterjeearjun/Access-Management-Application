@@ -388,7 +388,7 @@ const AssetsManagement = (props) => {
   // }
   const filterBy = () => true;
   const handleSearch = (query) => {
-    debugger;
+    //debugger;
     setTypeaheadList([]);
     setIsLoading(true);
     const list = owners?.filter(
@@ -427,9 +427,12 @@ const AssetsManagement = (props) => {
         )} */}
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Assets" breadcrumbItem="Asset List" />
+          {/* <Breadcrumbs title="Assets" breadcrumbItem="Asset List" /> */}
           <ToastContainer />
           <Row>
+            <Col lg={12} className="mb-2">
+              <h5>Asset List</h5>
+            </Col>
             <Col lg="12">
               <Card>
                 <CardBody>

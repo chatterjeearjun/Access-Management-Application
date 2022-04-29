@@ -407,6 +407,21 @@ export const bulkEmployeeUpload = (file) =>
     )
   );
 
+//TicketsManagement
+
+//get ticket
+export const getTickets = () =>
+  get(url.GET_TICKETS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+
+// add ticket
+export const addNewTicket = (ticket) => post(url.ADD_NEW_TICKET, ticket);
+
+// update ticket
+export const updateTicket = (ticket) => put(url.UPDATE_TICKET, ticket);
+
+// delete ticket
+export const deleteTicket = (ticket) => del(url.DELETE_TICKET, ticket);
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

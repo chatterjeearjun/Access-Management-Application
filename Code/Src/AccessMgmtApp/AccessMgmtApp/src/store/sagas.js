@@ -17,6 +17,7 @@ import dashboardSaga from "./Dashboard/saga";
 import rolesSaga from "./RolesManagement/sagas";
 import approversSaga from "./AdminManagement/saga";
 import employeesSaga from "./EmployeeManagement/saga";
+import ticketsSaga from "./TicketingSystem/saga";
 
 export default function* rootSaga() {
   yield all([
@@ -37,5 +38,6 @@ export default function* rootSaga() {
     fork(employeesSaga),
     fork(approversSaga),
     fork(rolesSaga),
+    fork(ticketsSaga),
   ]);
 }

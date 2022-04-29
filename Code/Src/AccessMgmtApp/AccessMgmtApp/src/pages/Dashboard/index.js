@@ -25,7 +25,10 @@ import AuditsPie from "./AuditsPie";
 import UsersApproval from "./UsersApproval";
 import ApprovalStatusList from "./ApprovalStatusList";
 import SystemHealth from "./SystemHealth";
-import { getDashboardData as ongetDashData } from "../../store/actions";
+import {
+  getDashboardData as ongetDashData,
+  getUsers as onGetUsers,
+} from "../../store/actions";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 import "react-datepicker/dist/react-datepicker.css";
@@ -89,7 +92,10 @@ const Dashboard = () => {
     ]);
 
   const dispatch = useDispatch();
-
+  const { users, result } = useSelector((state) => ({
+    users: state.employeesManagement.users,
+    result: state.employeesManagement.result,
+  }));
   const { dData } = useSelector((state) => ({
     dData: state.dashboardManagement.dashboard,
   }));
@@ -108,6 +114,12 @@ const Dashboard = () => {
   useEffect(() => {
     setData(dData);
   }, [dData]);
+
+  useEffect(() => {
+    if (users && !users.length) {
+      dispatch(onGetUsers());
+    }
+  }, []);
 
   const DatesRange = (selectedDates) => {
     setDateRange(
@@ -133,8 +145,11 @@ const Dashboard = () => {
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumbs */}
-          <Breadcrumbs title="Dashboard" breadcrumbItem="Dashboard" />
-          <Row className="justify-content-end">
+          {/* <Breadcrumbs title="Dashboard" breadcrumbItem="Dashboard" /> */}
+          <Row className="justify-content-between align-items-center">
+            <Col xs={6}>
+              <h5>Dashboard</h5>
+            </Col>
             <Col xs={3}>
               <FormGroup className="mb-4">
                 <Label>Date Range</Label>

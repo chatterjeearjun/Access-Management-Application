@@ -38,3 +38,6 @@ export * from "./EmployeeManagement/actions";
 
 //RoleManagement
 export * from "./RolesManagement/actions";
+
+//TicketingSystem
+export * from "./TicketingSystem/actions";
