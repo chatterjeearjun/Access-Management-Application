@@ -5,12 +5,17 @@ namespace AccessMgmtBackend.Generic
 {
     public class GenericAPICalls
     {
-        private static string BaseAddress = "https://accessmanagesapi.azurewebsites.net/";
+        private readonly string _baseAddress;
+
+        public GenericAPICalls(IConfiguration configuration)
+        {
+            _baseAddress = configuration["BaseAddress"];
+        }
         public async Task<HttpResponseMessage> GetEndpoint(string requestURI)
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(BaseAddress);
+                client.BaseAddress = new Uri(_baseAddress);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 //GET Method
@@ -22,7 +27,7 @@ namespace AccessMgmtBackend.Generic
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(BaseAddress);
+                client.BaseAddress = new Uri(_baseAddress);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 //POST Method                
@@ -36,7 +41,7 @@ namespace AccessMgmtBackend.Generic
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri(BaseAddress);
+                client.BaseAddress = new Uri(_baseAddress);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 //POST Method                
@@ -50,7 +55,7 @@ namespace AccessMgmtBackend.Generic
 
             var client = new HttpClient
             {
-                BaseAddress = new(BaseAddress)
+                BaseAddress = new(_baseAddress)
             };
             await using var stream = file.File.OpenReadStream();
             using var request = new HttpRequestMessage(HttpMethod.Post, requestURI);

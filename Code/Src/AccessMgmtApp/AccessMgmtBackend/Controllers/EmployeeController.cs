@@ -16,10 +16,12 @@ namespace AccessMgmtBackend.Controllers
     public class EmployeeController : ControllerBase
     {
         private CompanyContext _companyContext;
+        private IConfiguration configuration;
 
-        public EmployeeController(CompanyContext companyContext)
+        public EmployeeController(CompanyContext companyContext, IConfiguration iConfig)
         {
             _companyContext = companyContext;
+            configuration = iConfig;
         }
 
         /// <summary>
@@ -150,13 +152,13 @@ namespace AccessMgmtBackend.Controllers
         private async Task<UploadedFile> PostUploadFile(IFormFile document, string companyId, [Optional] string userIdentifier)
         {
             UploadedFile employeeResponse = new UploadedFile();
-            GenericAPICalls request = new GenericAPICalls();
+            GenericAPICalls request = new GenericAPICalls(configuration);
             var file = new FileModel
             {
                 File = document,
                 upload_category = "Employee",
                 company_identifier = companyId,
-                user_identifier = userIdentifier
+                user_identifier = !string.IsNullOrEmpty(userIdentifier)?userIdentifier:"NA"
             };
             var response = request.FileUploadPostEndpoint("api/FileUpload/UploadDocument", file);
             if (response.Result.IsSuccessStatusCode)
@@ -269,8 +271,35 @@ namespace AccessMgmtBackend.Controllers
                     });
                 }
             }
+            _companyContext.Tickets.Add(new Ticket
+            {
+                id=0,
+                company_identifier= employee.company_identifier,
+                ticket_subject = "New Employee Created - "+employee.emp_email,
+                ticket_content = "Please approve the employee.",
+                ticket_status =1,
+                ticket_user_guid = employee.employee_identifier.ToString(),
+                ticket_agent_guid = "NA",
+                created_date = DateTime.UtcNow,
+                created_by = "Application"
+            });
             _companyContext.SaveChanges();
-            return _companyContext.Employees.FirstOrDefault(s => s.emp_email == value.emp_email);
+
+            var updatedEmployee = _companyContext.Employees.FirstOrDefault(s => s.emp_email == value.emp_email);
+            var listRoles = new List<KeyValuePair<string, string>>();
+            var employeesToRoles = _companyContext.EmployeeToRoles.Where
+                     (x => x.company_identifier == employee.company_identifier && x.employee_identifier == employee.employee_identifier.ToString() && x.is_active == true).ToList();
+            foreach (var roleDetail in employeesToRoles)
+            {
+                var roleName = _companyContext.CompanyRoles.FirstOrDefault
+                         (x => x.company_identifier == employee.company_identifier && x.role_identifier.ToString() == roleDetail.role_identifier.ToString())
+                         ?.role_name;
+
+                if (!string.IsNullOrEmpty(roleName)) listRoles.Add(new KeyValuePair<string, string>(roleName, roleDetail.role_identifier));
+            }
+            updatedEmployee.emp_role = JsonConvert.SerializeObject(listRoles);
+
+            return updatedEmployee;
 
         }
 

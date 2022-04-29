@@ -13,9 +13,11 @@ namespace AccessMgmtBackend.Controllers
     public class AppUserController : ControllerBase
     {
         private CompanyContext _companyContext;
-        public AppUserController(CompanyContext companyContext)
+        private IConfiguration configuration;
+        public AppUserController(CompanyContext companyContext,IConfiguration iConfig)
         {
             _companyContext = companyContext;
+            configuration = iConfig;
         }
 
         // GET: api/<AppUserController>
@@ -100,7 +102,7 @@ namespace AccessMgmtBackend.Controllers
             if (value.user_description_attachment != null)
             {
                 // Add user to AppUser table
-                GenericAPICalls request = new GenericAPICalls();
+                GenericAPICalls request = new GenericAPICalls(configuration);
                 var file = new FileModel
                 {
                     File = value.user_description_attachment,

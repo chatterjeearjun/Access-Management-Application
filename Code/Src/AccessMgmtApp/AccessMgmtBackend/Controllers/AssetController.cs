@@ -3,6 +3,7 @@ using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,16 +14,33 @@ namespace AccessMgmtBackend.Controllers
     public class AssetController : ControllerBase
     {
         private CompanyContext _companyContext;
-        public AssetController(CompanyContext companyContext)
+        private IConfiguration configuration;
+        public AssetController(CompanyContext companyContext, IConfiguration iConfig)
         {
             _companyContext = companyContext;
+            configuration = iConfig;
         }
 
         // GET: api/<AssetController>/GetByCompany/{companyId}
         [HttpGet]
         public IEnumerable<Asset> GetByCompany(string companyId)
         {
-            return _companyContext.Assets.Where(x => x.company_identifier == companyId && x.is_active).ToList();
+            var assets = _companyContext.Assets.Where(x => x.company_identifier == companyId && x.is_active).ToList();
+            foreach (var asset in assets)
+            {
+                asset.asset_description_attachment = !string.IsNullOrEmpty(asset.asset_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
+                        (s => s.file_identifier.ToString() == asset.asset_description_attachment)?.blob_file_name : String.Empty;
+                if (!string.IsNullOrEmpty(asset.asset_owner))
+                {
+                    var employee = _companyContext.Employees.FirstOrDefault(x => x.employee_identifier == new Guid(asset.asset_owner));
+                    if (employee != null && employee.emp_first_name != string.Empty)
+                    {
+                        var listRole = new KeyValuePair<string, string>(employee.employee_identifier.ToString(), employee.emp_first_name + employee.emp_last_name);
+                        asset.asset_owner = JsonConvert.SerializeObject(listRole);
+                    }
+                }
+            }
+            return assets;
         }
 
         // GET api/<AssetController>/{guid}
@@ -34,6 +52,15 @@ namespace AccessMgmtBackend.Controllers
             {
                 asset.asset_description_attachment = !string.IsNullOrEmpty(asset.asset_description_attachment) ? _companyContext.UploadedFiles.FirstOrDefault
                         (s => s.file_identifier.ToString() == asset.asset_description_attachment)?.blob_file_name : String.Empty;
+                if (!string.IsNullOrEmpty(asset.asset_owner))
+                {
+                    var employee = _companyContext.Employees.FirstOrDefault(x => x.employee_identifier == new Guid(asset.asset_owner));
+                    if (employee != null && employee.emp_first_name != string.Empty)
+                    {
+                        var listRole = new KeyValuePair<string, string>(employee.employee_identifier.ToString(), employee.emp_first_name + employee.emp_last_name);
+                        asset.asset_owner = JsonConvert.SerializeObject(listRole);
+                    }
+                }
             }
             return asset;
         }
@@ -66,7 +93,7 @@ namespace AccessMgmtBackend.Controllers
             if (value.asset_description_attachment != null)
             {
                 // Add user to AppUser table
-                GenericAPICalls request = new GenericAPICalls();
+                GenericAPICalls request = new GenericAPICalls(configuration);
                 var file = new FileModel
                 {
                     File = value.asset_description_attachment,

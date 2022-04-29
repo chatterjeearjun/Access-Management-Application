@@ -12,9 +12,11 @@ namespace AccessMgmtBackend.Controllers
     public class FileUploadController : ControllerBase
     {
         private CompanyContext _companyContext;
-        public FileUploadController(CompanyContext companyContext)
+        private IConfiguration configuration;
+        public FileUploadController(CompanyContext companyContext, IConfiguration iConfig)
         {
             _companyContext = companyContext;
+            configuration = iConfig;
         }
 
         [Route("UploadDocument")]
@@ -26,8 +28,9 @@ namespace AccessMgmtBackend.Controllers
             {
                 var filename = GenerateFileName(file.File.FileName, file.company_identifier, file.user_identifier, file.upload_category);
                 var fileUrl = "";
-                BlobContainerClient container = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=accessmanagement;AccountKey=n/iZ6tfNgH8sRbbItnRPbo+1F32DZzr57MGQvMWmuNW+jhrD1Acfr+KNS99dOt6LwQrNafxOrkyNnFHmSoVriw==;EndpointSuffix=core.windows.net",
-                "accessmanagement");
+                string connectionString = configuration.GetValue<string>("BlobSettings:Connectionstring");
+                string blobName = configuration.GetValue<string>("BlobSettings:Containername");
+                BlobContainerClient container = new BlobContainerClient(connectionString,blobName);
                 try
                 {
                     var uploadedFile = new UploadedFile();
