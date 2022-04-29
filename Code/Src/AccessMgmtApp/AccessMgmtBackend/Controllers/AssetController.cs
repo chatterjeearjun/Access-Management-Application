@@ -115,6 +115,15 @@ namespace AccessMgmtBackend.Controllers
             var newAsset = _companyContext.Assets.FirstOrDefault(s => s.asset_id == value.asset_id);
             newAsset.asset_description_attachment = !string.IsNullOrEmpty(newAsset.asset_description_attachment) ?
                 _companyContext.UploadedFiles.FirstOrDefault(s => s.file_identifier.ToString() == asset.asset_description_attachment)?.blob_file_name : string.Empty;
+            if (!string.IsNullOrEmpty(newAsset.asset_owner))
+            {
+                var employee = _companyContext.Employees.FirstOrDefault(x => x.employee_identifier == new Guid(newAsset.asset_owner));
+                if (employee != null && employee.emp_first_name != string.Empty)
+                {
+                    var listRole = new KeyValuePair<string, string>(employee.employee_identifier.ToString(), employee.emp_first_name + employee.emp_last_name);
+                    newAsset.asset_owner = JsonConvert.SerializeObject(listRole);
+                }
+            }
             return newAsset;
         }
 
