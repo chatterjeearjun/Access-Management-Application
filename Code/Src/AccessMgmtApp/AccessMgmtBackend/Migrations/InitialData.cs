@@ -467,7 +467,7 @@ namespace AccessMgmtBackend.Migrations
                     status_identifier = new Guid("9c0276ec-fea1-4fa8-bb1f-5d428a777990"),
                     company_identifier = "6C0276EC-FEA1-4FA8-BB1F-5D428A850222",
                     status_name = "On Hold",
-                    status_value = 2
+                    status_value = 3
 
                 });
                 dbContext.TicketStatus.Add(new TicketStatus
