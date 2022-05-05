@@ -17,6 +17,37 @@ namespace AccessMgmtBackend.Controllers
             _companyContext = companyContext;
         }
 
+        [Route("Employees")]
+        [HttpPost]
+        public bool Employees(string companyId, string EmployeeId,bool isApproved,bool isRejected, string? comment)
+        {
+            if (!string.IsNullOrEmpty(companyId) && !string.IsNullOrEmpty(EmployeeId))
+            {
+                var existingEmployee = _companyContext.Employees.FirstOrDefault(x => x.company_identifier == companyId && x.employee_identifier.ToString() == EmployeeId);
+                if (existingEmployee != null)
+                {
+                    existingEmployee.is_approved = isApproved;
+                    existingEmployee.is_rejected = isRejected;
+                    existingEmployee.emp_approval_comment = !string.IsNullOrEmpty(comment)?comment: existingEmployee.emp_approval_comment;
+                    existingEmployee.modified_date = DateTime.UtcNow;
+                    existingEmployee.modified_by = "Application";
+                    _companyContext.Employees.Attach(existingEmployee);
+                    _companyContext.Entry(existingEmployee).Property(x => x.is_approved).IsModified = true;
+                    _companyContext.Entry(existingEmployee).Property(x => x.is_rejected).IsModified = true;
+                    _companyContext.Entry(existingEmployee).Property(x => x.emp_approval_comment).IsModified = true;
+                    _companyContext.Entry(existingEmployee).Property(x => x.modified_date).IsModified = true;
+                    _companyContext.Entry(existingEmployee).Property(x => x.modified_by).IsModified = true;
+                    _companyContext.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         //https://localhost:5001/api/ApproveRelations/AssetToUsers?companyId=121&assetId=212&UserId=12
         [Route("AssetToUsers")]
         [HttpGet]

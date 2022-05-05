@@ -48,8 +48,8 @@ namespace AccessMgmtBackend.Controllers
                     }
                     dashboardView.MonthlyEmployeeAdded = listEmployees.Where(x => x.is_active && x.created_date > DateTime.UtcNow.AddMonths(-1)).Count();
                     dashboardView.YearlyEmployeeAdded = listEmployees.Where(x => x.is_active && x.created_date > DateTime.UtcNow.AddYears(-1)).Count();
-                    dashboardView.PendingEmployees = listEmployees.Where(x => x.is_active == true && x.is_approved == false).Count();
-                    dashboardView.RejectedEmployees = 0;//Needs to be developed
+                    dashboardView.PendingEmployees = listEmployees.Where(x => x.is_active == true && x.is_approved == false && x.is_rejected == false).Count();
+                    dashboardView.RejectedEmployees = listEmployees.Where(x => x.is_active && x.is_rejected == true).Count();//Needs to be developed
                     dashboardView.ApprovedEmployeePercentage = (dashboardView.ApprovedEmployees / dashboardView.TotalEmployees) * 100;
                     dashboardView.AuditCompletedPercentage = 0;//Needs to be developed
                     dashboardView.TicketClosurePercentage = 0;//Needs to be developed

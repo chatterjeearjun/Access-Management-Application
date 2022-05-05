@@ -177,6 +177,8 @@ namespace AccessMgmtBackend.Controllers
             employee.created_date = DateTime.UtcNow;
             employee.created_by = "Application";
             employee.is_active = true;
+            employee.is_approved = false;
+            employee.is_rejected = false;
             if (value.emp_profile_picture != null)
             {
                 UploadedFile employeeResponse = await PostUploadFile(value.emp_profile_picture, value.company_identifier);
@@ -317,6 +319,8 @@ namespace AccessMgmtBackend.Controllers
                 employeeNew.created_date = employeeStore.created_date;
                 employeeNew.modified_date = DateTime.UtcNow;
                 employeeNew.modified_by = "Application";
+                employeeNew.is_approved = employeeStore.is_approved;
+                employeeNew.is_rejected = employeeStore.is_rejected;
                 employeeNew.emp_profile_picture = employeeStore.emp_profile_picture;
                 if (value.emp_documents != null && value.emp_documents.Count > 0)
                 {

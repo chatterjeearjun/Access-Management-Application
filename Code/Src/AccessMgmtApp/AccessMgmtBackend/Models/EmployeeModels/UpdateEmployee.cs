@@ -22,7 +22,6 @@
         public string? emp_doc_externallink { get; set; }
         public List<CreateEmployeeDocument>? emp_documents { get; set; }
         public bool is_active { get; set; }
-        public bool? is_approved { get; set; }
         public string? associated_assets { get; set; }
         public DateTime? emp_approval_overdue { get; set; }
     }
