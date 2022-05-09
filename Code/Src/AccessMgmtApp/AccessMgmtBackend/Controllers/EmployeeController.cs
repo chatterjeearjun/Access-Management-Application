@@ -312,6 +312,7 @@ namespace AccessMgmtBackend.Controllers
             var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == value.employee_identifier);
             if (employeeStore != null)
             {
+                CreateBackup(employeeStore, "Update");
                 var employeeNew = new Employee();
                 var docList = new List<EmployeeDocument>();
                 employeeNew.id = employeeStore.id;
@@ -436,6 +437,7 @@ namespace AccessMgmtBackend.Controllers
             var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier == value.employee_identifier && s.is_active);
             if (employeeStore != null)
             {
+                CreateBackup(employeeStore, "Delete");
                 employeeStore.is_active = false;
                 employeeStore.modified_date = DateTime.UtcNow;
                 employeeStore.modified_by = "Application";
@@ -468,6 +470,7 @@ namespace AccessMgmtBackend.Controllers
                 var employeeStore = _companyContext.Employees.FirstOrDefault(s => s.employee_identifier.ToString() == value.employee_identifier && s.is_active);
                 if (employeeStore != null)
                 {
+                    CreateBackup(employeeStore, "Update");
                     UploadedFile employeeResponse = await PostUploadFile(value.emp_profile_picture, value.company_identifier, value.employee_identifier);
                     employeeStore.emp_profile_picture = employeeResponse?.file_identifier.ToString();
                     _companyContext.Employees.Attach(employeeStore);
@@ -482,6 +485,16 @@ namespace AccessMgmtBackend.Controllers
                 return null;
             }
 
+        }
+        private void CreateBackup(Employee company, string reason)
+        {
+            EmployeeHistory history = new EmployeeHistory();
+            PropertyCopier<Employee, EmployeeHistory>.Copy(company, history);
+            history.id = 0;
+            history.reason = reason;
+            history.employee_identifier = company.employee_identifier.ToString();
+            _companyContext.EmployeeHistory.Add(history);
+            _companyContext.SaveChanges();
         }
 
     }

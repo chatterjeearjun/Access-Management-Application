@@ -154,6 +154,7 @@ namespace AccessMgmtBackend.Controllers
             var company = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
             if (company != null)
             {
+                CreateBackup(company, "Update");
                 var companyNew = new Company();
                 companyNew.id = company.id;
                 companyNew.created_by = company.created_by;
@@ -161,9 +162,9 @@ namespace AccessMgmtBackend.Controllers
                 companyNew.modified_date = DateTime.UtcNow;
                 companyNew.modified_by = "Application";
                 companyNew.is_active = true;
-                PropertyCopier<UpdateCompany, Company>.Copy(value, companyNew);
+                PropertyCopier<UpdateCompany, Company>.Copy(value, companyNew);                
                 _companyContext.Entry<Company>(company).CurrentValues.SetValues(companyNew);
-                _companyContext.SaveChanges();
+                _companyContext.SaveChanges();                
                 return _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
             }
             else
@@ -179,6 +180,7 @@ namespace AccessMgmtBackend.Controllers
             var student = _companyContext.Companies.FirstOrDefault(s => s.company_identifier == value.company_identifier);
             if (student != null)
             {
+                CreateBackup(student, "Delete");
                 student.is_active = false;
                 student.modified_date = DateTime.UtcNow;
                 student.modified_by = "Application";
@@ -191,5 +193,16 @@ namespace AccessMgmtBackend.Controllers
                 return _companyContext.Companies.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
         }
+        private void CreateBackup(Company company,string reason)
+        {
+            CompanyHistory history = new CompanyHistory();            
+            PropertyCopier<Company,CompanyHistory>.Copy(company, history);
+            history.id = 0;
+            history.reason = reason;
+            history.company_identifier = company.company_identifier.ToString();
+            _companyContext.CompanyHistory.Add(history);
+            _companyContext.SaveChanges();
+        }
     }
+    
 }

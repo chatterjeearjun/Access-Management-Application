@@ -1,4 +1,5 @@
 ﻿using AccessMgmtBackend.Context;
+using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,13 @@ namespace AccessMgmtBackend.Controllers
                 var existingEmployee = _companyContext.Employees.FirstOrDefault(x => x.company_identifier == companyId && x.employee_identifier.ToString() == EmployeeId);
                 if (existingEmployee != null)
                 {
+                    EmployeeHistory history = new EmployeeHistory();
+                    PropertyCopier<Employee, EmployeeHistory>.Copy(existingEmployee, history);
+                    history.id = 0;
+                    history.reason = "Approve/reject";
+                    history.employee_identifier = existingEmployee.employee_identifier.ToString();
+                    _companyContext.EmployeeHistory.Add(history);
+
                     existingEmployee.is_approved = isApproved;
                     existingEmployee.is_rejected = isRejected;
                     existingEmployee.emp_approval_comment = !string.IsNullOrEmpty(comment)?comment: existingEmployee.emp_approval_comment;

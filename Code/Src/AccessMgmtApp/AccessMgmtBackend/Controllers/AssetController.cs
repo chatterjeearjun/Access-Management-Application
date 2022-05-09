@@ -134,6 +134,7 @@ namespace AccessMgmtBackend.Controllers
             var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier.ToString() == value.asset_identifier);
             if (asset != null)
             {
+                CreateBackup(asset, "Update");
                 var assetNew = new Asset();
                 assetNew.id = asset.id;
                 assetNew.created_by = asset.created_by;
@@ -160,6 +161,7 @@ namespace AccessMgmtBackend.Controllers
             var asset = _companyContext.Assets.FirstOrDefault(s => s.asset_identifier == value.asset_identifier && s.is_active);
             if (asset != null)
             {
+                CreateBackup(asset, "Delete");
                 _companyContext.AssetToEmployees.UpdateRange(_companyContext.AssetToEmployees.Where(x =>
                 x.company_identifier == value.company_identifier && x.asset_identifier == value.asset_identifier.ToString()).ToList()
                    .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
@@ -180,6 +182,16 @@ namespace AccessMgmtBackend.Controllers
             {
                 return _companyContext.Assets.Where(x => x.company_identifier == value.company_identifier && x.is_active);
             }
+        }
+        private void CreateBackup(Asset company, string reason)
+        {
+            AssetHistory history = new AssetHistory();
+            PropertyCopier<Asset, AssetHistory>.Copy(company, history);
+            history.id = 0;
+            history.reason = reason;
+            history.asset_identifier = company.asset_identifier.ToString();
+            _companyContext.AssetHistory.Add(history);
+            _companyContext.SaveChanges();
         }
     }
 }

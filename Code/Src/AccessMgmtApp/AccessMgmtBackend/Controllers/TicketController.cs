@@ -95,6 +95,7 @@ namespace AccessMgmtBackend.Controllers
             var ListStatus = _companyContext.TicketStatus.ToList();
             if (ticket != null)
             {
+                CreateBackup(ticket, "Update");
                 var ticketNew = new Ticket();
                 ticketNew.id = ticket.id;
                 ticketNew.created_by = ticket.created_by;
@@ -131,6 +132,16 @@ namespace AccessMgmtBackend.Controllers
             {
                 return null;
             }
+        }
+        private void CreateBackup(Ticket company, string reason)
+        {
+            TicketHistory history = new TicketHistory();
+            PropertyCopier<Ticket, TicketHistory>.Copy(company, history);
+            history.id = 0;
+            history.reason = reason;
+            history.ticket_identifier = company.ticket_identifier.ToString();
+            _companyContext.TicketHistory.Add(history);
+            _companyContext.SaveChanges();
         }
     }
 }

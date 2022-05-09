@@ -4,6 +4,7 @@ using AccessMgmtBackend.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccessMgmtBackend.Migrations
 {
     [DbContext(typeof(CompanyContext))]
-    partial class CompanyContextModelSnapshot : ModelSnapshot
+    [Migration("20220509105956_v0905")]
+    partial class v0905
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,71 +139,6 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("document_identifier");
 
                     b.ToTable("ac_additional_document");
-                });
-
-            modelBuilder.Entity("AccessMgmtBackend.Models.ApproverHistory", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("approver_email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("approver_first_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("approver_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("approver_last_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("approver_mobile_number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("approver_office_phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("approver_role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("company_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("created_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("created_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("is_active")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_approved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("modified_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("modified_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ac_approvers_history");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.ApproverModels.Approver", b =>
@@ -379,79 +316,6 @@ namespace AccessMgmtBackend.Migrations
                     b.ToTable("ac_user");
                 });
 
-            modelBuilder.Entity("AccessMgmtBackend.Models.AppUserHistory", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("associated_assets")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("company_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("created_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("created_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("is_active")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_approved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_bc_required")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_certification_required")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_nda_required")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("modified_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("modified_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("user_description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("user_description_attachment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("user_group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("user_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("user_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("user_profile_picture")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("user_role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ac_users_history");
-                });
-
             modelBuilder.Entity("AccessMgmtBackend.Models.Asset", b =>
                 {
                     b.Property<Guid>("asset_identifier")
@@ -529,88 +393,6 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("asset_identifier");
 
                     b.ToTable("ac_assets");
-                });
-
-            modelBuilder.Entity("AccessMgmtBackend.Models.AssetHistory", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<DateTime?>("alocation_end_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("alocation_start_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("asset_description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("asset_description_attachment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("asset_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("asset_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("asset_location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("asset_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("asset_owner")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("asset_risk_ranking")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("asset_type")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("certification_required")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("company_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("created_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("created_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("is_active")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_approved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_bc_required")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_nda_required")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("modified_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("modified_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ac_assets_history");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.AssetToEmployee", b =>
@@ -1024,106 +806,6 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("employee_identifier");
 
                     b.ToTable("ac_employees");
-                });
-
-            modelBuilder.Entity("AccessMgmtBackend.Models.EmployeeHistory", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("associated_assets")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("company_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("created_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("created_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("emp_approval_comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("emp_approval_overdue")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("emp_designation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("emp_dob")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("emp_doc_configitem")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_doc_externallink")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_first_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_group")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("emp_joining_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("emp_last_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_mobile_number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_office_phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("emp_profile_picture")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("emp_relieving_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("emp_role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("employee_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("is_active")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_approved")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_rejected")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("modified_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("modified_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ac_employees_history");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.EmployeeToDocument", b =>
@@ -1594,67 +1276,6 @@ namespace AccessMgmtBackend.Migrations
                     b.ToTable("ac_role");
                 });
 
-            modelBuilder.Entity("AccessMgmtBackend.Models.RoleHistory", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("associated_assets")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("associated_documents")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("associated_groups")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("company_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("created_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("created_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("is_active")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("is_approved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("modified_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("modified_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("role_description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("role_description_attachment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("role_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("role_name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ac_roles_history");
-                });
-
             modelBuilder.Entity("AccessMgmtBackend.Models.RoleToDocument", b =>
                 {
                     b.Property<int>("id")
@@ -1887,63 +1508,6 @@ namespace AccessMgmtBackend.Migrations
                     b.HasKey("comment_identifier");
 
                     b.ToTable("ac_ticket_comments");
-                });
-
-            modelBuilder.Entity("AccessMgmtBackend.Models.TicketHistory", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("company_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("created_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("created_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("modified_by")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("modified_date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("reason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ticket_agent_guid")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ticket_completed_at")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ticket_content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ticket_html")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ticket_identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ticket_status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ticket_subject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ticket_user_guid")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("ac_tickets_history");
                 });
 
             modelBuilder.Entity("AccessMgmtBackend.Models.TicketStatus", b =>

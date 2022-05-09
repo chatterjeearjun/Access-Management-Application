@@ -123,6 +123,7 @@ namespace AccessMgmtBackend.Controllers
             var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == value.approver_identifier);
             if (approver != null)
             {
+                CreateBackup(approver, "Update");
                 ViewApprover viewApprover = new ViewApprover();
                 var approverNew = new Approver();
                 approverNew.id = approver.id;
@@ -181,6 +182,7 @@ namespace AccessMgmtBackend.Controllers
             var approver = _companyContext.Approvers.FirstOrDefault(s => s.approver_identifier == deleteApprover.approver_identifier && s.is_active);
             if (approver != null)
             {
+                CreateBackup(approver, "Delete");
                 approver.is_active = false;
                 approver.modified_date = DateTime.UtcNow;
                 approver.modified_by = "Application";
@@ -237,6 +239,16 @@ namespace AccessMgmtBackend.Controllers
                 }
                 return viewApprovers;
             }
+        }
+        private void CreateBackup(Approver company, string reason)
+        {
+            ApproverHistory history = new ApproverHistory();
+            PropertyCopier<Approver, ApproverHistory>.Copy(company, history);
+            history.id = 0;
+            history.reason = reason;
+            history.approver_identifier = company.approver_identifier.ToString();
+            _companyContext.ApproverHistory.Add(history);
+            _companyContext.SaveChanges();
         }
     }
 }

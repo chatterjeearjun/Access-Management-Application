@@ -153,6 +153,7 @@ namespace AccessMgmtBackend.Controllers
             var appusers = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier.ToString() == value.user_identifier);
             if (appusers != null)
             {
+                CreateBackup(appusers, "Update");
                 var appUser = new AppUser();
                 appUser.id = appusers.id;
                 appUser.created_by = appusers.created_by;
@@ -200,6 +201,7 @@ namespace AccessMgmtBackend.Controllers
             var appuser = _companyContext.AppUsers.FirstOrDefault(s => s.user_identifier == deleteAppuser.user_identifier && s.is_active);
             if (appuser != null)
             {
+                CreateBackup(appuser, "Delete");
                 _companyContext.AssetToUsers.UpdateRange(_companyContext.AssetToUsers.Where(x =>
                 x.company_identifier == deleteAppuser.company_identifier && x.user_identifier == deleteAppuser.user_identifier.ToString()).ToList()
                    .Select(x => { x.is_active = false; x.modified_date = DateTime.UtcNow; x.modified_by = "Application"; return x; }));
@@ -226,6 +228,16 @@ namespace AccessMgmtBackend.Controllers
             {
                 return _companyContext.AppUsers.Where(x => x.company_identifier == deleteAppuser.company_identifier && x.is_active);
             }
+        }
+        private void CreateBackup(AppUser company, string reason)
+        {
+            AppUserHistory history = new AppUserHistory();
+            PropertyCopier<AppUser, AppUserHistory>.Copy(company, history);
+            history.id = 0;
+            history.reason = reason;
+            history.user_identifier = company.user_identifier.ToString();
+            _companyContext.AppUserHistory.Add(history);
+            _companyContext.SaveChanges();
         }
     }
 }

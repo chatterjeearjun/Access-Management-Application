@@ -303,6 +303,7 @@ namespace AccessMgmtBackend.Controllers
             var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier.ToString() == value.role_identifier);
             if (role != null)
             {
+                CreateBackup(role, "Update");
                 var roleNew = new Role();
                 roleNew.id = role.id;
                 roleNew.created_by = role.created_by;
@@ -398,6 +399,7 @@ namespace AccessMgmtBackend.Controllers
             var role = _companyContext.CompanyRoles.FirstOrDefault(s => s.role_identifier == value.role_identifier && s.is_active);
             if (role != null)
             {
+                CreateBackup(role, "Delete");
                 role.is_active = false;
                 role.modified_date = DateTime.UtcNow;
                 role.modified_by = "Application";
@@ -429,6 +431,17 @@ namespace AccessMgmtBackend.Controllers
             {
                 return _companyContext.CompanyRoles.Where(x => x.company_identifier == value.company_identifier && x.is_active).ToList();
             }
+        }
+
+        private void CreateBackup(Role company, string reason)
+        {
+            RoleHistory history = new RoleHistory();
+            PropertyCopier<Role, RoleHistory>.Copy(company, history);
+            history.id = 0;
+            history.reason = reason;
+            history.role_identifier = company.role_identifier.ToString();
+            _companyContext.RoleHistory.Add(history);
+            _companyContext.SaveChanges();
         }
     }
 }

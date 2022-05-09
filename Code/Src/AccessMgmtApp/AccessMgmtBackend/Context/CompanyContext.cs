@@ -43,6 +43,14 @@
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TicketComment> TicketComments { get; set; }
         public DbSet<TicketStatus> TicketStatus { get; set; }
+        public DbSet<CompanyHistory> CompanyHistory { get; set; }
+        public DbSet<TicketHistory> TicketHistory { get; set; }
+        public DbSet<RoleHistory> RoleHistory { get; set; }
+        public DbSet<EmployeeHistory> EmployeeHistory { get; set; }
+        public DbSet<AssetHistory> AssetHistory { get; set; }
+        public DbSet<AppUserHistory> AppUserHistory { get; set; }
+        public DbSet<ApproverHistory> ApproverHistory { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // add your own configuration here
