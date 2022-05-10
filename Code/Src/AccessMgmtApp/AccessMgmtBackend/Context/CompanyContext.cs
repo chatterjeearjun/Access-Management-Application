@@ -50,6 +50,7 @@
         public DbSet<AssetHistory> AssetHistory { get; set; }
         public DbSet<AppUserHistory> AppUserHistory { get; set; }
         public DbSet<ApproverHistory> ApproverHistory { get; set; }
+        public DbSet<CompanySetting> CompanySetting { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,6 +72,7 @@
             modelBuilder.Entity<Ticket>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<TicketComment>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             modelBuilder.Entity<TicketStatus>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+            modelBuilder.Entity<CompanySetting>().Property(u => u.id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         }
     }
 }
