@@ -2,6 +2,8 @@
 using AccessMgmtBackend.Dto;
 using AccessMgmtBackend.Generic;
 using AccessMgmtBackend.Models;
+using AccessMgmtBackend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -20,16 +22,18 @@ namespace AccessMgmtBackend.Controllers
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
         private readonly IConfiguration config;
+        private readonly ITokenService _tokenService;
 
         public AccountController(ILogger<AccountController> logger,
             SignInManager<User> signInManager,
             UserManager<User> userManager,
-            IConfiguration config)
+            IConfiguration config, ITokenService tokenService)
         {
             this.logger = logger;
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.config = config;
+            _tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
 
         [HttpPost("register")]
@@ -46,7 +50,7 @@ namespace AccessMgmtBackend.Controllers
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
 
-                    IdentityResult result = userManager.CreateAsync(user, model.Password).Result;                    
+                    IdentityResult result = userManager.CreateAsync(user, model.Password).Result;
 
                     if (result.Succeeded && !string.IsNullOrEmpty(model.user_role))
                     {
@@ -76,7 +80,7 @@ namespace AccessMgmtBackend.Controllers
                         {
                             Console.WriteLine("Internal server Error");
                         }
-                       
+
                     }
                     await userManager.AddToRoleAsync(user, model.user_role);
                     return Created("", model);
@@ -100,25 +104,43 @@ namespace AccessMgmtBackend.Controllers
                     var passwordCheck = await this.signInManager.CheckPasswordSignInAsync(user, model.Password, false);
                     if (passwordCheck.Succeeded)
                     {
+
                         var claims = new List<Claim>
                         {
-                            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+                            new Claim(ClaimTypes.Name, user.Email),
+                            new Claim(JwtRegisteredClaimNames.Sub, user.UserName)
                         };
-                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.config["Tokens:Key"]));
-                        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                        var token = new JwtSecurityToken(
-                            this.config["Tokens:Issuer"],
-                            this.config["Tokens:Audience"],
-                            claims,
-                            expires: DateTime.UtcNow.AddHours(3),
-                            signingCredentials: credentials
-                            );
+                        var accessToken = _tokenService.GenerateAccessToken(claims);
+                        var refreshToken = _tokenService.GenerateRefreshToken();
+
+                        ////user.RefreshToken = refreshToken;
+                        ////user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+                        //var claims = new List<Claim>
+                        //{
+                        //    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                        //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        //    new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
+                        //};
+                        //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.config["Tokens:Key"]));
+                        //var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        //var token = new JwtSecurityToken(
+                        //    this.config["Tokens:Issuer"],
+                        //    this.config["Tokens:Audience"],
+                        //    claims,
+                        //    expires: DateTime.UtcNow.AddHours(3),
+                        //    signingCredentials: credentials
+                        //    );
+
+
+
+
+
+
                         var response = request.GetEndpoint("api/AppUser/GetByEmail?email=" + user.Email);
                         if (response.Result.IsSuccessStatusCode)
                         {
-                           userResponse = await response.Result.Content.ReadAsAsync<string>();
+                            userResponse = await response.Result.Content.ReadAsAsync<string>();
                         }
                         else
                         {
@@ -127,8 +149,9 @@ namespace AccessMgmtBackend.Controllers
                         return Ok(new
                         {
                             useridentier = userResponse,
-                            token = new JwtSecurityTokenHandler().WriteToken(token),
-                            expiration = token.ValidTo
+                            token = accessToken,
+                            refreshtoken = refreshToken,
+                            refreshtokenexpirytime = DateTime.UtcNow.AddDays(7),
                         });
                     }
                     else if (passwordCheck.IsLockedOut)
@@ -148,6 +171,34 @@ namespace AccessMgmtBackend.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("refresh")]
+        public IActionResult Refresh(TokenApiModel tokenApiModel)
+        {
+            if (tokenApiModel is null)
+                return BadRequest("Invalid client request");
+
+            string accessToken = tokenApiModel.AccessToken;
+            string refreshToken = tokenApiModel.RefreshToken;
+
+            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
+            var username = principal.Identity.Name; //this is mapped to the Name claim by default
+
+            var user = this.userManager.FindByEmailAsync(username);
+
+            if (user == null)
+                return BadRequest("Invalid client request");
+
+            var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims);
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+
+            return Ok(new AuthenticatedResponse()
+            {
+                Token = newAccessToken,
+                RefreshToken = newRefreshToken
+            });
         }
 
     }

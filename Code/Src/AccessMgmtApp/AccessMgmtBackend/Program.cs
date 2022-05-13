@@ -1,6 +1,7 @@
 using AccessMgmtBackend.Context;
 using AccessMgmtBackend.Data.Entities;
 using AccessMgmtBackend.Migrations;
+using AccessMgmtBackend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CompanyContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CompanyConnStr")));
+builder.Services.AddTransient<ITokenService, TokenService>();
 //builder.Services.AddDbContext<PayrollContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("CompanyConnStr")));
 
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<CompanyContext>()

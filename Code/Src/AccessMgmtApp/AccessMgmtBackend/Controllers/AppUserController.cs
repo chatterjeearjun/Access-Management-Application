@@ -92,7 +92,7 @@ namespace AccessMgmtBackend.Controllers
 
         // POST api/<AppUserController>
         [HttpPost]
-        public async Task<AppUser> Post([FromForm] CreateAppUser value)
+        public async Task<AppUser> Post([FromBody] CreateAppUser value)
         {
             var appUser = new AppUser();
             appUser.created_date = DateTime.UtcNow;
