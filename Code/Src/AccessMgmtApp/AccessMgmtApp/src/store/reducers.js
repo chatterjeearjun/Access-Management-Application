@@ -40,6 +40,10 @@ import adminTeam from "./AdminManagement/reducer";
 
 import ticketingSystem from "./TicketingSystem/reducer";
 
+import companySettings from "./CompanySettings/reducer";
+
+import AiEngineSettings from "./AiEngineSettings/reducer";
+
 const rootReducer = combineReducers({
   // public
   Layout,
@@ -59,6 +63,8 @@ const rootReducer = combineReducers({
   employeesManagement,
   adminTeam,
   ticketingSystem,
+  companySettings,
+  AiEngineSettings,
 });
 
 export default rootReducer;

@@ -422,6 +422,42 @@ export const updateTicket = (ticket) => put(url.UPDATE_TICKET, ticket);
 // delete ticket
 export const deleteTicket = (ticket) => del(url.DELETE_TICKET, ticket);
 
+//CompanySettings
+
+//get settings
+export const getCompanySettings = () =>
+  get(url.GET_COMPANY_SETTINGS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+
+// add settings
+export const addNewCompanySetting = (setting) =>
+  post(url.ADD_NEW_COMPANY_SETTING, setting);
+
+// update settings
+export const updateCompanySetting = (setting) =>
+  put(url.UPDATE_COMPANY_SETTING, setting);
+
+// delete settings
+export const deleteCompanySetting = (setting) =>
+  del(url.DELETE_COMPANY_SETTING, setting);
+
+//AiEngineSettings
+
+//get settings
+export const getAiEngineSettings = () =>
+  get(url.GET_AIENGINE_SETTINGS, "6c0276ec-fea1-4fa8-bb1f-5d428a850222");
+
+// add settings
+export const addNewAiEngineSetting = (setting) =>
+  post(url.ADD_NEW_AIENGINE_SETTING, setting);
+
+// update settings
+export const updateAiEngineSetting = (setting) =>
+  put(url.UPDATE_AIENGINE_SETTING, setting);
+
+// delete settings
+export const deleteAiEngineSetting = (setting) =>
+  del(url.DELETE_AIENGINE_SETTING, setting);
+
 export {
   getLoggedInUser,
   isUserAuthenticated,

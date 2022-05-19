@@ -2,7 +2,6 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 
 const PieChart = (dData) => {
-  // console.log(dData?.data, "PieChart");
   const piechartColors = [
     "#00b894",
     "#19e9c0",
@@ -58,7 +57,6 @@ const PieChart = (dData) => {
       },
     ],
   };
-  // console.log(options, series, "options");
   return (
     <ReactApexChart
       options={options || []}

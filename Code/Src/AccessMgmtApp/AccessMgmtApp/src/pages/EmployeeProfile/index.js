@@ -7,7 +7,7 @@ import ProfileHeader from "./ProfileHeader";
 
 const EmployeeProfile = () => {
   //apply base url for axios
-  const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const API_URL = process.env.REACT_APP_API_BASE_URL; //"https://localhost:5001";
   const id = window.location.search.slice(1);
 
   const [employeeData, setEmployeeData] = useState([]);
@@ -23,7 +23,7 @@ const EmployeeProfile = () => {
           },
         }
       );
-      debugger;
+
       const json = await response.json();
       setEmployeeData(json);
     };

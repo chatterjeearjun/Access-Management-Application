@@ -132,10 +132,6 @@ const Dashboard = () => {
       ])
     );
   };
-  console.log(
-    moment.utc(moment(new Date()).add(1, "days").format("YYYY-MM-DD")).format(),
-    "ksjdfhkjsdh"
-  );
 
   return (
     <React.Fragment>
@@ -150,7 +146,7 @@ const Dashboard = () => {
             <Col xs={6}>
               <h5>Dashboard</h5>
             </Col>
-            <Col xs={3}>
+            <Col xs={3} sm={12} md={6} lg={4}>
               <FormGroup className="mb-4">
                 <Label>Date Range</Label>
                 <div className="input-group mb-3">
@@ -187,23 +183,10 @@ const Dashboard = () => {
             {(WidgetsData(data) || []).map((widget, key) => (
               <Col xl={3} md={6} key={key}>
                 <Card className="card-h-100">
-                  <CardBody
-                    style={
-                      widget.id === 1 || widget.id === 2
-                        ? { paddingTop: "2rem" }
-                        : {}
-                    }
-                  >
-                    <Row
-                      className="align-items-center"
-                      style={
-                        widget.id === 1 || widget.id === 2
-                          ? { marginBottom: "1rem" }
-                          : {}
-                      }
-                    >
+                  <CardBody>
+                    <Row className="align-items-center">
                       <Col xs={6}>
-                        <span className="text-muted mb-3 lh-1 d-block text-truncate">
+                        <span className="text-muted mb-3 lh-1 d-block">
                           {widget.title}
                         </span>
                         <h4 className="mb-3">
@@ -232,7 +215,7 @@ const Dashboard = () => {
                         ""
                       )}
                     </Row>
-                    <div className="text-nowrap">
+                    <div className="text-wrap">
                       <span
                         className={
                           "badge badge-soft-" +

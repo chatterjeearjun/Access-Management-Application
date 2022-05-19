@@ -31,7 +31,7 @@ export async function get(url, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "get error");
+    console.log(error, "get error");
   }
 }
 
@@ -49,7 +49,7 @@ export async function getForDocs(url, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "get error");
+    console.log(error, "get Documents Error");
   }
 }
 export async function postForAddingDocs(url, doc, id) {
@@ -68,7 +68,7 @@ export async function postForAddingDocs(url, doc, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "get error");
+    console.log(error, "Post for adding Documents Error");
   }
 }
 export async function postForUpdatingDocs(url, doc, id) {
@@ -87,7 +87,7 @@ export async function postForUpdatingDocs(url, doc, id) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "get error");
+    console.log(error, "Post for Updating Documents Error");
   }
 }
 
@@ -105,7 +105,7 @@ export async function getAAssociation(url, asset) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "get error");
+    console.log(error, "get Associations Error");
   }
 }
 
@@ -123,7 +123,7 @@ export async function post(url, data) {
     const result = await response.json();
     return result;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "post error");
   }
 }
 
@@ -150,7 +150,7 @@ export async function postRole(url, data) {
     const result = await response.json();
     return result;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "post Role error");
   }
 }
 export async function postBulkEmployeeUpload(url, data) {
@@ -169,7 +169,7 @@ export async function postBulkEmployeeUpload(url, data) {
     });
     return response;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "post BulkUpload error");
   }
 }
 
@@ -204,7 +204,7 @@ export async function postAsset(url, data) {
     const result = await response.json();
     return result;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "post Asset error");
   }
 }
 
@@ -230,9 +230,9 @@ export async function postEmployee(url, data) {
     formData.append("is_active", data.is_active);
     formData.append(
       "associated_assets",
-      data.associated_assets
-        .replaceAll("label", "Key")
-        .replaceAll("value", "Value")
+      JSON.parse(data.associated_assets)
+        ?.map((asset) => asset.value)
+        ?.toString()
     );
     const response = await fetch(`${API_URL}${url}`, {
       method: "POST",
@@ -298,7 +298,7 @@ export async function put(url, formdata) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "Put Error");
   }
 }
 
@@ -314,7 +314,7 @@ export async function del(url, user) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "Delete error");
   }
 }
 export async function delApprover(url, approver) {
@@ -329,7 +329,7 @@ export async function delApprover(url, approver) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "Delete Approver error");
   }
 }
 export async function delGroup(url, group) {
@@ -344,7 +344,7 @@ export async function delGroup(url, group) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "Delete Group error");
   }
 }
 export async function isEmpDuplicate(url) {
@@ -359,7 +359,7 @@ export async function isEmpDuplicate(url) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "post error");
+    console.log(error, "Duplicate Check Api error");
   }
 }
 export async function isapproverDuplicate(url) {
@@ -374,6 +374,6 @@ export async function isapproverDuplicate(url) {
     const data = await response.json();
     return data;
   } catch (error) {
-    // console.log(error, "isapproverDuplicate error");
+    console.log(error, "Approver Duplicate Check Api error");
   }
 }

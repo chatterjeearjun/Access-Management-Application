@@ -82,21 +82,21 @@ const TicketingSystem = () => {
   };
   const statusColor = {
     New: "bg-primary",
-    InProgress: "bg-info",
-    OnHold: "bg-danger",
-    Done: "bg-success",
+    "In Progress": "bg-info",
+    "On Hold": "bg-danger",
+    Closed: "bg-success",
   };
   const statusColorLight = {
     New: "bg-soft-primary",
-    InProgress: "bg-soft-info",
-    OnHold: "bg-soft-danger",
-    Done: "bg-soft-success",
+    "In Progress": "bg-soft-info",
+    "On Hold": "bg-soft-danger",
+    Closed: "bg-soft-success",
   };
-  const statusRowColorLight = {
-    New: "table-primary",
-    InProgress: "table-info",
-    OnHold: "table-danger",
-    Done: "table-success",
+  const statusValues = {
+    New: 1,
+    "In Progress": 2,
+    "On Hold": 3,
+    Closed: 4,
   };
 
   const ticketsListColumns = [
@@ -196,14 +196,14 @@ const TicketingSystem = () => {
           <Button
             type="button"
             color="primary"
-            className="waves-light waves-effect cursor-not-allowed"
+            className="waves-light waves-effect"
             disabled
           >
             <i className="fa fa-eye font-size-12" />
           </Button>
           <Button
             type="button"
-            color="success"
+            color="primary"
             className="waves-light waves-effect"
             onClick={() => handleTicketClick(ticket)}
           >
@@ -211,8 +211,8 @@ const TicketingSystem = () => {
           </Button>
           <Button
             type="button"
-            color="danger"
-            className="waves-light waves-effect cursor-not-allowed"
+            color="primary"
+            className="waves-light waves-effect"
             disabled
             //       onClick={() => {
             //         setDeleteAlert(true);
@@ -266,7 +266,7 @@ const TicketingSystem = () => {
         company_identifier: ticketsList.companyguid,
         ticket_subject: values["subject"],
         ticket_content: values["content"],
-        ticket_status: 1,
+        ticket_status: statusValues[values["status"]],
         ticket_user_guid: ticketsList.user,
         ticket_agent_guid: ticketsList.approver,
         ticket_html: "",
@@ -441,7 +441,7 @@ const TicketingSystem = () => {
                                                     name="status"
                                                     label="Ticket Status"
                                                     placeholder="ticket subject..."
-                                                    type="text"
+                                                    type="select"
                                                     errorMessage="please provide valid ticket status"
                                                     validate={{
                                                       required: { value: true },
@@ -449,13 +449,28 @@ const TicketingSystem = () => {
                                                     value={
                                                       ticketsList.status || ""
                                                     }
-                                                    disabled
                                                     className={`${
                                                       statusColorLight[
                                                         ticketsList.status
                                                       ]
                                                     } text-dark`}
-                                                  />
+                                                  >
+                                                    <option>
+                                                      Update Ticket Status
+                                                    </option>
+                                                    <option value="New">
+                                                      New
+                                                    </option>
+                                                    <option value="In Progress">
+                                                      In Progress
+                                                    </option>
+                                                    <option value="On Hold">
+                                                      On Hold
+                                                    </option>
+                                                    <option value="Closed">
+                                                      Closed
+                                                    </option>
+                                                  </AvField>
                                                 </div>
                                               </Col>
                                             </Row>

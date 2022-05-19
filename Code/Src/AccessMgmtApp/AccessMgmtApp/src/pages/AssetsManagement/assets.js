@@ -104,11 +104,6 @@ const AssetsManagement = (props) => {
       formatter: (cellContent, asset) => <>{asset.id}</>,
     },
     {
-      text: "Asset ID",
-      dataField: "asset_identifier",
-      sort: true,
-    },
-    {
       text: "Serial No",
       dataField: "asset_id",
       sort: true,
@@ -139,6 +134,16 @@ const AssetsManagement = (props) => {
       text: "Asset Owner",
       dataField: "asset_owner",
       sort: true,
+      formatter: (cellContent, asset) => (
+        <>
+          <h5 className="font-size-14 mb-1 text-dark">
+            {asset?.asset_owner.indexOf("Key") !== -1
+              ? JSON.parse(asset.asset_owner)?.Value
+              : ""}
+          </h5>
+          {/* <p className="text-muted mb-0">{asset.designation}</p> */}
+        </>
+      ),
     },
     {
       text: "Asset Description",
@@ -388,7 +393,7 @@ const AssetsManagement = (props) => {
   // }
   const filterBy = () => true;
   const handleSearch = (query) => {
-    //debugger;
+    //
     setTypeaheadList([]);
     setIsLoading(true);
     const list = owners?.filter(

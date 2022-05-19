@@ -18,8 +18,6 @@ const EmpAttachments = (props) => {
     setEmployeeData(props.data);
   }, [props]);
 
-  // console.log(employeeData, "overview");
-
   return employeeData !== undefined && employeeData !== [] ? (
     <React.Fragment>
       <Row>

@@ -22,7 +22,6 @@ import BootstrapTable from "react-bootstrap-table-next";
 //import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import { MultiSelect } from "react-multi-select-component";
 import { FaUserEdit } from "react-icons/fa";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
 import InputMask from "react-input-mask";
 import Loading from "react-fullscreen-loading";
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -37,11 +36,12 @@ import {
   getCompGroups as onGetGroups,
   getRoles as onGetRoles,
   getAssets as onGetAssets,
+  getCompanySettings as onGetCompanySettings,
 } from "../../store/actions";
 import { isEmpty } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import { FcUpload, FcDownload } from "react-icons/fc";
+import { FcUpload } from "react-icons/fc";
 
 const EmployeeManagement = () => {
   const dispatch = useDispatch();
@@ -60,6 +60,22 @@ const EmployeeManagement = () => {
     assets: state.assetsManagement.assets,
   }));
 
+  const { settings } = useSelector((state) => ({
+    settings: state.companySettings.settings,
+  }));
+  const [settingsList, setSettingsList] = useState([]);
+
+  useEffect(() => {
+    if (settings && !settings.length) {
+      dispatch(onGetCompanySettings());
+    }
+  }, []);
+
+  useEffect(() => {
+    setSettingsList(
+      settings.filter((setting) => setting.setting_key === "UploadSettings")
+    );
+  }, [settings]);
   const [userList, setUserList] = useState([]),
     [editUserList, setEditUserList] = useState([]),
     [groupList, setGroupsList] = useState([]),
@@ -76,13 +92,12 @@ const EmployeeManagement = () => {
     [phone, setPhone] = useState(""),
     [deleteAlert, setDeleteAlert] = useState(false),
     [deleteRow, setDeleteRow] = useState(false),
-    [selectedFileError, setSelectedFileError] = useState(false),
-    [uploadType, setUploadType] = useState("");
+    [selectedFileError, setSelectedFileError] = useState(false);
   const { SearchBar } = Search;
 
   const pageOptions = {
     sizePerPage: 10,
-    totalSize: users.length, // replace later with size(users),
+    totalSize: users?.length, // replace later with size(users),
     custom: true,
   };
 
@@ -443,17 +458,14 @@ const EmployeeManagement = () => {
       const final = rolesList?.filter(
         (role) => role?.role_identifier === e.target.value
       );
-      console.log(JSON.parse(final[0]?.associated_documents), "sdkfhkdjh");
       setDocsRequired(JSON.parse(final[0]?.associated_documents));
     } else {
       setDocsRequired([]);
-      setUploadType("");
     }
   };
 
   useEffect(() => {}, [docsRequired]);
   const handleInput = (e) => {
-    // console.log(e.target.value, "phone");
     setPhone(e.target.value);
   };
 
@@ -466,7 +478,7 @@ const EmployeeManagement = () => {
     });
   }
   const requiredFilesChange = (e) => {
-    //debugger;
+    //
     const { files, id, name } = e.target;
     const { docsSelected: docs } = selectedFiles;
     setSelectedFiles({
@@ -603,9 +615,7 @@ const EmployeeManagement = () => {
                                     {...paginationTableProps}
                                     selectRow={selectRow}
                                     defaultSorted={defaultSorted}
-                                    classes={
-                                      "table align-middle table-nowrap table-hover"
-                                    }
+                                    classes={"table table-nowrap table-hover"}
                                     bordered={false}
                                     striped={false}
                                     responsive
@@ -840,86 +850,12 @@ const EmployeeManagement = () => {
                                                   </AvField>
                                                 </div>
                                               </Col>
-                                              <Col xs={6}>
-                                                {!isEdit &&
-                                                  docsRequired?.length > 0 && (
-                                                    <div>
-                                                      <h5 className="font-size-14 mb-3 mt-3">
-                                                        Choose how to provide
-                                                        documents?
-                                                      </h5>
-
-                                                      <div className="form-check form-check-inline">
-                                                        <input
-                                                          className="form-check-input"
-                                                          type="radio"
-                                                          name="uploadtype"
-                                                          id="uploadfile"
-                                                          value="uploadfile"
-                                                          required
-                                                          onChange={(e) =>
-                                                            setUploadType(
-                                                              e.target.value
-                                                            )
-                                                          }
-                                                        />
-                                                        <label
-                                                          className="form-check-label"
-                                                          htmlFor="uploadfile"
-                                                        >
-                                                          Upload File
-                                                        </label>
-                                                      </div>
-                                                      <div className="form-check form-check-inline">
-                                                        <input
-                                                          className="form-check-input"
-                                                          type="radio"
-                                                          name="uploadtype"
-                                                          id="urlinput"
-                                                          value="urlinput"
-                                                          required
-                                                          onChange={(e) =>
-                                                            setUploadType(
-                                                              e.target.value
-                                                            )
-                                                          }
-                                                        />
-                                                        <label
-                                                          className="form-check-label"
-                                                          htmlFor="urlinput"
-                                                        >
-                                                          Url of you file
-                                                        </label>
-                                                      </div>
-                                                      <div className="form-check form-check-inline">
-                                                        <input
-                                                          className="form-check-input"
-                                                          type="radio"
-                                                          name="uploadtype"
-                                                          id="alreadyuploaded"
-                                                          value="alreadyuploaded"
-                                                          required
-                                                          onChange={(e) =>
-                                                            setUploadType(
-                                                              e.target.value
-                                                            )
-                                                          }
-                                                        />
-                                                        <label
-                                                          className="form-check-label"
-                                                          htmlFor="alreadyuploaded"
-                                                        >
-                                                          Already with Company
-                                                        </label>
-                                                      </div>
-                                                    </div>
-                                                  )}{" "}
-                                              </Col>
                                             </Row>
 
                                             <Row>
                                               {!isEdit &&
-                                              uploadType === "uploadfile" &&
+                                              settingsList[0]?.setting_value ===
+                                                "uploadfile" &&
                                               docsRequired?.length > 0
                                                 ? docsRequired?.map(
                                                     (document) => (
@@ -966,7 +902,8 @@ const EmployeeManagement = () => {
                                             </Row>
                                             <Row>
                                               {!isEdit &&
-                                              uploadType === "urlinput" &&
+                                              settingsList[0]?.setting_value ===
+                                                "urlinput" &&
                                               docsRequired?.length > 0
                                                 ? docsRequired?.map(
                                                     (document) => (
@@ -1024,11 +961,6 @@ const EmployeeManagement = () => {
                                                       type="file"
                                                       placeholder="choose employee photo"
                                                       errormessage="please provide valid file"
-                                                      validate={{
-                                                        required: {
-                                                          value: true,
-                                                        },
-                                                      }}
                                                       onChange={(e) =>
                                                         setSelectedProfileFile(
                                                           e.target.files[0]

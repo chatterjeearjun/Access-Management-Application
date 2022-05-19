@@ -19,6 +19,7 @@ import AssetsOverview from "../pages/AssetOverView/index";
 
 //Roles
 import RolesManagement from "../pages/RolesManagement/index";
+
 //Required Documents
 import RequiredDocuments from "../pages/RequiredDocuments/index";
 
@@ -30,6 +31,18 @@ import EmployeeBulkUpload from "../pages/BulkUpload/index";
 
 //TicketingSystem
 import TicketingSystem from "../pages/TicketingSystem/index";
+
+//EmailBoxSettings
+import EmailBoxSettings from "../pages/EmailBoxSettings/index";
+
+//AzureSettings
+import AzureSettings from "../pages/AzureSettings/index";
+
+//UploadSettings
+import UploadSettings from "../pages/UploadSettings/index";
+
+//AiEngineSettings
+import AiEngineSettings from "../pages/AiEngineSettings/index";
 
 // Calendar
 import Calendar from "../pages/Calendar/index";
@@ -167,6 +180,18 @@ const userRoutes = [
 
   //TicketingSystem
   { path: "/ticketingsystem", component: TicketingSystem },
+
+  //EmailBoxSettings
+  { path: "/emailboxsettings", component: EmailBoxSettings },
+
+  //AzureSettings
+  { path: "/azuresettings", component: AzureSettings },
+
+  //UploadSettings
+  { path: "/uploadsettings", component: UploadSettings },
+
+  //AiEngineSettings
+  { path: "/aienginesettings", component: AiEngineSettings },
 
   //Calendar
   { path: "/apps-calendar", component: Calendar },

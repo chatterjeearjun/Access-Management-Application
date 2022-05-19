@@ -40,7 +40,6 @@ const AssetsToEmp = (props) => {
                         {employeeData.associated_assets?.length > 0
                           ? JSON.parse(employeeData.associated_assets).map(
                               (asset) => {
-                                // console.log(asset, "mapping asset");
                                 return (
                                   <>
                                     <Link

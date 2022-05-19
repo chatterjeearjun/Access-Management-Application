@@ -116,7 +116,9 @@ const SidebarContent = (props) => {
                   <Link to="/AdminTeam">{props.t("Admin Team")}</Link>
                 </li>
                 <li>
-                  <Link to="/#">{props.t("Email Box Settings")}</Link>
+                  <Link to="/EmailBoxSettings">
+                    {props.t("Email Box Settings")}
+                  </Link>
                 </li>
                 <li>
                   <Link to="/#">{props.t("Payment Settings")}</Link>
@@ -125,7 +127,12 @@ const SidebarContent = (props) => {
                   <Link to="/UploadSettings">{props.t("Upload Settings")}</Link>
                 </li>
                 <li>
-                  <Link to="/#">{props.t("Azure Settings")}</Link>
+                  <Link to="/AzureSettings">{props.t("Azure Settings")}</Link>
+                </li>
+                <li>
+                  <Link to="/AiEngineSettings">
+                    {props.t("Email Settings")}
+                  </Link>
                 </li>
               </ul>
             </li>

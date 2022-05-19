@@ -165,3 +165,17 @@ export const GET_TICKETS = "/api/Ticket?companyId=";
 export const ADD_NEW_TICKET = "/api/Ticket";
 export const UPDATE_TICKET = "/api/Ticket";
 export const DELETE_TICKET = "/api/Ticket";
+
+//Company Settings
+export const GET_COMPANY_SETTINGS =
+  "/api/CompanySettings/GetCompanySettings?companyId=";
+export const ADD_NEW_COMPANY_SETTING = "/api/CompanySettings";
+export const UPDATE_COMPANY_SETTING = "/api/CompanySettings";
+export const DELETE_COMPANY_SETTING = "/api/CompanySettings";
+
+//AiEngine Settings
+export const GET_AIENGINE_SETTINGS =
+  "/api/EmailSettings/GetEmailSettings?companyId=";
+export const ADD_NEW_AIENGINE_SETTING = "/api/EmailSettings";
+export const UPDATE_AIENGINE_SETTING = "/api/EmailSettings";
+export const DELETE_AIENGINE_SETTING = "/api/EmailSettings";

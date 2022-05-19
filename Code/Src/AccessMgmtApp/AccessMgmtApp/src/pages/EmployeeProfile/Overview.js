@@ -18,8 +18,6 @@ const OverviewTab = (props) => {
     setEmployeeData(props.data);
   }, [props]);
 
-  // console.log(employeeData, "overview");
-
   return employeeData !== undefined && employeeData !== [] ? (
     <React.Fragment>
       <Row>
@@ -56,7 +54,11 @@ const OverviewTab = (props) => {
                       <h6>Role:</h6>
                     </Col>
                     <Col xs={8}>
-                      <p>{employeeData.emp_role}</p>
+                      <p>
+                        {employeeData.emp_role
+                          ? JSON.parse(employeeData.emp_role)[0].Key
+                          : ""}
+                      </p>
                     </Col>
                   </Row>
                 </div>

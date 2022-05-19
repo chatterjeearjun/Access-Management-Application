@@ -52,7 +52,6 @@ function* onDeleteCompGroup({ payload: group }) {
   try {
     yield call(deleteCompGroup, group);
     const res = yield put(deleteCompGroupSuccess(group));
-    // console.log(res, "result........");
   } catch (error) {
     yield put(deleteCompGroupFail(error));
   }

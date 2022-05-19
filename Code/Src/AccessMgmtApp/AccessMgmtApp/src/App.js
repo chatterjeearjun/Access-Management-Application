@@ -43,6 +43,33 @@ import fakeBackend from "./helpers/AuthType/fakeBackend";
 
 const App = (props) => {
   function getLayout() {
+    var timeoutHandle = window.setTimeout(() => reset, 5000);
+    function reset() {
+      document.addEventListener("click", function () {
+        window.clearTimeout(timeoutHandle);
+        timeoutHandle = window.setTimeout(
+          () => console.log("resetted timeout!"),
+          1000
+        );
+      });
+
+      document.addEventListener("mouseover", function () {
+        window.clearTimeout(timeoutHandle);
+        timeoutHandle = window.setTimeout(
+          () => console.log("resetted timeout!"),
+          1000
+        );
+      });
+
+      document.addEventListener("keypress", function () {
+        window.clearTimeout(timeoutHandle);
+        timeoutHandle = window.setTimeout(
+          () => console.log("resetted timeout!"),
+          1000
+        );
+      });
+    }
+
     let layoutCls = VerticalLayout;
     switch (props.layout.layoutType) {
       case "horizontal":

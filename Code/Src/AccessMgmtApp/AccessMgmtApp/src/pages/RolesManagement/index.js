@@ -207,7 +207,6 @@ const RolesManagement = (props) => {
     setIsEdit(true);
     toggle();
   };
-  // console.log(roleList, "roleList");
   const handleDeleteRole = (role) => {
     confirmAlert({
       title: "Deleting Role",
@@ -257,7 +256,6 @@ const RolesManagement = (props) => {
         RoleDocumentMapping: JSON.stringify(selectedDocsReq),
         associated_assets: JSON.stringify(assetsSelected),
       };
-      // console.log(newRole, "newrole");
       // save new role
       dispatch(onAddNewRole(newRole));
     }
