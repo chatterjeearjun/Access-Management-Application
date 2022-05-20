@@ -73,11 +73,7 @@ const options = {
       show: false,
     },
     y: {
-      title: {
-        formatter: function (seriesName) {
-          return "";
-        },
-      },
+      show: false,
     },
     marker: {
       show: false,
@@ -184,7 +180,11 @@ const Dashboard = () => {
               <Col xl={3} md={6} key={key}>
                 <Card className="card-h-100">
                   <CardBody>
-                    <Row className="align-items-center">
+                    <Row
+                      className={`align-items-center ${
+                        widget.id === 4 ? "mb-3" : ""
+                      }`}
+                    >
                       <Col xs={6}>
                         <span className="text-muted mb-3 lh-1 d-block">
                           {widget.title}
@@ -201,8 +201,8 @@ const Dashboard = () => {
                           </span>
                         </h4>
                       </Col>
-                      {widget.id !== 1 && widget.id !== 2 ? (
-                        <Col xs={6}>
+                      {widget.id === "" ? (
+                        <Col xs={6} sm={4} md={4} lg={4}>
                           <ReactApexChart
                             options={options}
                             series={[{ data: [...widget["series"]] }]}

@@ -6,9 +6,10 @@ import UsersApprovalPieChart from "./UsersApprovalPieChart";
 import { Link } from "react-router-dom";
 
 const UsersApproval = (props) => {
+  console.log(props, "usersapproval pie");
   return (
     <React.Fragment>
-      <Col xl={6} md={8} lg={6} xs={12}>
+      <Col xl={6} md={6} lg={6} xs={6}>
         <Card className="card-h-100">
           <CardBody>
             <div className="d-flex flex-wrap align-items-center mb-4">

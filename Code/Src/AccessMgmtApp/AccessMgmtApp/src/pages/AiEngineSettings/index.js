@@ -166,8 +166,10 @@ const AssetsManagement = (props) => {
   /**
    * Handling submit AiEngineSettings on AiEngineSettings form
    */
+  //code to upload settings from dynamicformdata.js file at once
+
   // useEffect(() => {
-  //   // eslint-disable-next-line array-callback-return
+  //   eslint-disable-next-line array-callback-return
   //   fields.map((field) => {
   //     const newsettings = {
   //       company_identifier: "6C0276EC-FEA1-4FA8-BB1F-5D428A850222", //JSON.parse(localStorage.getItem("authUser")).companyID,
